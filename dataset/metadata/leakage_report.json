@@ -1,0 +1,109 @@
+{
+  "total_violations": 0,
+  "checks": [
+    {
+      "check": "impossible_atm_coordinates",
+      "violations": 0,
+      "note": "ATM lat/lon outside plausible India bounding box"
+    },
+    {
+      "check": "impossible_victim_coordinates",
+      "violations": 0,
+      "note": "Victim lat/lon outside plausible India bounding box"
+    },
+    {
+      "check": "negative_reported_loss",
+      "violations": 0,
+      "note": "reported_loss_amount < 0"
+    },
+    {
+      "check": "negative_transaction_amount",
+      "violations": 0,
+      "note": "transaction amount < 0"
+    },
+    {
+      "check": "negative_withdrawal_amount",
+      "violations": 0,
+      "note": "withdrawal amount < 0"
+    },
+    {
+      "check": "duplicate_complaint_ids",
+      "violations": 0,
+      "note": "duplicate complaint_id"
+    },
+    {
+      "check": "duplicate_account_ids",
+      "violations": 0,
+      "note": "duplicate account_id"
+    },
+    {
+      "check": "duplicate_atm_ids",
+      "violations": 0,
+      "note": "duplicate atm_id"
+    },
+    {
+      "check": "duplicate_transaction_ids",
+      "violations": 0,
+      "note": "duplicate transaction_id"
+    },
+    {
+      "check": "duplicate_withdrawal_ids",
+      "violations": 0,
+      "note": "duplicate withdrawal_id"
+    },
+    {
+      "check": "missing_complaint_id_in_transactions",
+      "violations": 0,
+      "note": "null complaint_id in transactions"
+    },
+    {
+      "check": "missing_atm_id_in_withdrawals",
+      "violations": 0,
+      "note": "null atm_id in withdrawals"
+    },
+    {
+      "check": "withdrawal_before_incident",
+      "violations": 0,
+      "note": "withdrawal_timestamp earlier than incident_timestamp"
+    },
+    {
+      "check": "withdrawal_before_first_transaction",
+      "violations": 0,
+      "note": "withdrawal earlier than first transaction in its chain"
+    },
+    {
+      "check": "withdrawal_atm_absent_from_master",
+      "violations": 0,
+      "note": "withdrawal.atm_id not present in atm_master"
+    },
+    {
+      "check": "self_loop_transactions",
+      "violations": 0,
+      "note": "from_account_id == to_account_id"
+    },
+    {
+      "check": "positive_label_without_actual_withdrawal",
+      "violations": 0,
+      "note": "label=1 row whose atm_id != the case's actual withdrawal ATM"
+    },
+    {
+      "check": "prediction_after_or_at_withdrawal",
+      "violations": 0,
+      "note": "prediction_timestamp >= actual withdrawal_timestamp (label leakage)"
+    }
+  ],
+  "correction_performed": "Rows failing 'withdrawal_before_incident', 'withdrawal_before_first_transaction' or 'prediction_after_or_at_withdrawal' are excluded upstream by construction (the generator only emits rank_pairs for complaints where prediction_timestamp < withdrawal_timestamp); any remaining count here indicates a generator bug rather than an already-fixed row.",
+  "candidate_retrieval_stats": {
+    "total_actionable_complaints": 834,
+    "recall_of_union_candidate_set": 0.9197,
+    "forced_insertions_of_true_atm": 67,
+    "forced_insertion_rate": 0.0803,
+    "avg_candidates_per_complaint": 88.681
+  },
+  "recall_at_k": {
+    "recall_at_20": 0.2986,
+    "recall_at_40": 0.4365,
+    "recall_at_60": 0.7074,
+    "recall_at_80": 0.8705
+  }
+}

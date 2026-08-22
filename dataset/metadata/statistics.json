@@ -1,0 +1,74 @@
+{
+  "total_complaints": 1200,
+  "total_transactions": 4029,
+  "total_accounts": 1800,
+  "total_atms": 400,
+  "total_withdrawals": 1200,
+  "total_fraud_types": 11,
+  "avg_transactions_per_complaint": 3.357,
+  "avg_candidates_per_complaint": 88.681,
+  "ranking_positive_negative_ratio": {
+    "positive": 834,
+    "negative": 73126,
+    "ratio_neg_per_pos": 87.68
+  },
+  "geographic_distribution_by_city": {
+    "Mumbai": 155,
+    "Bengaluru": 129,
+    "Delhi": 113,
+    "Hyderabad": 105,
+    "Chennai": 99,
+    "Pune": 87,
+    "Kolkata": 85,
+    "Ahmedabad": 69,
+    "Nagpur": 55,
+    "Thane": 55,
+    "Jaipur": 52,
+    "Lucknow": 51,
+    "Surat": 40,
+    "Nashik": 37,
+    "Navi Mumbai": 37,
+    "Indore": 31
+  },
+  "fraud_type_distribution": {
+    "UPI Fraud": 283,
+    "Phishing": 185,
+    "Investment Scam": 160,
+    "Impersonation (Digital Arrest/Officer)": 127,
+    "Remote Access Scam": 108,
+    "Card Fraud": 96,
+    "OTP Fraud": 84,
+    "Fake Customer Care": 70,
+    "Marketplace Fraud (OLX/e-commerce)": 51,
+    "Loan App Scam": 22,
+    "Social Engineering (Romance/Job)": 14
+  },
+  "time_window_distribution": {
+    "0": 118,
+    "1": 219,
+    "2": 214,
+    "3": 182,
+    "4": 101
+  },
+  "candidate_retrieval": {
+    "total_actionable_complaints": 834,
+    "recall_of_union_candidate_set": 0.9197,
+    "forced_insertions_of_true_atm": 67,
+    "forced_insertion_rate": 0.0803,
+    "avg_candidates_per_complaint": 88.681
+  },
+  "recall_at_k": {
+    "recall_at_20": 0.2986,
+    "recall_at_40": 0.4365,
+    "recall_at_60": 0.7074,
+    "recall_at_80": 0.8705
+  },
+  "split_sizes": {
+    "train_complaints": 583,
+    "validation_complaints": 125,
+    "test_complaints": 126
+  },
+  "total_fraud_clusters": 27,
+  "total_cross_case_links": 26,
+  "avg_accounts_per_case": 3.568
+}

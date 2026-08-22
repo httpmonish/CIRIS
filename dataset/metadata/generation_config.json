@@ -1,0 +1,17 @@
+{
+  "seed": 42,
+  "scale": "demo",
+  "n_complaints": 1200,
+  "n_transactions_generated": 4029,
+  "n_accounts": 1800,
+  "n_atms": 400,
+  "n_withdrawals": 1200,
+  "sim_start": "2024-01-01",
+  "sim_end": "2026-06-30",
+  "candidate_recall_targets": [
+    20,
+    40,
+    60,
+    80
+  ]
+}

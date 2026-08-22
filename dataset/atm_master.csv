@@ -1,0 +1,401 @@
+atm_id,atm_name,bank_name,state,district,city,area,pincode,latitude,longitude,location_type
+ATM_000001,SBI Mall ATM 1,SBI,West Bengal,Kolkata,Kolkata,Area-27,53857,22.570259981191402,88.32864222600998,Mall ATM
+ATM_000002,Kotak Mahindra Bank Bank Branch ATM 2,Kotak Mahindra Bank,Delhi,New Delhi,Delhi,Area-37,41501,28.57323762217617,77.31218533657218,Bank Branch ATM
+ATM_000003,Union Bank of India Residential Complex ATM 3,Union Bank of India,Rajasthan,Jaipur,Jaipur,Area-10,74956,26.977487381625732,75.7269303823776,Residential Complex ATM
+ATM_000004,Kotak Mahindra Bank Bus Terminal ATM 4,Kotak Mahindra Bank,Tamil Nadu,Chennai,Chennai,Area-37,50685,13.072762724653366,80.26387571924367,Bus Terminal ATM
+ATM_000005,Punjab National Bank Bank Branch ATM 5,Punjab National Bank,Maharashtra,Mumbai City,Mumbai,Area-55,48204,19.15172421032615,72.9588642711249,Bank Branch ATM
+ATM_000006,IDFC First Bank Bus Terminal ATM 6,IDFC First Bank,Madhya Pradesh,Indore,Indore,Area-8,55895,22.778458741462313,75.93860984345183,Bus Terminal ATM
+ATM_000007,Punjab National Bank Residential Complex ATM 7,Punjab National Bank,West Bengal,Kolkata,Kolkata,Area-20,69539,22.561858355993618,88.33276292163383,Residential Complex ATM
+ATM_000008,Union Bank of India Bank Branch ATM 8,Union Bank of India,West Bengal,Kolkata,Kolkata,Area-41,52227,22.614712896346877,88.45062002814181,Bank Branch ATM
+ATM_000009,Bank of Baroda University ATM 9,Bank of Baroda,Maharashtra,Thane,Thane,Area-37,51237,19.20680726138619,72.97754191653533,University ATM
+ATM_000010,SBI Standalone Kiosk 10,SBI,Delhi,New Delhi,Delhi,Area-40,48718,28.72176710087986,77.2026438997545,Standalone Kiosk
+ATM_000011,Kotak Mahindra Bank Hospital ATM 11,Kotak Mahindra Bank,Delhi,New Delhi,Delhi,Area-34,45142,28.68584310331269,77.21106403513465,Hospital ATM
+ATM_000012,SBI Residential Complex ATM 12,SBI,Uttar Pradesh,Lucknow,Lucknow,Area-41,63357,26.916602762836686,80.95439138923042,Residential Complex ATM
+ATM_000013,IndusInd Bank Hospital ATM 13,IndusInd Bank,Telangana,Hyderabad,Hyderabad,Area-36,59225,17.39476814761355,78.48625496868215,Hospital ATM
+ATM_000014,Canara Bank Residential Complex ATM 14,Canara Bank,Gujarat,Ahmedabad,Ahmedabad,Area-5,49496,22.93891637098737,72.51796872006797,Residential Complex ATM
+ATM_000015,Punjab National Bank Bank Branch ATM 15,Punjab National Bank,Delhi,New Delhi,Delhi,Area-45,69472,28.616090074679143,77.21155537706599,Bank Branch ATM
+ATM_000016,Bank of Baroda Petrol Station ATM 16,Bank of Baroda,Maharashtra,Pune,Pune,Area-27,63569,18.541200718482763,73.84018670282627,Petrol Station ATM
+ATM_000017,Canara Bank Market ATM 17,Canara Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-4,51351,12.982896443923638,77.58376615140253,Market ATM
+ATM_000018,Axis Bank Market ATM 18,Axis Bank,Maharashtra,Mumbai City,Mumbai,Area-25,58128,18.994187971275416,72.85766356413873,Market ATM
+ATM_000019,Axis Bank Airport ATM 19,Axis Bank,Gujarat,Ahmedabad,Ahmedabad,Area-26,69652,23.00704618103605,72.55527239374688,Airport ATM
+ATM_000020,Bank of Baroda Residential Complex ATM 20,Bank of Baroda,Telangana,Hyderabad,Hyderabad,Area-6,53435,17.370707943410704,78.58876699456908,Residential Complex ATM
+ATM_000021,Axis Bank Standalone Kiosk 21,Axis Bank,West Bengal,Kolkata,Kolkata,Area-59,54685,22.64000361220316,88.38788148097339,Standalone Kiosk
+ATM_000022,IDFC First Bank Market ATM 22,IDFC First Bank,Maharashtra,Nagpur,Nagpur,Area-14,72197,21.142560585113028,79.08585332554065,Market ATM
+ATM_000023,HDFC Bank Market ATM 23,HDFC Bank,Gujarat,Surat,Surat,Area-20,57112,21.170037096942902,72.83170476702948,Market ATM
+ATM_000024,IDFC First Bank Mall ATM 24,IDFC First Bank,Rajasthan,Jaipur,Jaipur,Area-27,59323,26.909515646004493,75.7819370692034,Mall ATM
+ATM_000025,Punjab National Bank Mall ATM 25,Punjab National Bank,West Bengal,Kolkata,Kolkata,Area-50,54510,22.606385073565644,88.30312347833534,Mall ATM
+ATM_000026,Kotak Mahindra Bank Mall ATM 26,Kotak Mahindra Bank,Maharashtra,Thane,Navi Mumbai,Area-44,53454,19.119083215737124,73.0401359973329,Mall ATM
+ATM_000027,HDFC Bank Bank Branch ATM 27,HDFC Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-46,72828,12.95033523534078,77.57962653879115,Bank Branch ATM
+ATM_000028,Punjab National Bank Bank Branch ATM 28,Punjab National Bank,Maharashtra,Mumbai City,Mumbai,Area-14,40439,19.086775723525495,72.97419233300249,Bank Branch ATM
+ATM_000029,IDFC First Bank Petrol Station ATM 29,IDFC First Bank,Maharashtra,Thane,Thane,Area-50,76576,19.222644376367352,72.9734345140488,Petrol Station ATM
+ATM_000030,Axis Bank Mall ATM 30,Axis Bank,Tamil Nadu,Chennai,Chennai,Area-49,48633,13.080706445177317,80.35957453075774,Mall ATM
+ATM_000031,HDFC Bank Residential Complex ATM 31,HDFC Bank,West Bengal,Kolkata,Kolkata,Area-28,46119,22.495626098117945,88.29425663931455,Residential Complex ATM
+ATM_000032,Kotak Mahindra Bank Standalone Kiosk 32,Kotak Mahindra Bank,Gujarat,Surat,Surat,Area-33,67563,21.09140764918425,72.80155223359311,Standalone Kiosk
+ATM_000033,HDFC Bank Bank Branch ATM 33,HDFC Bank,Maharashtra,Nagpur,Nagpur,Area-3,72410,21.085827579273364,79.13732727685856,Bank Branch ATM
+ATM_000034,Axis Bank Bank Branch ATM 34,Axis Bank,Delhi,New Delhi,Delhi,Area-45,76478,28.57410657173998,77.1162926099141,Bank Branch ATM
+ATM_000035,Bank of Baroda Railway Station ATM 35,Bank of Baroda,Karnataka,Bengaluru Urban,Bengaluru,Area-57,71190,12.970941707796804,77.59019717267921,Railway Station ATM
+ATM_000036,Kotak Mahindra Bank Residential Complex ATM 36,Kotak Mahindra Bank,Maharashtra,Thane,Navi Mumbai,Area-28,44803,19.01308680550494,73.020278321365,Residential Complex ATM
+ATM_000037,Canara Bank Railway Station ATM 37,Canara Bank,Maharashtra,Thane,Thane,Area-32,75947,19.219014344415665,72.96381770905222,Railway Station ATM
+ATM_000038,Union Bank of India Market ATM 38,Union Bank of India,Karnataka,Bengaluru Urban,Bengaluru,Area-30,53120,13.025848086085105,77.58877860017694,Market ATM
+ATM_000039,Yes Bank Residential Complex ATM 39,Yes Bank,Maharashtra,Pune,Pune,Area-5,82640,18.44998213174327,73.89797019591478,Residential Complex ATM
+ATM_000040,SBI Residential Complex ATM 40,SBI,Tamil Nadu,Chennai,Chennai,Area-37,50786,13.014876324194478,80.26430193474677,Residential Complex ATM
+ATM_000041,Punjab National Bank Railway Station ATM 41,Punjab National Bank,Delhi,New Delhi,Delhi,Area-43,78356,28.705631888669142,77.21720396371722,Railway Station ATM
+ATM_000042,SBI Bank Branch ATM 42,SBI,Gujarat,Ahmedabad,Ahmedabad,Area-55,73808,23.027285447115542,72.55392522871009,Bank Branch ATM
+ATM_000043,SBI Bank Branch ATM 43,SBI,Tamil Nadu,Chennai,Chennai,Area-55,61668,13.003922213179136,80.26036405904456,Bank Branch ATM
+ATM_000044,ICICI Bank Bank Branch ATM 44,ICICI Bank,Maharashtra,Nashik,Nashik,Area-30,51935,19.980024097785513,73.8019390219631,Bank Branch ATM
+ATM_000045,Canara Bank Bank Branch ATM 45,Canara Bank,Gujarat,Ahmedabad,Ahmedabad,Area-57,82981,23.04680517942798,72.58912303394615,Bank Branch ATM
+ATM_000046,Yes Bank Market ATM 46,Yes Bank,Gujarat,Ahmedabad,Ahmedabad,Area-32,71138,23.081528414336862,72.51810777211162,Market ATM
+ATM_000047,IDFC First Bank Residential Complex ATM 47,IDFC First Bank,Delhi,New Delhi,Delhi,Area-38,55499,28.530165832142718,77.28298021687472,Residential Complex ATM
+ATM_000048,Canara Bank Market ATM 48,Canara Bank,Maharashtra,Nashik,Nashik,Area-36,81591,19.9703245206881,73.72566368017561,Market ATM
+ATM_000049,IDFC First Bank Standalone Kiosk 49,IDFC First Bank,Tamil Nadu,Chennai,Chennai,Area-59,63231,13.086181904283295,80.27557966805446,Standalone Kiosk
+ATM_000050,ICICI Bank Railway Station ATM 50,ICICI Bank,Maharashtra,Thane,Thane,Area-44,74402,19.28299302697493,72.96121863966702,Railway Station ATM
+ATM_000051,Yes Bank Petrol Station ATM 51,Yes Bank,Maharashtra,Thane,Navi Mumbai,Area-8,43987,19.03498986988828,73.03406186976342,Petrol Station ATM
+ATM_000052,Yes Bank Standalone Kiosk 52,Yes Bank,Maharashtra,Mumbai City,Mumbai,Area-5,48114,19.105798349312856,72.97379683545773,Standalone Kiosk
+ATM_000053,HDFC Bank University ATM 53,HDFC Bank,West Bengal,Kolkata,Kolkata,Area-25,43506,22.62111879618164,88.29955231607082,University ATM
+ATM_000054,Bank of Baroda Residential Complex ATM 54,Bank of Baroda,Tamil Nadu,Chennai,Chennai,Area-31,44857,13.098663542145438,80.2606685689505,Residential Complex ATM
+ATM_000055,IDFC First Bank Mall ATM 55,IDFC First Bank,Tamil Nadu,Chennai,Chennai,Area-40,62391,13.085036148706607,80.28059344946895,Mall ATM
+ATM_000056,Bank of Baroda Bank Branch ATM 56,Bank of Baroda,West Bengal,Kolkata,Kolkata,Area-29,40531,22.553114682698816,88.36795275956757,Bank Branch ATM
+ATM_000057,Yes Bank Railway Station ATM 57,Yes Bank,Delhi,New Delhi,Delhi,Area-31,46979,28.602932299817006,77.08895938394815,Railway Station ATM
+ATM_000058,IndusInd Bank Mall ATM 58,IndusInd Bank,Telangana,Hyderabad,Hyderabad,Area-55,52526,17.42078761520513,78.45075277349024,Mall ATM
+ATM_000059,Bank of Baroda Residential Complex ATM 59,Bank of Baroda,Maharashtra,Thane,Thane,Area-20,40217,19.156855072570554,73.03993894632441,Residential Complex ATM
+ATM_000060,SBI Mall ATM 60,SBI,Maharashtra,Mumbai City,Mumbai,Area-30,48146,19.00759210751052,72.86992999783358,Mall ATM
+ATM_000061,Punjab National Bank Petrol Station ATM 61,Punjab National Bank,Tamil Nadu,Chennai,Chennai,Area-33,71949,13.079480635064519,80.20725452795836,Petrol Station ATM
+ATM_000062,ICICI Bank Market ATM 62,ICICI Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-28,82338,12.969744704543817,77.57861234021964,Market ATM
+ATM_000063,Bank of Baroda Bank Branch ATM 63,Bank of Baroda,Karnataka,Bengaluru Urban,Bengaluru,Area-58,73553,12.992629096535614,77.49189143434175,Bank Branch ATM
+ATM_000064,Canara Bank Bus Terminal ATM 64,Canara Bank,West Bengal,Kolkata,Kolkata,Area-57,41181,22.543117157231535,88.3488916690425,Bus Terminal ATM
+ATM_000065,Bank of Baroda Standalone Kiosk 65,Bank of Baroda,Telangana,Hyderabad,Hyderabad,Area-31,63480,17.434467960954702,78.52670763185954,Standalone Kiosk
+ATM_000066,ICICI Bank Standalone Kiosk 66,ICICI Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-27,40936,13.03389423523437,77.55055075170849,Standalone Kiosk
+ATM_000067,Axis Bank Mall ATM 67,Axis Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-35,71551,13.018204834127848,77.54074468340339,Mall ATM
+ATM_000068,Union Bank of India Railway Station ATM 68,Union Bank of India,Maharashtra,Nashik,Nashik,Area-11,82973,20.02776437261695,73.68649367415586,Railway Station ATM
+ATM_000069,SBI Petrol Station ATM 69,SBI,Maharashtra,Mumbai City,Mumbai,Area-26,81332,19.08899081210344,72.88766865769026,Petrol Station ATM
+ATM_000070,ICICI Bank Bank Branch ATM 70,ICICI Bank,Delhi,New Delhi,Delhi,Area-13,77553,28.629432248344212,77.26905065412222,Bank Branch ATM
+ATM_000071,Yes Bank Residential Complex ATM 71,Yes Bank,Maharashtra,Pune,Pune,Area-9,71872,18.518644120823534,73.81067215987761,Residential Complex ATM
+ATM_000072,HDFC Bank Bank Branch ATM 72,HDFC Bank,Delhi,New Delhi,Delhi,Area-6,47502,28.66462062286966,77.21746011662675,Bank Branch ATM
+ATM_000073,Punjab National Bank Bank Branch ATM 73,Punjab National Bank,Gujarat,Ahmedabad,Ahmedabad,Area-35,45351,23.035278731188015,72.56957719916596,Bank Branch ATM
+ATM_000074,ICICI Bank Market ATM 74,ICICI Bank,Maharashtra,Pune,Pune,Area-1,57869,18.510012076811666,73.8673639449096,Market ATM
+ATM_000075,HDFC Bank Market ATM 75,HDFC Bank,Maharashtra,Mumbai City,Mumbai,Area-39,77450,19.07023940137228,72.84648047877309,Market ATM
+ATM_000076,Bank of Baroda Market ATM 76,Bank of Baroda,Maharashtra,Pune,Pune,Area-26,54577,18.54545811515855,73.83414983848944,Market ATM
+ATM_000077,Kotak Mahindra Bank Mall ATM 77,Kotak Mahindra Bank,Maharashtra,Nashik,Nashik,Area-22,79977,19.961013614778327,73.8200624868421,Mall ATM
+ATM_000078,ICICI Bank Residential Complex ATM 78,ICICI Bank,Tamil Nadu,Chennai,Chennai,Area-46,49267,13.054902311175745,80.33221535457712,Residential Complex ATM
+ATM_000079,SBI Market ATM 79,SBI,Karnataka,Bengaluru Urban,Bengaluru,Area-32,70370,12.91839194471208,77.55015252867156,Market ATM
+ATM_000080,HDFC Bank Market ATM 80,HDFC Bank,West Bengal,Kolkata,Kolkata,Area-44,48127,22.53372082262308,88.34041075311443,Market ATM
+ATM_000081,Canara Bank Mall ATM 81,Canara Bank,Tamil Nadu,Chennai,Chennai,Area-42,57452,13.045515312876448,80.29521731399635,Mall ATM
+ATM_000082,Yes Bank Bank Branch ATM 82,Yes Bank,Delhi,New Delhi,Delhi,Area-2,64279,28.59502131661763,77.19300617227998,Bank Branch ATM
+ATM_000083,ICICI Bank Standalone Kiosk 83,ICICI Bank,Gujarat,Ahmedabad,Ahmedabad,Area-13,70711,23.08093017221658,72.54410723265323,Standalone Kiosk
+ATM_000084,Axis Bank Railway Station ATM 84,Axis Bank,Maharashtra,Thane,Navi Mumbai,Area-34,59263,18.999431326545828,73.03702113199323,Railway Station ATM
+ATM_000085,Punjab National Bank Standalone Kiosk 85,Punjab National Bank,Maharashtra,Mumbai City,Mumbai,Area-58,61706,19.077280293822,72.88159607696088,Standalone Kiosk
+ATM_000086,Punjab National Bank Bank Branch ATM 86,Punjab National Bank,Maharashtra,Mumbai City,Mumbai,Area-10,56336,19.043575603739146,72.91107028466806,Bank Branch ATM
+ATM_000087,ICICI Bank Residential Complex ATM 87,ICICI Bank,Tamil Nadu,Chennai,Chennai,Area-7,61419,13.04237547348726,80.30318609124991,Residential Complex ATM
+ATM_000088,SBI Market ATM 88,SBI,Delhi,New Delhi,Delhi,Area-56,57413,28.630470770534295,77.22938379698242,Market ATM
+ATM_000089,Kotak Mahindra Bank Airport ATM 89,Kotak Mahindra Bank,Maharashtra,Thane,Thane,Area-58,53744,19.250512789923103,73.03406164087934,Airport ATM
+ATM_000090,Punjab National Bank Market ATM 90,Punjab National Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-10,59519,12.94715427123051,77.53706480691804,Market ATM
+ATM_000091,Punjab National Bank Bank Branch ATM 91,Punjab National Bank,Maharashtra,Thane,Thane,Area-24,68424,19.177845445931013,73.04610051589084,Bank Branch ATM
+ATM_000092,Axis Bank Hospital ATM 92,Axis Bank,Tamil Nadu,Chennai,Chennai,Area-37,44866,13.149954627073186,80.25059224526495,Hospital ATM
+ATM_000093,IndusInd Bank Standalone Kiosk 93,IndusInd Bank,Delhi,New Delhi,Delhi,Area-12,42614,28.6167369892839,77.28928122735135,Standalone Kiosk
+ATM_000094,Canara Bank Petrol Station ATM 94,Canara Bank,Delhi,New Delhi,Delhi,Area-20,51292,28.64169165059887,77.23167573592822,Petrol Station ATM
+ATM_000095,Bank of Baroda Mall ATM 95,Bank of Baroda,Maharashtra,Nashik,Nashik,Area-24,41909,19.999374347419597,73.69923227905664,Mall ATM
+ATM_000096,ICICI Bank Standalone Kiosk 96,ICICI Bank,Telangana,Hyderabad,Hyderabad,Area-38,58408,17.42854028389265,78.44441128823419,Standalone Kiosk
+ATM_000097,IDFC First Bank University ATM 97,IDFC First Bank,Delhi,New Delhi,Delhi,Area-19,71135,28.605704254668684,77.26130185465165,University ATM
+ATM_000098,Yes Bank Standalone Kiosk 98,Yes Bank,Maharashtra,Mumbai City,Mumbai,Area-25,64544,19.096067115150106,72.94608903244756,Standalone Kiosk
+ATM_000099,SBI Mall ATM 99,SBI,Maharashtra,Mumbai City,Mumbai,Area-18,63211,19.091312358228304,72.91564084956053,Mall ATM
+ATM_000100,IndusInd Bank Standalone Kiosk 100,IndusInd Bank,Gujarat,Surat,Surat,Area-45,80314,21.11529805610748,72.82290478510794,Standalone Kiosk
+ATM_000101,Union Bank of India Standalone Kiosk 101,Union Bank of India,Uttar Pradesh,Lucknow,Lucknow,Area-10,69771,26.768619192173965,80.96379808067807,Standalone Kiosk
+ATM_000102,HDFC Bank Residential Complex ATM 102,HDFC Bank,Tamil Nadu,Chennai,Chennai,Area-14,54217,13.077019595578525,80.36890787939947,Residential Complex ATM
+ATM_000103,IDFC First Bank Mall ATM 103,IDFC First Bank,Maharashtra,Pune,Pune,Area-15,52825,18.615989770601267,73.88610716158159,Mall ATM
+ATM_000104,HDFC Bank Mall ATM 104,HDFC Bank,Gujarat,Surat,Surat,Area-54,78942,21.11612095563628,72.83787475433475,Mall ATM
+ATM_000105,SBI Hospital ATM 105,SBI,West Bengal,Kolkata,Kolkata,Area-56,49645,22.627019730360914,88.348504386611,Hospital ATM
+ATM_000106,HDFC Bank Market ATM 106,HDFC Bank,Tamil Nadu,Chennai,Chennai,Area-30,46738,13.032986407125769,80.19806118233626,Market ATM
+ATM_000107,Bank of Baroda Petrol Station ATM 107,Bank of Baroda,Delhi,New Delhi,Delhi,Area-10,57741,28.57991887846852,77.21009315974506,Petrol Station ATM
+ATM_000108,Canara Bank Market ATM 108,Canara Bank,Maharashtra,Pune,Pune,Area-45,69992,18.589901303342067,73.91787562266242,Market ATM
+ATM_000109,Punjab National Bank Railway Station ATM 109,Punjab National Bank,Maharashtra,Mumbai City,Mumbai,Area-30,61407,19.075182285473264,72.93421810074747,Railway Station ATM
+ATM_000110,HDFC Bank Petrol Station ATM 110,HDFC Bank,Uttar Pradesh,Lucknow,Lucknow,Area-51,62246,26.843222708791792,80.95968625369402,Petrol Station ATM
+ATM_000111,ICICI Bank Bank Branch ATM 111,ICICI Bank,Delhi,New Delhi,Delhi,Area-22,44566,28.614623547099384,77.20016437276645,Bank Branch ATM
+ATM_000112,Yes Bank Bank Branch ATM 112,Yes Bank,Maharashtra,Thane,Navi Mumbai,Area-59,75579,19.098053456425703,72.96234821414691,Bank Branch ATM
+ATM_000113,IndusInd Bank Standalone Kiosk 113,IndusInd Bank,Maharashtra,Nashik,Nashik,Area-48,73259,20.002396209142194,73.78609597129261,Standalone Kiosk
+ATM_000114,IDFC First Bank Petrol Station ATM 114,IDFC First Bank,Telangana,Hyderabad,Hyderabad,Area-14,59651,17.415193888388494,78.48362266665102,Petrol Station ATM
+ATM_000115,HDFC Bank Airport ATM 115,HDFC Bank,Maharashtra,Thane,Navi Mumbai,Area-43,54112,19.06890069024167,73.0254751144905,Airport ATM
+ATM_000116,IDFC First Bank Railway Station ATM 116,IDFC First Bank,Rajasthan,Jaipur,Jaipur,Area-17,43933,26.930292496888846,75.78119583030755,Railway Station ATM
+ATM_000117,Union Bank of India Bank Branch ATM 117,Union Bank of India,West Bengal,Kolkata,Kolkata,Area-21,66337,22.60313735155465,88.37992691168564,Bank Branch ATM
+ATM_000118,Kotak Mahindra Bank Residential Complex ATM 118,Kotak Mahindra Bank,Tamil Nadu,Chennai,Chennai,Area-15,51135,13.134732197921853,80.33347937040632,Residential Complex ATM
+ATM_000119,HDFC Bank Bank Branch ATM 119,HDFC Bank,Delhi,New Delhi,Delhi,Area-41,80197,28.61336731870137,77.21070331799069,Bank Branch ATM
+ATM_000120,IndusInd Bank Bank Branch ATM 120,IndusInd Bank,Telangana,Hyderabad,Hyderabad,Area-16,72315,17.300469863811713,78.4561256689587,Bank Branch ATM
+ATM_000121,Bank of Baroda Bus Terminal ATM 121,Bank of Baroda,Telangana,Hyderabad,Hyderabad,Area-38,54346,17.460934753635037,78.54223338719872,Bus Terminal ATM
+ATM_000122,SBI Market ATM 122,SBI,Telangana,Hyderabad,Hyderabad,Area-35,75129,17.407787151681706,78.45194038063788,Market ATM
+ATM_000123,ICICI Bank University ATM 123,ICICI Bank,Maharashtra,Mumbai City,Mumbai,Area-45,55351,19.063664994250786,72.86593487113007,University ATM
+ATM_000124,Punjab National Bank Petrol Station ATM 124,Punjab National Bank,Delhi,New Delhi,Delhi,Area-59,51273,28.551231898272963,77.18953613893922,Petrol Station ATM
+ATM_000125,SBI Standalone Kiosk 125,SBI,Maharashtra,Mumbai City,Mumbai,Area-1,79440,19.082563965212646,72.88949657268364,Standalone Kiosk
+ATM_000126,Axis Bank Bank Branch ATM 126,Axis Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-59,57446,12.970793101253118,77.63507536164143,Bank Branch ATM
+ATM_000127,Bank of Baroda Mall ATM 127,Bank of Baroda,Maharashtra,Nagpur,Nagpur,Area-7,82404,21.201147518815567,79.18211667761801,Mall ATM
+ATM_000128,IndusInd Bank Market ATM 128,IndusInd Bank,Maharashtra,Thane,Thane,Area-32,54394,19.282608972898892,72.88671749392927,Market ATM
+ATM_000129,HDFC Bank Bank Branch ATM 129,HDFC Bank,Maharashtra,Mumbai City,Mumbai,Area-21,54180,19.003947880936206,72.83311037002841,Bank Branch ATM
+ATM_000130,Kotak Mahindra Bank Railway Station ATM 130,Kotak Mahindra Bank,Telangana,Hyderabad,Hyderabad,Area-38,65122,17.381863535499495,78.45162698844055,Railway Station ATM
+ATM_000131,Yes Bank Bus Terminal ATM 131,Yes Bank,Maharashtra,Thane,Navi Mumbai,Area-43,49281,19.01179633696639,73.10507488756701,Bus Terminal ATM
+ATM_000132,IDFC First Bank Bank Branch ATM 132,IDFC First Bank,Uttar Pradesh,Lucknow,Lucknow,Area-51,52780,26.79406042424502,81.00804437478753,Bank Branch ATM
+ATM_000133,IndusInd Bank Market ATM 133,IndusInd Bank,Telangana,Hyderabad,Hyderabad,Area-24,65990,17.350342968739632,78.51142873534339,Market ATM
+ATM_000134,ICICI Bank Standalone Kiosk 134,ICICI Bank,Maharashtra,Nagpur,Nagpur,Area-56,55934,21.150156962133117,79.01405966579246,Standalone Kiosk
+ATM_000135,IDFC First Bank Bank Branch ATM 135,IDFC First Bank,Telangana,Hyderabad,Hyderabad,Area-20,41553,17.385162348910296,78.48549670598813,Bank Branch ATM
+ATM_000136,IndusInd Bank Market ATM 136,IndusInd Bank,Maharashtra,Mumbai City,Mumbai,Area-13,74578,19.08205772125746,72.90073903873818,Market ATM
+ATM_000137,Axis Bank Petrol Station ATM 137,Axis Bank,Gujarat,Surat,Surat,Area-23,80382,21.223179555604478,72.80923885411525,Petrol Station ATM
+ATM_000138,Bank of Baroda Petrol Station ATM 138,Bank of Baroda,Karnataka,Bengaluru Urban,Bengaluru,Area-32,41795,12.984454809489609,77.6070901962344,Petrol Station ATM
+ATM_000139,Kotak Mahindra Bank Hospital ATM 139,Kotak Mahindra Bank,West Bengal,Kolkata,Kolkata,Area-40,42787,22.586849274333396,88.3521034778392,Hospital ATM
+ATM_000140,Bank of Baroda Mall ATM 140,Bank of Baroda,Maharashtra,Mumbai City,Mumbai,Area-50,71859,19.149011924286693,72.93412246935895,Mall ATM
+ATM_000141,Axis Bank Hospital ATM 141,Axis Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-14,60905,12.96184454963462,77.70387594017772,Hospital ATM
+ATM_000142,IndusInd Bank Railway Station ATM 142,IndusInd Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-18,47490,13.005844262065027,77.54391096445266,Railway Station ATM
+ATM_000143,IndusInd Bank Mall ATM 143,IndusInd Bank,Uttar Pradesh,Lucknow,Lucknow,Area-56,45789,26.8855842861817,81.038053560332,Mall ATM
+ATM_000144,Punjab National Bank Bank Branch ATM 144,Punjab National Bank,Telangana,Hyderabad,Hyderabad,Area-26,70824,17.293341510217825,78.5446742019531,Bank Branch ATM
+ATM_000145,IDFC First Bank Market ATM 145,IDFC First Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-15,72377,12.9570457342655,77.59946740582812,Market ATM
+ATM_000146,Punjab National Bank Mall ATM 146,Punjab National Bank,Maharashtra,Pune,Pune,Area-59,42935,18.521843319164628,73.90778304556412,Mall ATM
+ATM_000147,IDFC First Bank Railway Station ATM 147,IDFC First Bank,Maharashtra,Nagpur,Nagpur,Area-27,61184,21.13530887191366,79.0441079144747,Railway Station ATM
+ATM_000148,Canara Bank Petrol Station ATM 148,Canara Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-59,79993,12.97674521141251,77.58745947170766,Petrol Station ATM
+ATM_000149,Bank of Baroda Bus Terminal ATM 149,Bank of Baroda,Delhi,New Delhi,Delhi,Area-55,59792,28.671486099645577,77.14305107541588,Bus Terminal ATM
+ATM_000150,HDFC Bank Railway Station ATM 150,HDFC Bank,Maharashtra,Mumbai City,Mumbai,Area-54,41183,19.051041251285977,72.91970829237393,Railway Station ATM
+ATM_000151,Canara Bank Bank Branch ATM 151,Canara Bank,Gujarat,Ahmedabad,Ahmedabad,Area-35,51689,22.9727121741609,72.56078065791901,Bank Branch ATM
+ATM_000152,Axis Bank Mall ATM 152,Axis Bank,Rajasthan,Jaipur,Jaipur,Area-48,45130,26.912563096449293,75.80556641364709,Mall ATM
+ATM_000153,ICICI Bank Bus Terminal ATM 153,ICICI Bank,Maharashtra,Thane,Thane,Area-57,68792,19.218939379544256,72.99880293291267,Bus Terminal ATM
+ATM_000154,ICICI Bank Mall ATM 154,ICICI Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-16,71818,13.023491950281374,77.67998971856682,Mall ATM
+ATM_000155,IndusInd Bank Railway Station ATM 155,IndusInd Bank,Maharashtra,Mumbai City,Mumbai,Area-3,74641,19.080488176870666,72.87582040913196,Railway Station ATM
+ATM_000156,HDFC Bank Petrol Station ATM 156,HDFC Bank,Tamil Nadu,Chennai,Chennai,Area-19,62870,13.101891989694947,80.25397609097955,Petrol Station ATM
+ATM_000157,IDFC First Bank Residential Complex ATM 157,IDFC First Bank,Maharashtra,Pune,Pune,Area-38,54187,18.525800872314733,73.82389227783078,Residential Complex ATM
+ATM_000158,Yes Bank Market ATM 158,Yes Bank,Tamil Nadu,Chennai,Chennai,Area-33,72348,13.030031635088802,80.26467486307006,Market ATM
+ATM_000159,SBI Standalone Kiosk 159,SBI,Tamil Nadu,Chennai,Chennai,Area-5,82472,13.01941088226226,80.2745388108205,Standalone Kiosk
+ATM_000160,Canara Bank University ATM 160,Canara Bank,West Bengal,Kolkata,Kolkata,Area-34,76138,22.520200049045243,88.35316886121771,University ATM
+ATM_000161,Kotak Mahindra Bank Residential Complex ATM 161,Kotak Mahindra Bank,Maharashtra,Mumbai City,Mumbai,Area-11,68502,19.06714542643581,72.87550863111355,Residential Complex ATM
+ATM_000162,Punjab National Bank Standalone Kiosk 162,Punjab National Bank,Uttar Pradesh,Lucknow,Lucknow,Area-30,59338,26.82255292645224,80.95799999485584,Standalone Kiosk
+ATM_000163,Union Bank of India University ATM 163,Union Bank of India,Maharashtra,Pune,Pune,Area-34,81453,18.582093040732644,73.92753375223428,University ATM
+ATM_000164,Punjab National Bank Airport ATM 164,Punjab National Bank,Maharashtra,Mumbai City,Mumbai,Area-38,76482,19.124536092974644,72.92948649943835,Airport ATM
+ATM_000165,Bank of Baroda Petrol Station ATM 165,Bank of Baroda,Karnataka,Bengaluru Urban,Bengaluru,Area-25,42890,13.038643372162904,77.5733161676105,Petrol Station ATM
+ATM_000166,Bank of Baroda Market ATM 166,Bank of Baroda,Delhi,New Delhi,Delhi,Area-25,47343,28.541906903719134,77.21829870947677,Market ATM
+ATM_000167,IDFC First Bank Bank Branch ATM 167,IDFC First Bank,Gujarat,Ahmedabad,Ahmedabad,Area-41,77903,23.10143671627846,72.54542993473302,Bank Branch ATM
+ATM_000168,Canara Bank Bank Branch ATM 168,Canara Bank,Gujarat,Ahmedabad,Ahmedabad,Area-45,79482,23.025746018285766,72.57724382268653,Bank Branch ATM
+ATM_000169,Punjab National Bank Market ATM 169,Punjab National Bank,Maharashtra,Nagpur,Nagpur,Area-48,72394,21.108460788270737,79.07395210235893,Market ATM
+ATM_000170,IndusInd Bank Market ATM 170,IndusInd Bank,Gujarat,Surat,Surat,Area-20,71551,21.185514188320827,72.89145417459305,Market ATM
+ATM_000171,IDFC First Bank Mall ATM 171,IDFC First Bank,Maharashtra,Nashik,Nashik,Area-26,42475,19.99676790453139,73.8287297347669,Mall ATM
+ATM_000172,IndusInd Bank Market ATM 172,IndusInd Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-20,60331,13.061272055904244,77.61218651410661,Market ATM
+ATM_000173,Union Bank of India Market ATM 173,Union Bank of India,Maharashtra,Pune,Pune,Area-32,56551,18.558664336758845,73.89409880578008,Market ATM
+ATM_000174,Punjab National Bank Hospital ATM 174,Punjab National Bank,Uttar Pradesh,Lucknow,Lucknow,Area-8,42236,26.918709668867425,80.89972566928067,Hospital ATM
+ATM_000175,IDFC First Bank Bank Branch ATM 175,IDFC First Bank,Maharashtra,Thane,Thane,Area-26,72416,19.17828062274152,73.06595802578543,Bank Branch ATM
+ATM_000176,Axis Bank Railway Station ATM 176,Axis Bank,Maharashtra,Mumbai City,Mumbai,Area-12,66608,19.033545538500235,72.84141876415256,Railway Station ATM
+ATM_000177,Axis Bank Petrol Station ATM 177,Axis Bank,Delhi,New Delhi,Delhi,Area-32,63471,28.517936227568605,77.23342454540783,Petrol Station ATM
+ATM_000178,Bank of Baroda Hospital ATM 178,Bank of Baroda,Madhya Pradesh,Indore,Indore,Area-51,60840,22.6681438064313,75.89798883939375,Hospital ATM
+ATM_000179,IndusInd Bank Residential Complex ATM 179,IndusInd Bank,Rajasthan,Jaipur,Jaipur,Area-59,81330,26.82231709323649,75.76678503979676,Residential Complex ATM
+ATM_000180,Kotak Mahindra Bank University ATM 180,Kotak Mahindra Bank,West Bengal,Kolkata,Kolkata,Area-27,68971,22.586746422822937,88.40071491243924,University ATM
+ATM_000181,Punjab National Bank University ATM 181,Punjab National Bank,Rajasthan,Jaipur,Jaipur,Area-4,40805,26.966187974153172,75.78297340833223,University ATM
+ATM_000182,Bank of Baroda Bus Terminal ATM 182,Bank of Baroda,Rajasthan,Jaipur,Jaipur,Area-14,61969,26.936306907927246,75.72871603602272,Bus Terminal ATM
+ATM_000183,Axis Bank Mall ATM 183,Axis Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-7,64853,12.971002325574643,77.58296980418518,Mall ATM
+ATM_000184,Canara Bank Railway Station ATM 184,Canara Bank,Maharashtra,Nashik,Nashik,Area-45,47227,19.955240651529998,73.79874250651875,Railway Station ATM
+ATM_000185,Punjab National Bank Standalone Kiosk 185,Punjab National Bank,West Bengal,Kolkata,Kolkata,Area-59,79573,22.629431797105507,88.45191459808768,Standalone Kiosk
+ATM_000186,Kotak Mahindra Bank Residential Complex ATM 186,Kotak Mahindra Bank,Tamil Nadu,Chennai,Chennai,Area-33,64252,13.14259936414573,80.23722682211573,Residential Complex ATM
+ATM_000187,Punjab National Bank Bus Terminal ATM 187,Punjab National Bank,Delhi,New Delhi,Delhi,Area-11,49835,28.603476720589104,77.22735396994915,Bus Terminal ATM
+ATM_000188,Axis Bank Market ATM 188,Axis Bank,Maharashtra,Mumbai City,Mumbai,Area-2,53625,19.110832496650467,72.88970270267518,Market ATM
+ATM_000189,IndusInd Bank Bus Terminal ATM 189,IndusInd Bank,West Bengal,Kolkata,Kolkata,Area-58,53336,22.56123810986596,88.38265652286051,Bus Terminal ATM
+ATM_000190,Punjab National Bank Bank Branch ATM 190,Punjab National Bank,Maharashtra,Pune,Pune,Area-19,47935,18.521139899391553,73.85397954333075,Bank Branch ATM
+ATM_000191,SBI Bank Branch ATM 191,SBI,Uttar Pradesh,Lucknow,Lucknow,Area-7,80203,26.77478793131292,80.86788868362937,Bank Branch ATM
+ATM_000192,Punjab National Bank Bank Branch ATM 192,Punjab National Bank,Maharashtra,Pune,Pune,Area-11,55606,18.520655306596943,73.80559935559889,Bank Branch ATM
+ATM_000193,Kotak Mahindra Bank Residential Complex ATM 193,Kotak Mahindra Bank,Maharashtra,Thane,Thane,Area-16,56748,19.227301543694644,72.94420584887054,Residential Complex ATM
+ATM_000194,HDFC Bank Mall ATM 194,HDFC Bank,Gujarat,Ahmedabad,Ahmedabad,Area-39,51152,23.03781946874166,72.6397004783593,Mall ATM
+ATM_000195,Axis Bank Hospital ATM 195,Axis Bank,Maharashtra,Thane,Thane,Area-53,54637,19.21900180027548,72.97771412622745,Hospital ATM
+ATM_000196,HDFC Bank Standalone Kiosk 196,HDFC Bank,Maharashtra,Thane,Navi Mumbai,Area-17,47833,19.005196214529054,73.0417768562589,Standalone Kiosk
+ATM_000197,Kotak Mahindra Bank Bank Branch ATM 197,Kotak Mahindra Bank,Telangana,Hyderabad,Hyderabad,Area-41,40160,17.336191471028762,78.42565075644137,Bank Branch ATM
+ATM_000198,Union Bank of India Bank Branch ATM 198,Union Bank of India,Rajasthan,Jaipur,Jaipur,Area-4,61560,26.980908442155847,75.78841459480564,Bank Branch ATM
+ATM_000199,IndusInd Bank Hospital ATM 199,IndusInd Bank,Maharashtra,Thane,Navi Mumbai,Area-1,52332,19.139049059135743,73.02502301321114,Hospital ATM
+ATM_000200,Punjab National Bank Railway Station ATM 200,Punjab National Bank,Maharashtra,Nashik,Nashik,Area-4,43695,19.984562308418386,73.8598281251077,Railway Station ATM
+ATM_000201,Yes Bank Residential Complex ATM 201,Yes Bank,West Bengal,Kolkata,Kolkata,Area-55,56206,22.62034679559839,88.38515202232594,Residential Complex ATM
+ATM_000202,ICICI Bank Bank Branch ATM 202,ICICI Bank,Gujarat,Surat,Surat,Area-35,57942,21.090697402479382,72.85398532063265,Bank Branch ATM
+ATM_000203,IDFC First Bank Standalone Kiosk 203,IDFC First Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-48,51904,13.038883467536111,77.66723371480546,Standalone Kiosk
+ATM_000204,Kotak Mahindra Bank Hospital ATM 204,Kotak Mahindra Bank,Maharashtra,Thane,Thane,Area-2,51267,19.263169806797624,73.04555491961383,Hospital ATM
+ATM_000205,IDFC First Bank Railway Station ATM 205,IDFC First Bank,Maharashtra,Mumbai City,Mumbai,Area-2,51390,19.005813536121565,72.79630763415469,Railway Station ATM
+ATM_000206,IDFC First Bank Railway Station ATM 206,IDFC First Bank,Maharashtra,Pune,Pune,Area-51,45628,18.454279847591135,73.91225868385318,Railway Station ATM
+ATM_000207,Kotak Mahindra Bank Residential Complex ATM 207,Kotak Mahindra Bank,Maharashtra,Thane,Thane,Area-7,54745,19.300937050726734,72.93130679628723,Residential Complex ATM
+ATM_000208,Axis Bank Railway Station ATM 208,Axis Bank,Tamil Nadu,Chennai,Chennai,Area-10,61497,13.077506996162347,80.28218740458425,Railway Station ATM
+ATM_000209,Kotak Mahindra Bank Mall ATM 209,Kotak Mahindra Bank,Maharashtra,Mumbai City,Mumbai,Area-31,60240,19.06419376695908,72.79485599836282,Mall ATM
+ATM_000210,IDFC First Bank Mall ATM 210,IDFC First Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-36,70193,12.925436933061711,77.60641484170263,Mall ATM
+ATM_000211,IndusInd Bank Railway Station ATM 211,IndusInd Bank,Tamil Nadu,Chennai,Chennai,Area-14,71998,13.050644787167151,80.21887814339456,Railway Station ATM
+ATM_000212,IndusInd Bank Petrol Station ATM 212,IndusInd Bank,Telangana,Hyderabad,Hyderabad,Area-27,72509,17.327711900060155,78.4432606986068,Petrol Station ATM
+ATM_000213,ICICI Bank Petrol Station ATM 213,ICICI Bank,Maharashtra,Thane,Navi Mumbai,Area-40,53884,18.929684335066543,73.04857336225288,Petrol Station ATM
+ATM_000214,Canara Bank Mall ATM 214,Canara Bank,Gujarat,Ahmedabad,Ahmedabad,Area-27,51533,23.123743905272597,72.5357036573373,Mall ATM
+ATM_000215,HDFC Bank Hospital ATM 215,HDFC Bank,Tamil Nadu,Chennai,Chennai,Area-23,73929,13.065557608744104,80.29741398983336,Hospital ATM
+ATM_000216,Union Bank of India Railway Station ATM 216,Union Bank of India,West Bengal,Kolkata,Kolkata,Area-5,79178,22.607616381833843,88.44098267925628,Railway Station ATM
+ATM_000217,IndusInd Bank Bank Branch ATM 217,IndusInd Bank,Maharashtra,Thane,Thane,Area-27,78202,19.182902062919357,72.90085092579497,Bank Branch ATM
+ATM_000218,SBI Market ATM 218,SBI,Maharashtra,Thane,Thane,Area-48,65935,19.23955061597074,72.9454320142576,Market ATM
+ATM_000219,Canara Bank Residential Complex ATM 219,Canara Bank,Uttar Pradesh,Lucknow,Lucknow,Area-37,68951,26.859665287906292,80.94995576624906,Residential Complex ATM
+ATM_000220,IndusInd Bank Bank Branch ATM 220,IndusInd Bank,Delhi,New Delhi,Delhi,Area-53,54382,28.60969312785745,77.21056930146217,Bank Branch ATM
+ATM_000221,Yes Bank Railway Station ATM 221,Yes Bank,Maharashtra,Nashik,Nashik,Area-8,54419,20.06308103984392,73.73387978363421,Railway Station ATM
+ATM_000222,Punjab National Bank Market ATM 222,Punjab National Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-1,69506,12.971473139407328,77.54027330063093,Market ATM
+ATM_000223,HDFC Bank Hospital ATM 223,HDFC Bank,Tamil Nadu,Chennai,Chennai,Area-33,71474,13.189103767144722,80.26507209306659,Hospital ATM
+ATM_000224,IndusInd Bank Bank Branch ATM 224,IndusInd Bank,Gujarat,Surat,Surat,Area-11,53270,21.120908593065135,72.82052917115357,Bank Branch ATM
+ATM_000225,IndusInd Bank Mall ATM 225,IndusInd Bank,Maharashtra,Nashik,Nashik,Area-36,63907,19.940849585841423,73.6948114451899,Mall ATM
+ATM_000226,Kotak Mahindra Bank Petrol Station ATM 226,Kotak Mahindra Bank,Uttar Pradesh,Lucknow,Lucknow,Area-54,76327,26.832292606363673,80.99338305519392,Petrol Station ATM
+ATM_000227,IndusInd Bank Mall ATM 227,IndusInd Bank,Maharashtra,Mumbai City,Mumbai,Area-20,60734,19.15718362687224,72.84831105016114,Mall ATM
+ATM_000228,SBI Bank Branch ATM 228,SBI,Karnataka,Bengaluru Urban,Bengaluru,Area-33,66160,12.965478498822426,77.60160591219447,Bank Branch ATM
+ATM_000229,Canara Bank Bank Branch ATM 229,Canara Bank,Telangana,Hyderabad,Hyderabad,Area-41,65134,17.380668801573417,78.42393949788111,Bank Branch ATM
+ATM_000230,SBI Mall ATM 230,SBI,Maharashtra,Mumbai City,Mumbai,Area-9,45687,19.00485893891834,72.93015286345715,Mall ATM
+ATM_000231,IndusInd Bank Market ATM 231,IndusInd Bank,Maharashtra,Thane,Thane,Area-53,44404,19.125778981564185,72.9380051403598,Market ATM
+ATM_000232,Union Bank of India University ATM 232,Union Bank of India,Delhi,New Delhi,Delhi,Area-12,65689,28.597117232060743,77.10952033836377,University ATM
+ATM_000233,Yes Bank Standalone Kiosk 233,Yes Bank,Gujarat,Surat,Surat,Area-48,59184,21.166209460248332,72.83085952660973,Standalone Kiosk
+ATM_000234,Kotak Mahindra Bank Standalone Kiosk 234,Kotak Mahindra Bank,Telangana,Hyderabad,Hyderabad,Area-39,74953,17.41861886034882,78.46342814518971,Standalone Kiosk
+ATM_000235,SBI Residential Complex ATM 235,SBI,Uttar Pradesh,Lucknow,Lucknow,Area-9,78772,26.84209769237251,80.94906536069078,Residential Complex ATM
+ATM_000236,SBI Mall ATM 236,SBI,Gujarat,Ahmedabad,Ahmedabad,Area-43,57887,23.01538106117906,72.56115543766649,Mall ATM
+ATM_000237,Punjab National Bank Mall ATM 237,Punjab National Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-12,60222,12.931570789651314,77.6572523843517,Mall ATM
+ATM_000238,Union Bank of India Residential Complex ATM 238,Union Bank of India,West Bengal,Kolkata,Kolkata,Area-36,76387,22.507977612888034,88.40945837621726,Residential Complex ATM
+ATM_000239,HDFC Bank Railway Station ATM 239,HDFC Bank,Maharashtra,Mumbai City,Mumbai,Area-57,80431,18.998218709610455,72.91025520766317,Railway Station ATM
+ATM_000240,Yes Bank Petrol Station ATM 240,Yes Bank,Maharashtra,Mumbai City,Mumbai,Area-57,77582,19.14182262226751,72.94805715683843,Petrol Station ATM
+ATM_000241,ICICI Bank Petrol Station ATM 241,ICICI Bank,Gujarat,Ahmedabad,Ahmedabad,Area-52,60366,23.089526498005423,72.61873155555956,Petrol Station ATM
+ATM_000242,Bank of Baroda Bank Branch ATM 242,Bank of Baroda,West Bengal,Kolkata,Kolkata,Area-30,75154,22.52969807378482,88.2824569449239,Bank Branch ATM
+ATM_000243,ICICI Bank Market ATM 243,ICICI Bank,Maharashtra,Pune,Pune,Area-34,60431,18.51743894014746,73.85207264990669,Market ATM
+ATM_000244,Bank of Baroda Railway Station ATM 244,Bank of Baroda,Karnataka,Bengaluru Urban,Bengaluru,Area-18,63328,12.958407667174459,77.57238012769452,Railway Station ATM
+ATM_000245,Bank of Baroda Bank Branch ATM 245,Bank of Baroda,Telangana,Hyderabad,Hyderabad,Area-55,68446,17.451714339485374,78.4954272070574,Bank Branch ATM
+ATM_000246,SBI Market ATM 246,SBI,Rajasthan,Jaipur,Jaipur,Area-29,48277,26.8694817950312,75.87953477374165,Market ATM
+ATM_000247,Kotak Mahindra Bank Bus Terminal ATM 247,Kotak Mahindra Bank,Telangana,Hyderabad,Hyderabad,Area-46,69335,17.385156689456352,78.4871826233591,Bus Terminal ATM
+ATM_000248,IDFC First Bank Petrol Station ATM 248,IDFC First Bank,Delhi,New Delhi,Delhi,Area-22,53663,28.6236896248309,77.14661292533447,Petrol Station ATM
+ATM_000249,IndusInd Bank Airport ATM 249,IndusInd Bank,Delhi,New Delhi,Delhi,Area-44,54448,28.66079544759772,77.14494487184595,Airport ATM
+ATM_000250,Axis Bank Petrol Station ATM 250,Axis Bank,Delhi,New Delhi,Delhi,Area-14,50410,28.61396675657173,77.21264530441651,Petrol Station ATM
+ATM_000251,Yes Bank Railway Station ATM 251,Yes Bank,Tamil Nadu,Chennai,Chennai,Area-44,69579,13.061284888957662,80.23195760540673,Railway Station ATM
+ATM_000252,Yes Bank Railway Station ATM 252,Yes Bank,Rajasthan,Jaipur,Jaipur,Area-3,82793,26.97896359678675,75.8661569858974,Railway Station ATM
+ATM_000253,IndusInd Bank Railway Station ATM 253,IndusInd Bank,Delhi,New Delhi,Delhi,Area-7,40440,28.602473075055293,77.29067749427534,Railway Station ATM
+ATM_000254,Punjab National Bank Bank Branch ATM 254,Punjab National Bank,Maharashtra,Pune,Pune,Area-21,52628,18.53694397909265,73.87743113261676,Bank Branch ATM
+ATM_000255,Yes Bank Residential Complex ATM 255,Yes Bank,Maharashtra,Pune,Pune,Area-29,51968,18.50112590286409,73.95177939271942,Residential Complex ATM
+ATM_000256,Kotak Mahindra Bank Mall ATM 256,Kotak Mahindra Bank,West Bengal,Kolkata,Kolkata,Area-42,52569,22.55546312912808,88.32762532195562,Mall ATM
+ATM_000257,SBI Railway Station ATM 257,SBI,Gujarat,Ahmedabad,Ahmedabad,Area-22,45917,23.100493558215113,72.51786415394638,Railway Station ATM
+ATM_000258,Axis Bank Hospital ATM 258,Axis Bank,Maharashtra,Mumbai City,Mumbai,Area-2,79813,19.0854985144813,72.91038578946552,Hospital ATM
+ATM_000259,Union Bank of India Mall ATM 259,Union Bank of India,Maharashtra,Mumbai City,Mumbai,Area-20,55152,19.01439915720663,72.86005389860291,Mall ATM
+ATM_000260,HDFC Bank Bank Branch ATM 260,HDFC Bank,Telangana,Hyderabad,Hyderabad,Area-26,70485,17.372096549397376,78.44381442569795,Bank Branch ATM
+ATM_000261,Bank of Baroda Bank Branch ATM 261,Bank of Baroda,Maharashtra,Thane,Thane,Area-33,82727,19.246720480337473,72.9689280934121,Bank Branch ATM
+ATM_000262,IDFC First Bank Standalone Kiosk 262,IDFC First Bank,Gujarat,Ahmedabad,Ahmedabad,Area-38,63987,22.948674104257442,72.50498909702354,Standalone Kiosk
+ATM_000263,HDFC Bank Petrol Station ATM 263,HDFC Bank,Maharashtra,Nashik,Nashik,Area-15,74512,19.996849358431675,73.81137049655416,Petrol Station ATM
+ATM_000264,Bank of Baroda Railway Station ATM 264,Bank of Baroda,Maharashtra,Thane,Thane,Area-37,40183,19.21183617215474,72.97121343647044,Railway Station ATM
+ATM_000265,ICICI Bank Residential Complex ATM 265,ICICI Bank,Uttar Pradesh,Lucknow,Lucknow,Area-38,59605,26.83085789246287,80.98363285587789,Residential Complex ATM
+ATM_000266,Kotak Mahindra Bank Hospital ATM 266,Kotak Mahindra Bank,Maharashtra,Thane,Thane,Area-46,41213,19.295011560360354,72.96582279328184,Hospital ATM
+ATM_000267,ICICI Bank Hospital ATM 267,ICICI Bank,Maharashtra,Nashik,Nashik,Area-31,70775,19.926985537109807,73.8445524756298,Hospital ATM
+ATM_000268,IndusInd Bank Railway Station ATM 268,IndusInd Bank,Maharashtra,Thane,Thane,Area-48,41556,19.175685505502067,72.87303811608564,Railway Station ATM
+ATM_000269,SBI Bank Branch ATM 269,SBI,Maharashtra,Mumbai City,Mumbai,Area-14,43750,19.107698538950824,72.88263004250993,Bank Branch ATM
+ATM_000270,IndusInd Bank University ATM 270,IndusInd Bank,Maharashtra,Mumbai City,Mumbai,Area-42,75881,19.04031086258275,72.90511404786614,University ATM
+ATM_000271,IDFC First Bank Bus Terminal ATM 271,IDFC First Bank,Maharashtra,Mumbai City,Mumbai,Area-3,65665,19.08646623215896,72.86664059449174,Bus Terminal ATM
+ATM_000272,Yes Bank Standalone Kiosk 272,Yes Bank,Maharashtra,Thane,Navi Mumbai,Area-7,79650,18.985170560413643,72.98772187343326,Standalone Kiosk
+ATM_000273,Yes Bank Petrol Station ATM 273,Yes Bank,Maharashtra,Mumbai City,Mumbai,Area-52,59778,18.9747741925689,72.91706664148816,Petrol Station ATM
+ATM_000274,ICICI Bank Bank Branch ATM 274,ICICI Bank,Telangana,Hyderabad,Hyderabad,Area-29,65857,17.454715162828638,78.45559705083552,Bank Branch ATM
+ATM_000275,IndusInd Bank Petrol Station ATM 275,IndusInd Bank,Tamil Nadu,Chennai,Chennai,Area-37,62881,13.12181367829086,80.21824345122793,Petrol Station ATM
+ATM_000276,Canara Bank Residential Complex ATM 276,Canara Bank,Delhi,New Delhi,Delhi,Area-36,41132,28.59530661848684,77.2524303496254,Residential Complex ATM
+ATM_000277,IndusInd Bank Petrol Station ATM 277,IndusInd Bank,Maharashtra,Nagpur,Nagpur,Area-41,44600,21.05069982069505,79.05888962386011,Petrol Station ATM
+ATM_000278,Yes Bank Mall ATM 278,Yes Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-15,70294,12.91798904988722,77.59812223480134,Mall ATM
+ATM_000279,Kotak Mahindra Bank University ATM 279,Kotak Mahindra Bank,Rajasthan,Jaipur,Jaipur,Area-11,46873,26.902603651311935,75.7752716203306,University ATM
+ATM_000280,Punjab National Bank Market ATM 280,Punjab National Bank,Gujarat,Ahmedabad,Ahmedabad,Area-3,72682,23.002582842473544,72.60846343532445,Market ATM
+ATM_000281,HDFC Bank Petrol Station ATM 281,HDFC Bank,Maharashtra,Mumbai City,Mumbai,Area-52,60477,19.076264331768794,72.8853780837726,Petrol Station ATM
+ATM_000282,HDFC Bank Hospital ATM 282,HDFC Bank,Maharashtra,Thane,Navi Mumbai,Area-14,40269,19.051630192585513,73.01765242288891,Hospital ATM
+ATM_000283,Punjab National Bank Petrol Station ATM 283,Punjab National Bank,Maharashtra,Pune,Pune,Area-34,78404,18.522095770853554,73.8557727812762,Petrol Station ATM
+ATM_000284,IDFC First Bank Bus Terminal ATM 284,IDFC First Bank,Maharashtra,Pune,Pune,Area-27,70732,18.547515296326686,73.81365300828696,Bus Terminal ATM
+ATM_000285,Kotak Mahindra Bank Bank Branch ATM 285,Kotak Mahindra Bank,Telangana,Hyderabad,Hyderabad,Area-10,53283,17.452956696566496,78.47688672793815,Bank Branch ATM
+ATM_000286,Bank of Baroda Railway Station ATM 286,Bank of Baroda,Delhi,New Delhi,Delhi,Area-25,69184,28.61273228687192,77.16674493026554,Railway Station ATM
+ATM_000287,ICICI Bank Market ATM 287,ICICI Bank,Maharashtra,Mumbai City,Mumbai,Area-5,61898,19.080182299796885,72.82981670403878,Market ATM
+ATM_000288,Kotak Mahindra Bank Market ATM 288,Kotak Mahindra Bank,Delhi,New Delhi,Delhi,Area-11,70787,28.6220945924951,77.09124408506763,Market ATM
+ATM_000289,Canara Bank Standalone Kiosk 289,Canara Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-9,43279,12.890909400270655,77.60473950651868,Standalone Kiosk
+ATM_000290,IndusInd Bank Mall ATM 290,IndusInd Bank,Maharashtra,Mumbai City,Mumbai,Area-49,51362,19.019704173630252,72.8944179347802,Mall ATM
+ATM_000291,Union Bank of India Petrol Station ATM 291,Union Bank of India,Gujarat,Ahmedabad,Ahmedabad,Area-34,48973,23.024387860325554,72.60476029315736,Petrol Station ATM
+ATM_000292,Canara Bank Residential Complex ATM 292,Canara Bank,Maharashtra,Mumbai City,Mumbai,Area-55,47736,19.016477784437882,72.79669589469381,Residential Complex ATM
+ATM_000293,Yes Bank Railway Station ATM 293,Yes Bank,Uttar Pradesh,Lucknow,Lucknow,Area-26,65648,26.840484537407267,80.97382126729464,Railway Station ATM
+ATM_000294,Bank of Baroda Petrol Station ATM 294,Bank of Baroda,Maharashtra,Mumbai City,Mumbai,Area-12,49376,19.07427508541924,72.91487108170753,Petrol Station ATM
+ATM_000295,IndusInd Bank Standalone Kiosk 295,IndusInd Bank,Gujarat,Ahmedabad,Ahmedabad,Area-36,66368,22.93821234751503,72.51648916351694,Standalone Kiosk
+ATM_000296,Punjab National Bank Market ATM 296,Punjab National Bank,Uttar Pradesh,Lucknow,Lucknow,Area-55,69135,26.798367487152287,80.98058649230224,Market ATM
+ATM_000297,HDFC Bank Bank Branch ATM 297,HDFC Bank,Madhya Pradesh,Indore,Indore,Area-32,43754,22.735203387378554,75.94304101477319,Bank Branch ATM
+ATM_000298,Bank of Baroda Petrol Station ATM 298,Bank of Baroda,Gujarat,Ahmedabad,Ahmedabad,Area-2,66138,23.048251909433514,72.50790014305613,Petrol Station ATM
+ATM_000299,HDFC Bank Residential Complex ATM 299,HDFC Bank,West Bengal,Kolkata,Kolkata,Area-18,78104,22.617823576424037,88.30512869667955,Residential Complex ATM
+ATM_000300,HDFC Bank Petrol Station ATM 300,HDFC Bank,Telangana,Hyderabad,Hyderabad,Area-55,81755,17.401000640230144,78.51618072213297,Petrol Station ATM
+ATM_000301,Yes Bank Residential Complex ATM 301,Yes Bank,West Bengal,Kolkata,Kolkata,Area-31,82953,22.598665254680242,88.36523243306792,Residential Complex ATM
+ATM_000302,IDFC First Bank Residential Complex ATM 302,IDFC First Bank,Maharashtra,Thane,Thane,Area-57,53780,19.200340152519644,73.00974576293312,Residential Complex ATM
+ATM_000303,ICICI Bank Mall ATM 303,ICICI Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-31,49524,12.976542292214004,77.57811812544057,Mall ATM
+ATM_000304,Yes Bank Standalone Kiosk 304,Yes Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-1,50536,13.021831666544454,77.51243518116864,Standalone Kiosk
+ATM_000305,SBI Market ATM 305,SBI,Rajasthan,Jaipur,Jaipur,Area-52,77492,26.932165373579654,75.8135284411878,Market ATM
+ATM_000306,Axis Bank Residential Complex ATM 306,Axis Bank,Delhi,New Delhi,Delhi,Area-46,43391,28.623145565195355,77.14066011207886,Residential Complex ATM
+ATM_000307,Union Bank of India Bank Branch ATM 307,Union Bank of India,Delhi,New Delhi,Delhi,Area-43,73569,28.677872510757314,77.27382117966692,Bank Branch ATM
+ATM_000308,Axis Bank Mall ATM 308,Axis Bank,Telangana,Hyderabad,Hyderabad,Area-58,64487,17.31968721122498,78.54327250009126,Mall ATM
+ATM_000309,Union Bank of India University ATM 309,Union Bank of India,Maharashtra,Pune,Pune,Area-12,52637,18.567791300301774,73.8562633323361,University ATM
+ATM_000310,Yes Bank Bus Terminal ATM 310,Yes Bank,Maharashtra,Thane,Thane,Area-54,67907,19.236471969168107,73.02911695269455,Bus Terminal ATM
+ATM_000311,SBI Petrol Station ATM 311,SBI,Karnataka,Bengaluru Urban,Bengaluru,Area-14,66994,13.032621712566838,77.68546359171873,Petrol Station ATM
+ATM_000312,SBI Mall ATM 312,SBI,Delhi,New Delhi,Delhi,Area-58,75170,28.54938317025352,77.24773501194764,Mall ATM
+ATM_000313,IndusInd Bank Residential Complex ATM 313,IndusInd Bank,Maharashtra,Pune,Pune,Area-12,56445,18.456075024739004,73.79326097893265,Residential Complex ATM
+ATM_000314,Kotak Mahindra Bank University ATM 314,Kotak Mahindra Bank,Delhi,New Delhi,Delhi,Area-33,40262,28.70292954882561,77.16351611949578,University ATM
+ATM_000315,Kotak Mahindra Bank Bus Terminal ATM 315,Kotak Mahindra Bank,Delhi,New Delhi,Delhi,Area-47,72416,28.698427388576636,77.19734047995648,Bus Terminal ATM
+ATM_000316,Bank of Baroda Petrol Station ATM 316,Bank of Baroda,Maharashtra,Nagpur,Nagpur,Area-5,46358,21.16393328460704,79.09729534989516,Petrol Station ATM
+ATM_000317,Bank of Baroda Bus Terminal ATM 317,Bank of Baroda,Delhi,New Delhi,Delhi,Area-4,51256,28.65322568764463,77.26178362583438,Bus Terminal ATM
+ATM_000318,Union Bank of India Standalone Kiosk 318,Union Bank of India,Tamil Nadu,Chennai,Chennai,Area-51,44786,13.085488907526226,80.25975933537603,Standalone Kiosk
+ATM_000319,Kotak Mahindra Bank Standalone Kiosk 319,Kotak Mahindra Bank,Maharashtra,Nashik,Nashik,Area-4,75546,19.988375124261342,73.86428476082742,Standalone Kiosk
+ATM_000320,HDFC Bank Hospital ATM 320,HDFC Bank,Gujarat,Surat,Surat,Area-37,66926,21.24760742524913,72.75777716435258,Hospital ATM
+ATM_000321,Canara Bank Bank Branch ATM 321,Canara Bank,Uttar Pradesh,Lucknow,Lucknow,Area-56,76129,26.818021241490687,80.89303487145207,Bank Branch ATM
+ATM_000322,Union Bank of India Railway Station ATM 322,Union Bank of India,Karnataka,Bengaluru Urban,Bengaluru,Area-37,80160,13.00731780206445,77.62564469028096,Railway Station ATM
+ATM_000323,HDFC Bank Standalone Kiosk 323,HDFC Bank,Maharashtra,Nagpur,Nagpur,Area-29,41462,21.147720468146318,79.08459152499843,Standalone Kiosk
+ATM_000324,Punjab National Bank Market ATM 324,Punjab National Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-25,72172,13.017916186976068,77.68987980350212,Market ATM
+ATM_000325,IDFC First Bank Market ATM 325,IDFC First Bank,Gujarat,Ahmedabad,Ahmedabad,Area-38,52336,23.012626498140403,72.57699454528036,Market ATM
+ATM_000326,Canara Bank Bank Branch ATM 326,Canara Bank,Tamil Nadu,Chennai,Chennai,Area-34,57986,13.07849561142994,80.26923169793007,Bank Branch ATM
+ATM_000327,HDFC Bank Mall ATM 327,HDFC Bank,Gujarat,Ahmedabad,Ahmedabad,Area-30,54287,22.99589851238561,72.57126086103086,Mall ATM
+ATM_000328,SBI University ATM 328,SBI,Karnataka,Bengaluru Urban,Bengaluru,Area-10,45278,12.968834038411906,77.58790710832811,University ATM
+ATM_000329,Kotak Mahindra Bank Bank Branch ATM 329,Kotak Mahindra Bank,Telangana,Hyderabad,Hyderabad,Area-40,45615,17.35675588217431,78.44448379343599,Bank Branch ATM
+ATM_000330,Bank of Baroda Mall ATM 330,Bank of Baroda,Maharashtra,Nashik,Nashik,Area-44,58547,20.053223544411868,73.78683249358077,Mall ATM
+ATM_000331,IndusInd Bank Residential Complex ATM 331,IndusInd Bank,West Bengal,Kolkata,Kolkata,Area-42,75621,22.606391122932326,88.3637670790471,Residential Complex ATM
+ATM_000332,Kotak Mahindra Bank Bank Branch ATM 332,Kotak Mahindra Bank,Maharashtra,Thane,Navi Mumbai,Area-5,46438,19.02752019354111,73.02909837280127,Bank Branch ATM
+ATM_000333,IndusInd Bank Petrol Station ATM 333,IndusInd Bank,Tamil Nadu,Chennai,Chennai,Area-42,53843,13.092670157524704,80.27767499995733,Petrol Station ATM
+ATM_000334,ICICI Bank Railway Station ATM 334,ICICI Bank,Rajasthan,Jaipur,Jaipur,Area-44,53224,26.9066317936065,75.74113436075218,Railway Station ATM
+ATM_000335,Bank of Baroda University ATM 335,Bank of Baroda,Maharashtra,Thane,Thane,Area-11,71485,19.224773403021103,72.97708756153456,University ATM
+ATM_000336,HDFC Bank Petrol Station ATM 336,HDFC Bank,Telangana,Hyderabad,Hyderabad,Area-51,44720,17.35358213323187,78.55861569653,Petrol Station ATM
+ATM_000337,Kotak Mahindra Bank University ATM 337,Kotak Mahindra Bank,Maharashtra,Mumbai City,Mumbai,Area-31,49880,19.054280878217295,72.88341484047682,University ATM
+ATM_000338,ICICI Bank Railway Station ATM 338,ICICI Bank,Tamil Nadu,Chennai,Chennai,Area-28,75432,13.053623755779812,80.28596260821823,Railway Station ATM
+ATM_000339,Bank of Baroda Market ATM 339,Bank of Baroda,Maharashtra,Mumbai City,Mumbai,Area-43,63610,19.116403784783518,72.89201347295692,Market ATM
+ATM_000340,Punjab National Bank Petrol Station ATM 340,Punjab National Bank,Uttar Pradesh,Lucknow,Lucknow,Area-31,68162,26.825566074193386,80.90162280571303,Petrol Station ATM
+ATM_000341,ICICI Bank Railway Station ATM 341,ICICI Bank,Maharashtra,Thane,Thane,Area-33,53253,19.21819144879545,72.97825144248796,Railway Station ATM
+ATM_000342,HDFC Bank Railway Station ATM 342,HDFC Bank,Gujarat,Surat,Surat,Area-19,69162,21.173025683536803,72.81846573650408,Railway Station ATM
+ATM_000343,Kotak Mahindra Bank Bank Branch ATM 343,Kotak Mahindra Bank,Gujarat,Ahmedabad,Ahmedabad,Area-55,62754,23.068518809346262,72.48325002482707,Bank Branch ATM
+ATM_000344,IndusInd Bank Residential Complex ATM 344,IndusInd Bank,Telangana,Hyderabad,Hyderabad,Area-58,80358,17.385057689163343,78.48657407288304,Residential Complex ATM
+ATM_000345,ICICI Bank Standalone Kiosk 345,ICICI Bank,West Bengal,Kolkata,Kolkata,Area-8,40750,22.525023267884155,88.39364754967747,Standalone Kiosk
+ATM_000346,Punjab National Bank Standalone Kiosk 346,Punjab National Bank,West Bengal,Kolkata,Kolkata,Area-44,40159,22.549604170475213,88.41551566084136,Standalone Kiosk
+ATM_000347,ICICI Bank Petrol Station ATM 347,ICICI Bank,Gujarat,Surat,Surat,Area-2,82875,21.169933193662782,72.79248473236532,Petrol Station ATM
+ATM_000348,IDFC First Bank Market ATM 348,IDFC First Bank,Maharashtra,Pune,Pune,Area-22,70851,18.535196051079847,73.81006454658142,Market ATM
+ATM_000349,Punjab National Bank Market ATM 349,Punjab National Bank,Telangana,Hyderabad,Hyderabad,Area-58,43179,17.300740133893683,78.4915549267342,Market ATM
+ATM_000350,IndusInd Bank Mall ATM 350,IndusInd Bank,Maharashtra,Mumbai City,Mumbai,Area-11,52121,19.14716239397614,72.81778688658537,Mall ATM
+ATM_000351,ICICI Bank Standalone Kiosk 351,ICICI Bank,Telangana,Hyderabad,Hyderabad,Area-23,78150,17.40240283904891,78.50987960505167,Standalone Kiosk
+ATM_000352,SBI Railway Station ATM 352,SBI,Maharashtra,Thane,Navi Mumbai,Area-13,63867,19.058274564831336,73.00429701439202,Railway Station ATM
+ATM_000353,Kotak Mahindra Bank University ATM 353,Kotak Mahindra Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-43,71310,12.993179480108086,77.60987326046228,University ATM
+ATM_000354,Canara Bank Hospital ATM 354,Canara Bank,Telangana,Hyderabad,Hyderabad,Area-28,60592,17.414555516598405,78.53137541700366,Hospital ATM
+ATM_000355,IndusInd Bank Mall ATM 355,IndusInd Bank,Delhi,New Delhi,Delhi,Area-35,73483,28.541697633686937,77.19124389403521,Mall ATM
+ATM_000356,Yes Bank Market ATM 356,Yes Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-56,52815,12.994088595745303,77.60502311695032,Market ATM
+ATM_000357,Yes Bank Bank Branch ATM 357,Yes Bank,West Bengal,Kolkata,Kolkata,Area-31,78539,22.606405074960566,88.37651323932268,Bank Branch ATM
+ATM_000358,Canara Bank Residential Complex ATM 358,Canara Bank,West Bengal,Kolkata,Kolkata,Area-44,41550,22.673181586555607,88.36425503087035,Residential Complex ATM
+ATM_000359,Punjab National Bank Airport ATM 359,Punjab National Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-6,78989,12.966764028192289,77.59669894328123,Airport ATM
+ATM_000360,Bank of Baroda Residential Complex ATM 360,Bank of Baroda,Telangana,Hyderabad,Hyderabad,Area-13,57234,17.392676167679383,78.43512610299828,Residential Complex ATM
+ATM_000361,HDFC Bank Bus Terminal ATM 361,HDFC Bank,Uttar Pradesh,Lucknow,Lucknow,Area-56,64846,26.921789590959662,80.9649223891589,Bus Terminal ATM
+ATM_000362,Bank of Baroda Bank Branch ATM 362,Bank of Baroda,Maharashtra,Mumbai City,Mumbai,Area-51,80146,19.066627111472375,72.86363441085587,Bank Branch ATM
+ATM_000363,Punjab National Bank Railway Station ATM 363,Punjab National Bank,Maharashtra,Mumbai City,Mumbai,Area-39,52529,19.078271266035365,72.8728429328227,Railway Station ATM
+ATM_000364,SBI Bank Branch ATM 364,SBI,Maharashtra,Mumbai City,Mumbai,Area-23,44896,19.083361829636065,72.89145701439439,Bank Branch ATM
+ATM_000365,ICICI Bank Bank Branch ATM 365,ICICI Bank,Tamil Nadu,Chennai,Chennai,Area-12,44698,13.142658167648497,80.3520057432738,Bank Branch ATM
+ATM_000366,Kotak Mahindra Bank Bank Branch ATM 366,Kotak Mahindra Bank,Delhi,New Delhi,Delhi,Area-51,79716,28.61454197180099,77.2081250301855,Bank Branch ATM
+ATM_000367,Punjab National Bank Residential Complex ATM 367,Punjab National Bank,West Bengal,Kolkata,Kolkata,Area-47,72336,22.581628463262547,88.3441383678443,Residential Complex ATM
+ATM_000368,IndusInd Bank Bank Branch ATM 368,IndusInd Bank,Tamil Nadu,Chennai,Chennai,Area-15,75476,13.079418730512336,80.26985889826781,Bank Branch ATM
+ATM_000369,Bank of Baroda Bank Branch ATM 369,Bank of Baroda,Maharashtra,Nagpur,Nagpur,Area-35,42429,21.15083782779605,79.07656973867611,Bank Branch ATM
+ATM_000370,IndusInd Bank Hospital ATM 370,IndusInd Bank,Rajasthan,Jaipur,Jaipur,Area-37,55568,26.96837587549417,75.82867978776605,Hospital ATM
+ATM_000371,Canara Bank Market ATM 371,Canara Bank,West Bengal,Kolkata,Kolkata,Area-29,51515,22.55201095056009,88.38131207783552,Market ATM
+ATM_000372,SBI Petrol Station ATM 372,SBI,Maharashtra,Pune,Pune,Area-55,58393,18.515686608978136,73.79199321472161,Petrol Station ATM
+ATM_000373,ICICI Bank Standalone Kiosk 373,ICICI Bank,Delhi,New Delhi,Delhi,Area-8,69374,28.610913615498532,77.28160210525232,Standalone Kiosk
+ATM_000374,Union Bank of India University ATM 374,Union Bank of India,Maharashtra,Nashik,Nashik,Area-16,72325,19.998843712913928,73.69208766809405,University ATM
+ATM_000375,Kotak Mahindra Bank Standalone Kiosk 375,Kotak Mahindra Bank,Maharashtra,Thane,Thane,Area-6,77428,19.21778759363977,72.97808574954735,Standalone Kiosk
+ATM_000376,Axis Bank Market ATM 376,Axis Bank,Maharashtra,Thane,Thane,Area-41,41234,19.218454183176572,72.88039923272343,Market ATM
+ATM_000377,Kotak Mahindra Bank Standalone Kiosk 377,Kotak Mahindra Bank,Uttar Pradesh,Lucknow,Lucknow,Area-38,74884,26.781409663198932,80.96271185047749,Standalone Kiosk
+ATM_000378,Yes Bank Mall ATM 378,Yes Bank,Delhi,New Delhi,Delhi,Area-59,49641,28.602026069778045,77.22378910447576,Mall ATM
+ATM_000379,Punjab National Bank Mall ATM 379,Punjab National Bank,Delhi,New Delhi,Delhi,Area-32,64220,28.62997567133125,77.30240810649397,Mall ATM
+ATM_000380,SBI Market ATM 380,SBI,West Bengal,Kolkata,Kolkata,Area-9,59723,22.59651120195155,88.46065298871946,Market ATM
+ATM_000381,Axis Bank Bank Branch ATM 381,Axis Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-27,81862,12.971857476882128,77.56639347194628,Bank Branch ATM
+ATM_000382,IndusInd Bank Petrol Station ATM 382,IndusInd Bank,Uttar Pradesh,Lucknow,Lucknow,Area-6,44313,26.919571587666734,81.02185200548482,Petrol Station ATM
+ATM_000383,IDFC First Bank Railway Station ATM 383,IDFC First Bank,West Bengal,Kolkata,Kolkata,Area-40,58235,22.614733544326302,88.39126645372609,Railway Station ATM
+ATM_000384,Yes Bank Bank Branch ATM 384,Yes Bank,Karnataka,Bengaluru Urban,Bengaluru,Area-40,64107,13.000743516487171,77.65449161142344,Bank Branch ATM
+ATM_000385,Yes Bank Railway Station ATM 385,Yes Bank,Delhi,New Delhi,Delhi,Area-51,44142,28.662020038768976,77.3171614946639,Railway Station ATM
+ATM_000386,HDFC Bank Hospital ATM 386,HDFC Bank,Madhya Pradesh,Indore,Indore,Area-21,52785,22.7369288913546,75.81971944977604,Hospital ATM
+ATM_000387,Axis Bank Bus Terminal ATM 387,Axis Bank,Tamil Nadu,Chennai,Chennai,Area-19,47987,13.01206799664274,80.32443136103434,Bus Terminal ATM
+ATM_000388,SBI Standalone Kiosk 388,SBI,Gujarat,Surat,Surat,Area-5,51140,21.204558776203847,72.8288721561159,Standalone Kiosk
+ATM_000389,SBI University ATM 389,SBI,Maharashtra,Mumbai City,Mumbai,Area-25,54772,19.132232363015927,72.94710985739454,University ATM
+ATM_000390,Yes Bank Bank Branch ATM 390,Yes Bank,Gujarat,Ahmedabad,Ahmedabad,Area-29,44164,22.985504681327402,72.51340374808777,Bank Branch ATM
+ATM_000391,IndusInd Bank Petrol Station ATM 391,IndusInd Bank,Telangana,Hyderabad,Hyderabad,Area-45,76632,17.362813379838723,78.49445966374988,Petrol Station ATM
+ATM_000392,HDFC Bank Bus Terminal ATM 392,HDFC Bank,Maharashtra,Mumbai City,Mumbai,Area-45,54779,19.04099485355675,72.90721447952957,Bus Terminal ATM
+ATM_000393,Union Bank of India Railway Station ATM 393,Union Bank of India,Telangana,Hyderabad,Hyderabad,Area-9,76422,17.40929417327396,78.46126983216824,Railway Station ATM
+ATM_000394,Kotak Mahindra Bank Standalone Kiosk 394,Kotak Mahindra Bank,Tamil Nadu,Chennai,Chennai,Area-17,64109,13.091045074425018,80.26937589869779,Standalone Kiosk
+ATM_000395,SBI Residential Complex ATM 395,SBI,Maharashtra,Mumbai City,Mumbai,Area-31,53635,19.078249801923082,72.8752545479219,Residential Complex ATM
+ATM_000396,Yes Bank Bus Terminal ATM 396,Yes Bank,Delhi,New Delhi,Delhi,Area-20,48991,28.627184032432975,77.2488949583097,Bus Terminal ATM
+ATM_000397,Yes Bank Market ATM 397,Yes Bank,Gujarat,Ahmedabad,Ahmedabad,Area-2,81331,23.022875444545114,72.573598296441,Market ATM
+ATM_000398,Kotak Mahindra Bank Bus Terminal ATM 398,Kotak Mahindra Bank,Maharashtra,Nashik,Nashik,Area-50,57270,19.98754407764876,73.77398182769393,Bus Terminal ATM
+ATM_000399,Union Bank of India Market ATM 399,Union Bank of India,Delhi,New Delhi,Delhi,Area-44,61211,28.59484071879401,77.29562609817984,Market ATM
+ATM_000400,Punjab National Bank Standalone Kiosk 400,Punjab National Bank,Delhi,New Delhi,Delhi,Area-31,56599,28.60656436145671,77.12220082563526,Standalone Kiosk
