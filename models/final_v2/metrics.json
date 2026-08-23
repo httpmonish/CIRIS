@@ -1,0 +1,29 @@
+{
+  "training_timestamp": "2026-08-23T22:09:15.590862",
+  "total_training_duration_seconds": 217.65,
+  "ranker_metrics": {
+    "NDCG@1": 0.33647017045454547,
+    "NDCG@3": 0.3932226508291285,
+    "NDCG@5": 0.42802821948959724,
+    "NDCG@10": 0.47361886452291907,
+    "MRR": 0.42802498604247907,
+    "HitRate@1": 0.3366477272727273,
+    "HitRate@3": 0.4357244318181818,
+    "HitRate@5": 0.5207741477272727,
+    "HitRate@10": 0.6612215909090909
+  },
+  "time_metrics": {
+    "regression_MAE_hours": 4.804596469577994,
+    "regression_RMSE_hours": 7.35238580788857,
+    "classification_Accuracy": 0.24041193181818182,
+    "classification_Macro_F1": 0.18063983351540389
+  },
+  "anomaly_metrics": {
+    "n_samples": 26285,
+    "score_min": -0.06581006012941763,
+    "score_max": 0.17440482665608967
+  },
+  "calibration_metrics": {
+    "brier_score": 0.0020713570433950027
+  }
+}

@@ -86,9 +86,12 @@ class CIPHERPipeline:
             spatial_index=self.spatial_index,
             hotspot_cache=self.hotspot_cache,
             graph_engine=self.graph_engine,
-            geo_radius_km=100.0,
-            geo_fallback_knn=100,
-            top_hotspots_count=100,
+            geo_radius_km=250.0,
+            geo_fallback_knn=200,
+            top_hotspots_count=1500,
+            enable_district_fallback=True,
+            enable_state_fallback=True,
+            state_top_k=100,
         )
         self.feature_builder = FeatureBuilder(
             atm_master_df=self.atm_master_df,
@@ -287,16 +290,21 @@ class CIPHERPipeline:
     def load_pipeline(self, model_dir: str) -> None:
         """Load complete serialized pipeline."""
         meta = joblib.load(os.path.join(model_dir, "offline_metadata.joblib"))
-        self.atm_master_df = meta["atm_master"]
-        self.withdrawals_df = meta["withdrawals"]
-        self.graph_edges_df = meta["graph_edges"]
-        self.case_links_df = meta["case_links"]
-        self.upi_df = meta["upi"]
+        self.atm_master_df = meta.get("atm_master_df", meta.get("atm_master"))
+        self.withdrawals_df = meta.get("withdrawals_df", meta.get("withdrawals"))
+        self.graph_edges_df = meta.get("graph_edges_df", meta.get("graph_edges"))
+        self.case_links_df = meta.get("case_links_df", meta.get("case_links"))
+        self.upi_df = meta.get("upi_df", meta.get("upi"))
 
         self._init_offline_intelligence()
 
+        ranker_path = (
+            os.path.join(model_dir, "location_ranker.joblib")
+            if os.path.exists(os.path.join(model_dir, "location_ranker.joblib"))
+            else os.path.join(model_dir, "ranker.joblib")
+        )
         self.ranker = ATMRanker()
-        self.ranker.load(os.path.join(model_dir, "ranker.joblib"))
+        self.ranker.load(ranker_path)
 
         self.time_predictor = TimeToCashoutPredictor()
         self.time_predictor.load(os.path.join(model_dir, "time_predictor.joblib"))

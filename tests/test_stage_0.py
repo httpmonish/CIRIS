@@ -74,7 +74,7 @@ def test_candidate_retrieval_structure(setup_retriever):
         assert isinstance(cand, CandidateATM)
         assert cand.distance_km >= 0.0
         assert len(cand.retrieval_sources) > 0
-        assert all(s in ["geo", "hotspot", "network", "behavioural"] for s in cand.retrieval_sources)
+        assert all(s in ["geo", "hotspot", "network", "behavioural", "district", "state"] for s in cand.retrieval_sources)
 
     # Check that nearby ATMs have 'geo' in sources
     nearby_cands = [c for c in candidates if c.distance_km <= 50.0]

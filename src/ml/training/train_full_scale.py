@@ -239,10 +239,21 @@ def run_full_training(
 
     # Save training configuration
     training_config = {
+        "model_version": "v4.1.0-final_v2",
         "dataset_version": "50k-final-scale",
         "dataset_path": os.path.abspath(dataset_dir),
         "random_seed": 42,
         "training_timestamp": datetime.now().isoformat(),
+        "candidate_retrieval_configuration": {
+            "geo_radius_km": 250.0,
+            "geo_fallback_knn": 200,
+            "top_hotspots_count": 1500,
+            "enable_district_fallback": True,
+            "enable_state_fallback": True,
+            "state_top_k": 100,
+            "enable_temporal_mule_graph": True,
+            "freeze_status": "FROZEN_VALIDATED_K2",
+        },
         "ranker": {
             "model_type": "LightGBM LGBMRanker (LambdaRank)",
             "n_estimators": n_ranker_estimators,
@@ -252,6 +263,7 @@ def run_full_training(
             "colsample_bytree": 0.85,
             "train_rows": n_train_rows,
             "val_rows": n_val_rows,
+            "feature_count": len(FeatureBuilder.FEATURE_COLUMNS),
         },
         "time_model": {
             "model_type": "LightGBM Regressor + Classifier",
@@ -285,18 +297,20 @@ def run_full_training(
 
     # Save metadata JSON
     model_metadata = {
-        "model_name": "CIPHER-X ML V4 Production Suite",
-        "version": "4.0.0",
+        "model_name": "CIPHER-X ML V4 Production Suite (V2 Optimized Retrieval)",
+        "version": "4.1.0",
         "trained_on": "50,000 complaints final-scale dataset (8,019,703 rank pairs)",
         "train_period": "2024-01-01 to 2025-09-27",
         "val_period": "2025-09-28 to 2026-02-12",
         "test_period": "2026-02-12 to 2026-06-30 (UNTOUCHED)",
+        "feature_count": len(FeatureBuilder.FEATURE_COLUMNS),
+        "retrieval_configuration": training_config["candidate_retrieval_configuration"],
         "metrics": metrics_summary,
     }
     with open(os.path.join(output_dir, "model_metadata.json"), "w") as f:
         json.dump(model_metadata, f, indent=2)
 
-    print(f"  - Production Artifacts Saved in {time.time() - t0:.2f}s")
+    print(f"  - Production Artifacts Saved in {time.time() - t0:.2f}s to '{output_dir}'")
     total_duration = time.time() - start_total_time
     print("\n" + "=" * 70)
     print(f"TRAINING COMPLETE IN {total_duration:.2f}s ({total_duration/60:.2f} min)")
@@ -306,4 +320,17 @@ def run_full_training(
 
 
 if __name__ == "__main__":
-    run_full_training()
+    import argparse
+    parser = argparse.ArgumentParser(description="Full-Scale Training for CIRIS ML V4")
+    parser.add_argument("--dataset-dir", type=str, default="datasets/final", help="Path to final datasets")
+    parser.add_argument("--output-dir", type=str, default="models/final_v2", help="Artifact output directory")
+    parser.add_argument("--ranker-estimators", type=int, default=150, help="Number of estimators for ranker")
+    parser.add_argument("--time-estimators", type=int, default=100, help="Number of estimators for time model")
+    args = parser.parse_args()
+
+    run_full_training(
+        dataset_dir=args.dataset_dir,
+        output_dir=args.output_dir,
+        n_ranker_estimators=args.ranker_estimators,
+        n_time_estimators=args.time_estimators,
+    )

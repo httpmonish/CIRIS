@@ -1,0 +1,56 @@
+[
+  {
+    "name": "A. Current Config (R=100km, KNN=100, HS=100)",
+    "recall": 0.521,
+    "missed": 479,
+    "avg_cands": 823.844,
+    "median_cands": 672.0,
+    "p95_cands": 1578.0,
+    "latency_ms": 0.1497827999992296
+  },
+  {
+    "name": "B. R=150km, KNN=100, HS=500, Dist, State50",
+    "recall": 0.703,
+    "missed": 297,
+    "avg_cands": 1463.947,
+    "median_cands": 1157.0,
+    "p95_cands": 2602.05,
+    "latency_ms": 0.29856829999698675
+  },
+  {
+    "name": "C. R=200km, KNN=150, HS=1000, Dist, State100",
+    "recall": 0.808,
+    "missed": 192,
+    "avg_cands": 1943.784,
+    "median_cands": 1613.0,
+    "p95_cands": 2956.0,
+    "latency_ms": 0.3927996999991592
+  },
+  {
+    "name": "D. R=250km, KNN=200, HS=1500, Dist, State100",
+    "recall": 0.873,
+    "missed": 127,
+    "avg_cands": 2490.829,
+    "median_cands": 2337.0,
+    "p95_cands": 3393.0,
+    "latency_ms": 0.48360979999779374
+  },
+  {
+    "name": "E. R=250km, KNN=200, HS=2000, Dist, State150",
+    "recall": 0.898,
+    "missed": 102,
+    "avg_cands": 2909.019,
+    "median_cands": 2759.5,
+    "p95_cands": 3744.0,
+    "latency_ms": 0.6001075999993191
+  },
+  {
+    "name": "F. R=300km, KNN=250, HS=2500, Dist, State-All",
+    "recall": 0.921,
+    "missed": 79,
+    "avg_cands": 3491.039,
+    "median_cands": 3291.5,
+    "p95_cands": 4251.0,
+    "latency_ms": 0.70373390000168
+  }
+]

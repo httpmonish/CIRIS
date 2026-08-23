@@ -33,9 +33,12 @@ class CandidateRetriever:
         spatial_index: SpatialIndex,
         hotspot_cache: HistoricalHotspotCache,
         graph_engine: Optional[TemporalGraphEngine] = None,
-        geo_radius_km: float = 100.0,
-        geo_fallback_knn: int = 100,
-        top_hotspots_count: int = 100,
+        geo_radius_km: float = 250.0,
+        geo_fallback_knn: int = 200,
+        top_hotspots_count: int = 1500,
+        enable_district_fallback: bool = True,
+        enable_state_fallback: bool = True,
+        state_top_k: int = 100,
     ):
         self.spatial_index = spatial_index
         self.hotspot_cache = hotspot_cache
@@ -43,12 +46,24 @@ class CandidateRetriever:
         self.geo_radius_km = geo_radius_km
         self.geo_fallback_knn = geo_fallback_knn
         self.top_hotspots_count = top_hotspots_count
+        self.enable_district_fallback = enable_district_fallback
+        self.enable_state_fallback = enable_state_fallback
+        self.state_top_k = state_top_k
 
-        # Quick lookup dictionary for ATM metadata
+        # Quick lookup dictionaries for ATM metadata and administrative indexing
         self.atm_metadata: Dict[str, Dict[str, Any]] = {}
+        self.district_to_atms: Dict[str, List[str]] = {}
+        self.state_to_atms: Dict[str, List[str]] = {}
+
         for _, row in self.spatial_index.atm_df.iterrows():
             atm_id = str(row["atm_id"]).strip()
             self.atm_metadata[atm_id] = row.to_dict()
+            dist = str(row.get("district", "")).lower().strip()
+            st = str(row.get("state", "")).lower().strip()
+            if dist:
+                self.district_to_atms.setdefault(dist, []).append(atm_id)
+            if st:
+                self.state_to_atms.setdefault(st, []).append(atm_id)
 
     def retrieve_candidates(
         self,
@@ -74,7 +89,7 @@ class CandidateRetriever:
         candidate_sources: Dict[str, Set[str]] = {}
 
         # -------------------------------------------------------------
-        # 1. Geospatial Candidate Retrieval
+        # 1. Geospatial Candidate Retrieval (Radius + KNN fallback)
         # -------------------------------------------------------------
         geo_results = self.spatial_index.query_radius(v_lat, v_lon, radius_km=self.geo_radius_km)
         if len(geo_results) < self.geo_fallback_knn:
@@ -85,22 +100,22 @@ class CandidateRetriever:
             candidate_sources.setdefault(atm_id, set()).add("geo")
 
         # -------------------------------------------------------------
-        # 2. Historical Hotspot Candidate Retrieval
+        # 2. Historical Hotspot Candidate Retrieval (Causal as-of T)
         # -------------------------------------------------------------
-        hotspot_results = self.hotspot_cache.get_top_hotspots_as_of_T(
-            as_of_T=t_pred,
-            top_k=self.top_hotspots_count
-        )
-        for atm_id, _ in hotspot_results:
-            atm_id = str(atm_id).strip()
-            if atm_id in self.atm_metadata:
-                candidate_sources.setdefault(atm_id, set()).add("hotspot")
+        if self.top_hotspots_count > 0:
+            hotspot_results = self.hotspot_cache.get_top_hotspots_as_of_T(
+                as_of_T=t_pred,
+                top_k=self.top_hotspots_count
+            )
+            for atm_id, _ in hotspot_results:
+                atm_id = str(atm_id).strip()
+                if atm_id in self.atm_metadata:
+                    candidate_sources.setdefault(atm_id, set()).add("hotspot")
 
         # -------------------------------------------------------------
-        # 3. Mule Network Associated Candidate Retrieval
+        # 3. Mule Network Associated Candidate Retrieval (Causal as-of T)
         # -------------------------------------------------------------
         if self.graph_engine is not None:
-            # Check explicit chain accounts or lookup by complaint_id
             accs = chain_accounts or self.graph_engine.case_to_chain.get(complaint.complaint_id, [])
             if not accs and complaint.complaint_id in self.graph_engine.case_to_cashout_acc:
                 cash_acc = self.graph_engine.case_to_cashout_acc[complaint.complaint_id]
@@ -115,13 +130,27 @@ class CandidateRetriever:
                         candidate_sources.setdefault(atm_id, set()).add("network")
 
         # -------------------------------------------------------------
-        # 4. Behavioral / Temporal Candidate Retrieval
+        # 4. District & State Fallback Candidate Retrieval
         # -------------------------------------------------------------
-        # Match ATMs with high cashout activity during complaint's temporal window (e.g. night/weekend)
+        if self.enable_district_fallback and complaint.victim_location.district:
+            dist_key = str(complaint.victim_location.district).lower().strip()
+            if dist_key in self.district_to_atms:
+                for atm_id in self.district_to_atms[dist_key]:
+                    candidate_sources.setdefault(atm_id, set()).add("district")
+
+        if self.enable_state_fallback and complaint.victim_location.state:
+            state_key = str(complaint.victim_location.state).lower().strip()
+            if state_key in self.state_to_atms:
+                st_atms = self.state_to_atms[state_key]
+                chosen = st_atms[:self.state_top_k] if self.state_top_k > 0 else st_atms
+                for atm_id in chosen:
+                    candidate_sources.setdefault(atm_id, set()).add("state")
+
+        # -------------------------------------------------------------
+        # 5. Behavioral / Temporal Candidate Retrieval
+        # -------------------------------------------------------------
         hour = t_pred.hour
         is_night = (hour >= 22 or hour <= 5)
-        
-        # Behavioral heuristic: In night hours, prioritize Standalone / 24/7 ATM locations in nearby radius
         if is_night:
             knn_night = self.spatial_index.query_knn(v_lat, v_lon, k=min(40, len(self.atm_metadata)))
             for res in knn_night:
@@ -131,7 +160,7 @@ class CandidateRetriever:
                     candidate_sources.setdefault(atm_id, set()).add("behavioural")
 
         # -------------------------------------------------------------
-        # 5. Union Aggregation & Distance Calculation
+        # 6. Union Aggregation & Distance Calculation
         # -------------------------------------------------------------
         candidates: List[CandidateATM] = []
         for atm_id, sources in candidate_sources.items():
@@ -161,7 +190,6 @@ class CandidateRetriever:
         # Sort candidate list primarily by geographic proximity
         candidates.sort(key=lambda c: c.distance_km)
         return candidates
-
     def to_feature_dict_list(
         self,
         complaint: ComplaintPayload,

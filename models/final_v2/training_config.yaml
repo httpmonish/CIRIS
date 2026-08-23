@@ -1,0 +1,35 @@
+anomaly_model:
+  contamination: 0.1
+  model_type: Isolation Forest
+  train_cases: 26285
+candidate_retrieval_configuration:
+  enable_district_fallback: true
+  enable_state_fallback: true
+  enable_temporal_mule_graph: true
+  freeze_status: FROZEN_VALIDATED_K2
+  geo_fallback_knn: 200
+  geo_radius_km: 250.0
+  state_top_k: 100
+  top_hotspots_count: 1500
+dataset_path: E:\CIRIS-SIH2026\datasets\final
+dataset_version: 50k-final-scale
+fusion_model:
+  model_type: Logistic Regression Meta-Learner + Platt Calibration
+model_version: v4.1.0-final_v2
+random_seed: 42
+ranker:
+  colsample_bytree: 0.85
+  feature_count: 36
+  learning_rate: 0.08
+  model_type: LightGBM LGBMRanker (LambdaRank)
+  n_estimators: 150
+  num_leaves: 31
+  subsample: 0.85
+  train_rows: 8019703
+  val_rows: 1939597
+time_model:
+  model_type: LightGBM Regressor + Classifier
+  n_estimators: 100
+  train_cases: 26285
+  val_cases: 5632
+training_timestamp: '2026-08-23T22:09:15.588315'

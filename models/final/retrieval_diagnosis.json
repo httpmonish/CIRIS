@@ -1,0 +1,19 @@
+{
+  "n_validation_cases": 1000,
+  "distance_min": 0.19217684109735705,
+  "distance_p25": 7.443280883329745,
+  "distance_p50_median": 415.35490327945604,
+  "distance_mean": 532.5336781280445,
+  "distance_p75": 967.57077816522,
+  "distance_p90": 1528.8974687371274,
+  "distance_p95": 1616.7589963708313,
+  "distance_max": 1767.9491279123697,
+  "recall_radius_50km": 0.427,
+  "recall_radius_100km": 0.427,
+  "recall_radius_150km": 0.455,
+  "recall_radius_200km": 0.462,
+  "recall_radius_250km": 0.487,
+  "recall_radius_300km": 0.489,
+  "same_district_rate": 0.412,
+  "same_state_rate": 0.49
+}
