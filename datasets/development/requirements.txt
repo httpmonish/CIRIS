@@ -1,0 +1,10 @@
+# Generation pipeline
+numpy>=1.24
+pandas>=1.5
+
+# Downstream ML pipeline this dataset is designed for (not required to
+# generate the data itself)
+lightgbm>=4.0
+scikit-learn>=1.3
+shap>=0.44
+networkx>=3.1
