@@ -203,6 +203,6 @@ Audit Verification Checklist Summary:
 
 ## Architectural Conclusion & SIH 2026 Readiness
 
-The CIPHER-X v4 ML implementation is **mathematically sound, point-in-time safe, and architecturally complete**. It eliminates the critical architectural flaws of the SKYVAR 2025 baseline (exhaustive 400-ATM cross-joins, hardcoded score overwrites, and static lack of candidate retrieval) while delivering a verifiable, calibrated, and explainable intelligence pipeline.
+The CIPHER-X v4 ML implementation is **mathematically sound, point-in-time safe, and architecturally complete**. It eliminates the critical architectural flaws of the V1 Legacy Engine baseline (exhaustive 400-ATM cross-joins, hardcoded score overwrites, and static lack of candidate retrieval) while delivering a verifiable, calibrated, and explainable intelligence pipeline.
 
 **Audit Status**: **APPROVED FOR INTEGRATION PHASE**.

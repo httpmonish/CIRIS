@@ -23,7 +23,7 @@ Unlike offline evaluations on pre-computed candidate tables, this benchmark exec
 ## 1. True End-to-End Benchmark Results
 
 ### Complete Comparison Table (126 Chronological Test Complaints):
-| Evaluation Metric | SKYVAR Baseline (All 400 ATMs) | CIPHER ML V4 (True E2E Dynamic) | Absolute Delta | Operational Status |
+| Evaluation Metric | Legacy Baseline (All 400 ATMs) | CIPHER ML V4 (True E2E Dynamic) | Absolute Delta | Operational Status |
 | :--- | :---: | :---: | :---: | :---: |
 | **Candidate Union Recall** | N/A (Exhaustive 400 ATMs) | **89.68% (113 / 126)** | - | 13 Cases Missed by Heuristic |
 | **Missed-Retrieval Count** | 0 / 126 (0.0%) | **13 / 126 (10.32%)** | +10.32% | Penalized as 0 on all Ranking Metrics |
@@ -51,7 +51,7 @@ Unlike offline evaluations on pre-computed candidate tables, this benchmark exec
 ### B. Dynamic Feature Distribution vs. Static Pre-Computed Pairs
 - During static candidate evaluation on `rank_pairs_test.csv` (where pairs were pre-extracted), HitRate@10 was **61.90%** because the training dataset distribution closely matched the pre-computed static feature statistics.
 - In true dynamic execution on raw master tables, feature values (such as point-in-time transaction velocities and bayesian cashout rates) are computed in real time from live graph and transaction states.
-- Despite this distribution shift, CIPHER ML V4 maintains superior **HitRate@5 (+0.79%)**, **HitRate@10 (+0.79%)**, and **P90 Geographic Error (-139.4 km closer)** compared to the SKYVAR baseline, while reducing computational load by **73.5%**.
+- Despite this distribution shift, CIPHER ML V4 maintains superior **HitRate@5 (+0.79%)**, **HitRate@10 (+0.79%)**, and **P90 Geographic Error (-139.4 km closer)** compared to the Legacy V1 Engine baseline, while reducing computational load by **73.5%**.
 
 ---
 
@@ -59,9 +59,9 @@ Unlike offline evaluations on pre-computed candidate tables, this benchmark exec
 
 1. **Candidate Retrieval is the Primary Upper-Bound Bottleneck**:
    - Because candidate retrieval prunes 73.5% of ATMs, improving heuristic candidate recall from `89.68%` to `>95%` (e.g. expanding fallback KNN from 50 to 75 or incorporating district-level centroid fallbacks) will immediately translate to a proportional boost in end-to-end HitRate@5 and HitRate@10.
-2. **Computational Superiority over SKYVAR**:
-   - SKYVAR's exhaustive 400-ATM cross-join scales as $O(N \times |\text{ATMs}|)$, which becomes computationally prohibitive when scaling from 400 to 250,000 national ATMs in India.
-   - CIPHER ML V4's $O(N \times K)$ candidate retrieval architecture makes national-scale deployment feasible while outperforming SKYVAR on Top-5, Top-10, and P90 tail localization error.
+2. **Computational Superiority over Legacy V1 Engine**:
+   - Legacy V1 Engine's exhaustive 400-ATM cross-join scales as $O(N \times |\text{ATMs}|)$, which becomes computationally prohibitive when scaling from 400 to 250,000 national ATMs in India.
+   - CIPHER ML V4's $O(N \times K)$ candidate retrieval architecture makes national-scale deployment feasible while outperforming Legacy V1 Engine on Top-5, Top-10, and P90 tail localization error.
 
 ---
 
@@ -72,8 +72,8 @@ Unlike offline evaluations on pre-computed candidate tables, this benchmark exec
 TRUE E2E BENCHMARK STATUS: COMPLETE & TRANSPARENTLY DOCUMENTED
  • Evaluated Complaints     : 126 Chronological Test Complaints
  • Candidate Pruning        : 73.5% reduction (105.95 avg candidates)
- • True E2E HitRate@10      : 22.22% (vs SKYVAR 21.43%)
- • P90 Geographic Error     : 1174.32 km (vs SKYVAR 1313.72 km, -139.4 km)
+ • True E2E HitRate@10      : 22.22% (vs Legacy V1 Engine 21.43%)
+ • P90 Geographic Error     : 1174.32 km (vs Legacy V1 Engine 1313.72 km, -139.4 km)
  • Audit Artifact Created   : docs/end_to_end_validation.md
 ========================================================================================
 ```

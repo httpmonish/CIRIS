@@ -2,15 +2,15 @@
 
 ## Executive Overview
 
-This document synthesizes the findings from the comprehensive audit of the three SKYVAR SIH 2025 repositories (`CIPHER-main/`, `CIPHER-25257-main/`, `CIPHER_FINAL_2025-main/`) and the temporary development dataset (`datasets/development/dataset/`).
+This document synthesizes the findings from the comprehensive audit of the three V1 Legacy Engine repositories (`CIPHER-main/`, `CIPHER-25257-main/`, `CIPHER_FINAL_2025-main/`) and the temporary development dataset (`datasets/development/dataset/`).
 
 The audit strictly evaluated concrete source code, executable scripts, schemas, database structures, model pickle bundles, and dataset integrity.
 
 ---
 
-## 1. What SKYVAR Actually Built
+## 1. What Legacy V1 Engine Actually Built
 
-SKYVAR built an end-to-end multi-tier prototype consisting of:
+Legacy V1 Engine built an end-to-end multi-tier prototype consisting of:
 1. **Control Layer Backend**: A FastAPI service (`backend/main.py`) paired with PostgreSQL (SQLAlchemy models for active complaints, history complaints, and ATMs).
 2. **ML Ranking Component**: A single LightGBM `LGBMRanker` (`lambdarank` objective) trained on 30 features with `LabelEncoder` categorical encoding and serialized as `cipher_ranker_bundle.pkl`.
 3. **Exhaustive Inference Logic**: In `predict.py`, the system cross-joins each incoming complaint against 100% of all ATMs in the database (400 rows) without any candidate retrieval or geospatial pruning.
@@ -106,9 +106,9 @@ ML V4 requires a modern, production-grade fraud intelligence pipeline:
 
 ---
 
-## 9. Schema Mismatches (SKYVAR 2025 vs Dataset)
+## 9. Schema Mismatches (V1 Legacy Engine vs Dataset)
 
-| Field / Concept | SKYVAR 2025 Code | Development Dataset | Resolution Strategy for SIH 2026 |
+| Field / Concept | V1 Legacy Engine Code | Development Dataset | Resolution Strategy for SIH 2026 |
 | :--- | :--- | :--- | :--- |
 | **ATM ID Column** | `suspected_atm_index` (int) | `atm_id` (string: `ATM_000001`) | Standardize on string `atm_id` across DB, API, and ML. |
 | **Candidate Count** | Fixed $N=400$ (all ATMs) | Variable (avg 88.68 cands) | Implement dynamic candidate retrieval array in API and pipeline. |

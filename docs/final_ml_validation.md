@@ -4,26 +4,26 @@
 **Auditor**: Principal Machine Learning Engineer & Systems Architect  
 **Evaluation Target**: Untouched Chronological Test Partition (`datasets/development/dataset/test/`)  
 **Test Set Size**: 126 Chronological Complaints, 12,096 Evaluated ATM Candidate Pairs  
-**Baseline Model**: Original SKYVAR SIH 2025 Architecture (Exhaustive 400-ATM Cross-Join Ranker)  
+**Baseline Model**: Original V1 Legacy Engine Architecture (Exhaustive 400-ATM Cross-Join Ranker)  
 **Target Model**: CIPHER-X v4 Multi-Stage Intelligence Pipeline  
 
 ---
 
 ## Executive Summary
 
-This report documents the rigorous, controlled validation of **CIPHER-X v4** against the original **SKYVAR 2025 baseline** on the exact same chronological test set.
+This report documents the rigorous, controlled validation of **CIPHER-X v4** against the original **V1 Legacy Engine baseline** on the exact same chronological test set.
 
 All evaluations were executed without data leakage, without synthetic score overwrites, and **without forced insertion of ground-truth cashout ATMs**.
 
 ```
 Controlled Benchmark Key Highlights (126 Untouched Test Complaints):
 ========================================================================================
- • HitRate@10 (Top-10 Cashout Capture) : SKYVAR: 21.43%  ──►  CIPHER ML V4: 61.90%  (+40.47% / 2.9x)
- • HitRate@5                           : SKYVAR: 11.11%  ──►  CIPHER ML V4: 38.89%  (+27.78% / 3.5x)
- • HitRate@1 (Top-1 Exact Hit)         : SKYVAR:  5.56%  ──►  CIPHER ML V4: 15.87%  (+10.31% / 2.9x)
- • NDCG@10                             : SKYVAR: 0.1169  ──►  CIPHER ML V4: 0.3365  (+0.2196 / 2.9x)
- • MRR (Mean Reciprocal Rank)          : SKYVAR: 0.1156  ──►  CIPHER ML V4: 0.2830  (+0.1674 / 2.4x)
- • P90 Geographic Error                : SKYVAR: 1313 km ──►  CIPHER ML V4: 1138 km (-175.0 km)
+ • HitRate@10 (Top-10 Cashout Capture) : Legacy V1 Engine: 21.43%  ──►  CIPHER ML V4: 61.90%  (+40.47% / 2.9x)
+ • HitRate@5                           : Legacy V1 Engine: 11.11%  ──►  CIPHER ML V4: 38.89%  (+27.78% / 3.5x)
+ • HitRate@1 (Top-1 Exact Hit)         : Legacy V1 Engine:  5.56%  ──►  CIPHER ML V4: 15.87%  (+10.31% / 2.9x)
+ • NDCG@10                             : Legacy V1 Engine: 0.1169  ──►  CIPHER ML V4: 0.3365  (+0.2196 / 2.9x)
+ • MRR (Mean Reciprocal Rank)          : Legacy V1 Engine: 0.1156  ──►  CIPHER ML V4: 0.2830  (+0.1674 / 2.4x)
+ • P90 Geographic Error                : Legacy V1 Engine: 1313 km ──►  CIPHER ML V4: 1138 km (-175.0 km)
  • Pure Candidate Union Recall         : 92.06% (116/126 cases) with 68.6% search space pruning
  • Predictive Lead Time Violations     : 0 / 126 (100% Causal Integrity, Median Lead Time: 3.94h)
  • Test Brier Score (Calibration)      : 0.00963 (Accurately calibrated probabilities)
@@ -54,11 +54,11 @@ Candidate retrieval was re-evaluated on all 126 test complaints using purely cau
 ## 2. Controlled Model Comparison on Identical Test Complaints
 
 Both models were trained strictly on `train/` (583 complaints) and evaluated on the exact same `test/` partition (126 complaints):
-- **SKYVAR Baseline**: 18 basic features with exhaustive 400-ATM cross-join.
+- **Legacy Baseline**: 18 basic features with exhaustive 400-ATM cross-join.
 - **CIPHER ML V4**: 36-feature pipeline + point-in-time graph centralities + Platt probability calibration + multi-signal risk fusion.
 
 ### Performance Comparison Table:
-| Evaluation Metric | SKYVAR Baseline | CIPHER ML V4 | Absolute Delta | Relative Gain |
+| Evaluation Metric | Legacy Baseline | CIPHER ML V4 | Absolute Delta | Relative Gain |
 | :--- | :---: | :---: | :---: | :---: |
 | **HitRate@1** | 5.56% (7/126) | **15.87% (20/126)** | **+10.31%** | **2.85x** |
 | **HitRate@5** | 11.11% (14/126) | **38.89% (49/126)** | **+27.78%** | **3.50x** |
@@ -69,7 +69,7 @@ Both models were trained strictly on `train/` (583 complaints) and evaluated on 
 | **Median Geographic Error** | 376.33 km | **331.87 km** | **-44.46 km** | **11.8% closer** |
 | **P90 Geographic Error** | 1313.72 km | **1138.75 km** | **-174.97 km** | **13.3% closer** |
 
-**Conclusion**: Under strictly identical test conditions, CIPHER ML V4 substantially outperforms the SKYVAR baseline across all ranking, top-K hit, reciprocal rank, and geographic localization metrics.
+**Conclusion**: Under strictly identical test conditions, CIPHER ML V4 substantially outperforms the Legacy V1 Engine baseline across all ranking, top-K hit, reciprocal rank, and geographic localization metrics.
 
 ---
 

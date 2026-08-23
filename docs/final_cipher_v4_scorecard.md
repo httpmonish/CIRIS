@@ -2,7 +2,7 @@
 
 **Audit Date**: 2026-08-23  
 **System**: CIPHER Predictive Cybercrime Analytics Engine (SIH 2026 Edition)  
-**Baseline**: SKYVAR SIH 2025 ML Baseline  
+**Baseline**: V1 Baseline Engine  
 **Target Architecture**: CIPHER ML V4 Multi-Stage Point-in-Time Predictive Engine  
 **Dataset**: Chronological Benchmark Dataset (`datasets/development/dataset/`)  
 
@@ -29,18 +29,18 @@ Below is the comparative performance across candidate retrieval configurations o
 
 | Configuration | Spatial Radius | KNN Fallback | Hotspot Pool | Candidate Recall | Missed Cases | Avg Candidates | Search Space Pruning | Retrieval Latency |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **SKYVAR Baseline Retriever** | 50 km | 25 | 40 | **89.68%** | 13 / 126 | 105.9 | 73.5% | 28.7 ms |
+| **V1 Baseline Retriever** | 50 km | 25 | 40 | **89.68%** | 13 / 126 | 105.9 | 73.5% | 28.7 ms |
 | **Exp B1 (Radius Sweep)** | 100 km | 50 | 50 | **92.06%** | 10 / 126 | 125.5 | 68.6% | 23.8 ms |
 | **Exp C1 (KNN Sweep)** | 50 km | 150 | 50 | **96.03%** | 5 / 126 | 198.5 | 50.4% | 36.6 ms |
 | **Exp G3 (Production Default)** | **100 km** | **100** | **100** | **95.24%** | **6 / 126** | **178.2** | **55.5%** | **34.8 ms** |
 
 ---
 
-## 3. End-to-End Performance Benchmarking (SKYVAR vs CIPHER ML V4)
+## 3. End-to-End Performance Benchmarking (V1 Baseline vs CIPHER ML V4)
 
 Evaluated under strict real-world operational constraints (zero forced insertion of ground-truth ATMs):
 
-| Evaluation Metric | SKYVAR SIH 2025 Baseline | CIPHER ML V4 (Production Default) | Absolute Improvement | Target Status |
+| Evaluation Metric | V1 Baseline | CIPHER ML V4 (Production Default) | Absolute Improvement | Target Status |
 | :--- | :---: | :---: | :---: | :---: |
 | **Candidate Retrieval Union Recall** | 89.68% | **95.24%** | **+5.56%** | **EXCEEDED (>95%)** |
 | **Missed Cashout ATM Retrievals** | 13 / 126 | **6 / 126** | **-53.8% Misses** | **EXCEEDED** |

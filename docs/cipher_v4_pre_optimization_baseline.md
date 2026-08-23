@@ -48,9 +48,9 @@
 
 ---
 
-## 3. Comparison Against SKYVAR-Style Baseline
+## 3. Comparison Against Legacy Baseline
 
-| Metric | SKYVAR Baseline (Exhaustive 400 ATMs) | CIPHER ML V4 Baseline (Pre-Optimization) | Status |
+| Metric | Legacy Baseline (Exhaustive 400 ATMs) | CIPHER ML V4 Baseline (Pre-Optimization) | Status |
 | :--- | :---: | :---: | :--- |
 | **Search Space Size** | 400 ATMs | **105.95 ATMs** | **73.5% Computation Reduction** |
 | **HitRate@1** | **5.56%** | 3.97% | -1.59% (Impacted by 13 Retrieval Misses) |

@@ -113,8 +113,8 @@ Inspect `accounts.csv` metadata fields (`prior_complaint_count`, `risk_history`,
 
 ## 3. Chronological vs Random Split Integrity
 
-**SKYVAR 2025 Flaw**:
-SKYVAR used random `train_test_split(random_state=42)` across `complaint_id`. In a cyber fraud setting, random splitting allows the model to train on future complaints from 2026 and test on past complaints from 2024, concealing temporal drift.
+**V1 Legacy Engine Flaw**:
+Legacy V1 Engine used random `train_test_split(random_state=42)` across `complaint_id`. In a cyber fraud setting, random splitting allows the model to train on future complaints from 2026 and test on past complaints from 2024, concealing temporal drift.
 
 **Development Dataset Split Audit**:
 The dataset provides a strict chronological split:

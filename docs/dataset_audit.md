@@ -1,14 +1,14 @@
-# Dataset and SKYVAR ML Audit
+# Dataset and Legacy Architecture Audit
 
 ## Executive Summary
 
 This document details the rigorous audit of:
-1. The **SKYVAR ML Architecture & Codebase** (actual source code capabilities vs. documented concepts).
+1. The **Legacy V1 Engine ML Architecture & Codebase** (actual source code capabilities vs. documented concepts).
 2. The **Temporary Development Dataset** located in `datasets/development/dataset/`.
 
 ---
 
-# Part 1: SKYVAR ML Implementation Audit
+# Part 1: Legacy Implementation Audit
 
 ### 1.1 Model & Training Configuration
 - **Model**: `lightgbm.LGBMRanker`
@@ -43,10 +43,10 @@ This document details the rigorous audit of:
 | Capability | Source Code Status | Technical Evidence / Assessment |
 | :--- | :---: | :--- |
 | **All ATMs Scored?** | **YES** | `predict.py:L57-98` loads `SELECT * FROM atms` and duplicates input complaint $N$ times. |
-| **Candidate Retrieval?** | **NO** | No ANN, geospatial bounding box, graph ego-net, or heuristic candidate generator exists in SKYVAR runtime. |
+| **Candidate Retrieval?** | **NO** | No ANN, geospatial bounding box, graph ego-net, or heuristic candidate generator exists in Legacy V1 Engine runtime. |
 | **Probability Calibration?** | **NO** | LambdaRank outputs relative ranking utility, not probabilities. Raw scores are min-max scaled and overwritten by artificial rank-based constants. |
-| **Time-to-Cashout Prediction?** | **NO** | No regression model, survival analysis, or time-window classification exists in SKYVAR code. |
-| **Anomaly Detection?** | **NO** | No IsolationForest, One-Class SVM, autoencoder, or statistical z-score engine exists in SKYVAR code. |
+| **Time-to-Cashout Prediction?** | **NO** | No regression model, survival analysis, or time-window classification exists in Legacy V1 Engine code. |
+| **Anomaly Detection?** | **NO** | No IsolationForest, One-Class SVM, autoencoder, or statistical z-score engine exists in Legacy V1 Engine code. |
 | **Graph Intelligence?** | **NO** | No Graph Neural Network, NetworkX traversal, community detection, or dynamic degree feature exists. `linked_fraud_ring` is a static string literal. |
 | **SHAP / XAI?** | **NO** | No TreeSHAP, KernelSHAP, or feature attribution computations exist. "AI Explanation" in UI is hardcoded boilerplate. |
 | **OOF Fusion / Stacking?** | **NO** | Only a single isolated LGBMRanker model exists. |

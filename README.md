@@ -19,9 +19,9 @@ CIPHER ML V4 implements a point-in-time compliant, multi-stage predictive pipeli
 
 ---
 
-## 📊 Performance Scorecard vs SKYVAR Baseline
+## 📊 Performance Scorecard vs Legacy V1 Baseline
 
-| Metric | SKYVAR SIH 2025 Baseline | CIPHER ML V4 | Improvement |
+| Metric | Legacy V1 Baseline | CIPHER ML V4 | Improvement |
 | :--- | :---: | :---: | :---: |
 | **Candidate Retrieval Recall** | 89.68% | **95.24%** | **+5.56%** |
 | **End-to-End HitRate@5** | 11.90% | **17.46%** | **+5.56%** |
