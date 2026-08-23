@@ -1,0 +1,83 @@
+{
+  "total_complaints": 50000,
+  "total_transactions": 349706,
+  "total_accounts": 40000,
+  "total_atms": 7000,
+  "total_withdrawals": 50000,
+  "total_fraud_types": 11,
+  "avg_transactions_per_complaint": 6.994,
+  "avg_candidates_per_complaint": 317.771,
+  "ranking_positive_negative_ratio": {
+    "positive": 37551,
+    "negative": 11895054,
+    "ratio_neg_per_pos": 316.77
+  },
+  "geographic_distribution_by_city": {
+    "Mumbai": 6022,
+    "Delhi": 5606,
+    "Bengaluru": 5114,
+    "Hyderabad": 4227,
+    "Pune": 3960,
+    "Chennai": 3896,
+    "Kolkata": 3584,
+    "Ahmedabad": 2657,
+    "Thane": 2234,
+    "Jaipur": 2170,
+    "Lucknow": 1971,
+    "Navi Mumbai": 1933,
+    "Nagpur": 1905,
+    "Surat": 1721,
+    "Nashik": 1618,
+    "Indore": 1382
+  },
+  "fraud_type_distribution": {
+    "UPI Fraud": 11974,
+    "Phishing": 7463,
+    "Investment Scam": 6395,
+    "Impersonation (Digital Arrest/Officer)": 4924,
+    "Remote Access Scam": 4535,
+    "Card Fraud": 4159,
+    "OTP Fraud": 3515,
+    "Fake Customer Care": 3030,
+    "Marketplace Fraud (OLX/e-commerce)": 2488,
+    "Loan App Scam": 989,
+    "Social Engineering (Romance/Job)": 528
+  },
+  "time_window_distribution": {
+    "0": 4716,
+    "1": 8976,
+    "2": 8947,
+    "3": 8076,
+    "4": 6836
+  },
+  "candidate_retrieval": {
+    "total_actionable_complaints": 37551,
+    "total_rank_pair_rows": 11932605,
+    "split_row_counts": {
+      "train": 8019703,
+      "validation": 1939597,
+      "test": 1973305
+    },
+    "recall_of_union_candidate_set": 0.7214,
+    "forced_insertions_of_true_atm": 10463,
+    "forced_insertion_rate": 0.2786,
+    "avg_candidates_per_complaint": 317.771,
+    "recall_at_k": {
+      "recall_at_50": 0.2873,
+      "recall_at_100": 0.5059,
+      "recall_at_200": 0.755,
+      "recall_at_300": 0.9447
+    }
+  },
+  "recall_at_k": {
+    "recall_at_50": 0.2873,
+    "recall_at_100": 0.5059,
+    "recall_at_200": 0.755,
+    "recall_at_300": 0.9447
+  },
+  "split_sizes": {
+    "train_complaints": 26285,
+    "validation_complaints": 5632,
+    "test_complaints": 5634
+  }
+}

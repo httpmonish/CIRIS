@@ -1,0 +1,22 @@
+The rank_pairs.csv (full 50k-scale run, 11,932,605 rows, ~2.9GB uncompressed)
+and its train/validation/test splits are NOT included in this zip — they're
+too large for a zip archive to be practical.
+
+They are delivered as separate compressed downloads alongside this zip:
+
+  rank_pairs.csv            -> rank_pairs_part0.csv.gz ... rank_pairs_part7.csv.gz
+                                (8 parts, ~64MB each, each with its own header;
+                                concat them to reconstruct the full file)
+  train/rank_pairs_train.csv      -> train_rank_pairs_train.csv.gz
+  validation/rank_pairs_val.csv   -> validation_rank_pairs_val.csv.gz
+  test/rank_pairs_test.csv        -> test_rank_pairs_test.csv.gz
+
+Reassemble the 8-part master file with pandas:
+
+    import pandas as pd, glob
+    parts = sorted(glob.glob("rank_pairs_part*.csv.gz"))
+    df = pd.concat([pd.read_csv(p, compression="gzip") for p in parts], ignore_index=True)
+
+Or load train/validation/test directly (each is a single file, no reassembly needed):
+
+    train = pd.read_csv("train_rank_pairs_train.csv.gz", compression="gzip")
