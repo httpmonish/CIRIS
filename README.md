@@ -1,12 +1,12 @@
-# CIPHER — Predictive Cybercrime Analytics & ATM Cashout Interception System
+# CIRIS — Predictive Cybercrime Analytics & ATM Cashout Interception System
 
-**CIPHER** (SIH 2026 Edition) is an advanced predictive cybercrime analytics platform engineered to intercept cyber fraud financial cashouts at ATMs before withdrawals occur.
+**CIRIS** (SIH 2026 Edition) is an advanced predictive cybercrime analytics platform engineered to intercept cyber fraud financial cashouts at ATMs before withdrawals occur.
 
 ---
 
 ## 🚀 Key Highlights & Architecture
 
-CIPHER ML V4 implements a point-in-time compliant, multi-stage predictive pipeline:
+CIRIS ML V4 implements a point-in-time compliant, multi-stage predictive pipeline:
 
 - **Stage -1**: Temporal Data Partitioning & Ground Truth Mapping
 - **Stage 0**: Multi-Strategy Candidate ATM Retrieval Engine (Geospatial $100\text{ km}$, KNN-100, Hotspots-100, Mule Graph & Admin District Fallback)
@@ -21,7 +21,7 @@ CIPHER ML V4 implements a point-in-time compliant, multi-stage predictive pipeli
 
 ## 📊 Performance Scorecard vs Legacy V1 Baseline
 
-| Metric | Legacy V1 Baseline | CIPHER ML V4 | Improvement |
+| Metric | Legacy V1 Baseline | CIRIS ML V4 | Improvement |
 | :--- | :---: | :---: | :---: |
 | **Candidate Retrieval Recall** | 89.68% | **95.24%** | **+5.56%** |
 | **End-to-End HitRate@5** | 11.90% | **17.46%** | **+5.56%** |
@@ -35,7 +35,7 @@ CIPHER ML V4 implements a point-in-time compliant, multi-stage predictive pipeli
 ## 📁 Repository Structure
 
 ```
-├── src/ml/                   # CIPHER ML V4 Core Engine
+├── src/ml/                   # CIRIS ML V4 Core Engine
 │   ├── contracts/            # Data payloads & Pydantic schemas
 │   ├── features/             # 36-feature point-in-time builder
 │   ├── models/               # LambdaRanker, TimePredictor, AnomalyDetector, RiskFusion
