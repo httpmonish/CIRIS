@@ -265,10 +265,15 @@ class TimeToCashoutPredictor:
         }
         joblib.dump(bundle, file_path)
 
-    def load(self, file_path: str) -> None:
-        """Load fitted dual-head models bundle."""
+    def load(self_or_cls, file_path: str) -> "TimeToCashoutPredictor":
+        """Load fitted dual-head models bundle (supports both instance and class method invocation)."""
         bundle = joblib.load(file_path)
-        self.regressor = bundle["regressor"]
-        self.classifier = bundle["classifier"]
-        self.FEATURE_COLUMNS = bundle["feature_columns"]
-        self.is_fitted = bundle["is_fitted"]
+        if isinstance(self_or_cls, type):
+            predictor = self_or_cls()
+        else:
+            predictor = self_or_cls
+        predictor.regressor = bundle["regressor"]
+        predictor.classifier = bundle["classifier"]
+        predictor.FEATURE_COLUMNS = bundle["feature_columns"]
+        predictor.is_fitted = bundle["is_fitted"]
+        return predictor

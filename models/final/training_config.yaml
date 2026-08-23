@@ -1,0 +1,24 @@
+anomaly_model:
+  contamination: 0.1
+  model_type: Isolation Forest
+  train_cases: 26285
+dataset_path: E:\CIRIS-SIH2026\datasets\final
+dataset_version: 50k-final-scale
+fusion_model:
+  model_type: Logistic Regression Meta-Learner + Platt Calibration
+random_seed: 42
+ranker:
+  colsample_bytree: 0.85
+  learning_rate: 0.08
+  model_type: LightGBM LGBMRanker (LambdaRank)
+  n_estimators: 150
+  num_leaves: 31
+  subsample: 0.85
+  train_rows: 8019703
+  val_rows: 1939597
+time_model:
+  model_type: LightGBM Regressor + Classifier
+  n_estimators: 100
+  train_cases: 26285
+  val_cases: 5632
+training_timestamp: '2026-08-23T21:05:03.598977'

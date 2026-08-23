@@ -233,10 +233,15 @@ class ATMRanker:
         }
         joblib.dump(bundle, file_path)
 
-    def load(self, file_path: str) -> None:
-        """Load fitted ranker bundle."""
+    def load(self_or_cls, file_path: str) -> "ATMRanker":
+        """Load fitted ranker bundle (supports both instance and class method invocation)."""
         bundle = joblib.load(file_path)
-        self.model = bundle["model"]
-        self.feature_columns = bundle["feature_columns"]
-        self.params = bundle["params"]
-        self.is_fitted = bundle["is_fitted"]
+        if isinstance(self_or_cls, type):
+            ranker = self_or_cls()
+        else:
+            ranker = self_or_cls
+        ranker.model = bundle["model"]
+        ranker.feature_columns = bundle["feature_columns"]
+        ranker.params = bundle.get("params", getattr(ranker, "params", {}))
+        ranker.is_fitted = bundle.get("is_fitted", True)
+        return ranker

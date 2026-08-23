@@ -103,14 +103,14 @@ class FeatureBuilder:
             self.atm_lookup[atm_id] = row.to_dict()
 
     def _precompute_atm_densities(self) -> None:
-        """Precompute nearby ATM density within 5km for all ATMs in master."""
+        """Precompute nearby ATM density within 5km for all ATMs in master via vectorized BallTree."""
         self.atm_densities: Dict[str, int] = {}
-        for _, row in self.atm_master_df.iterrows():
-            atm_id = str(row["atm_id"]).strip()
-            lat, lon = float(row["latitude"]), float(row["longitude"])
-            nearby = self.spatial_index.query_radius(lat, lon, radius_km=5.0)
+        coords_rad = np.radians(self.atm_master_df[["latitude", "longitude"]].values)
+        radius_rad = 5.0 / self.spatial_index.EARTH_RADIUS_KM
+        counts = self.spatial_index.tree.query_radius(coords_rad, r=radius_rad, count_only=True)
+        for atm_id, count in zip(self.atm_master_df["atm_id"], counts):
             # Exclude self
-            self.atm_densities[atm_id] = max(0, len(nearby) - 1)
+            self.atm_densities[str(atm_id).strip()] = max(0, int(count) - 1)
 
     def build_features_for_candidates(
         self,

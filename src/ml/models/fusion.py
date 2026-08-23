@@ -64,6 +64,23 @@ class ProbabilityCalibrator:
         else:
             return 1.0 / (1.0 + np.exp(-raw_scores))
 
+    def predict_proba(self, raw_scores: np.ndarray) -> np.ndarray:
+        """Alias for calibrate."""
+        return self.calibrate(raw_scores)
+
+    def save(self, file_path: str) -> None:
+        """Save fitted calibration model."""
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        joblib.dump(self, file_path)
+
+    def load(self_or_cls, file_path: str) -> "ProbabilityCalibrator":
+        """Load fitted calibration model (supports both instance and class method invocation)."""
+        obj = joblib.load(file_path)
+        if isinstance(self_or_cls, type):
+            return obj
+        self_or_cls.__dict__.update(obj.__dict__)
+        return self_or_cls
+
 
 class MultiSignalRiskFusionEngine:
     """
@@ -81,9 +98,9 @@ class MultiSignalRiskFusionEngine:
     def __init__(
         self,
         alpha_rank: float = 0.50,
-        beta_time: float = 0.20,
+        beta_time: float = 0.25,
         gamma_anomaly: float = 0.15,
-        delta_history: float = 0.15,
+        delta_history: float = 0.10,
         calibrator: Optional[ProbabilityCalibrator] = None,
     ):
         self.alpha_rank = alpha_rank
@@ -91,6 +108,25 @@ class MultiSignalRiskFusionEngine:
         self.gamma_anomaly = gamma_anomaly
         self.delta_history = delta_history
         self.calibrator = calibrator or ProbabilityCalibrator()
+        self.meta_model: Optional[Any] = None
+
+    def fit_meta_model(self, X_oof: np.ndarray, y_oof: np.ndarray) -> Dict[str, float]:
+        """Fit meta-learner on out-of-fold multi-signal features."""
+        from sklearn.linear_model import LogisticRegression
+        from sklearn.metrics import brier_score_loss, roc_auc_score
+        self.meta_model = LogisticRegression(C=1.0, solver="lbfgs", max_iter=200)
+        self.meta_model.fit(X_oof, y_oof)
+        probs = self.meta_model.predict_proba(X_oof)[:, 1]
+        brier = float(brier_score_loss(y_oof, probs))
+        auc = float(roc_auc_score(y_oof, probs)) if len(np.unique(y_oof)) > 1 else 0.5
+        return {"brier_score": brier, "roc_auc": auc}
+
+    def predict_proba(self, X_signals: np.ndarray) -> np.ndarray:
+        """Predict fused risk probability for a feature matrix."""
+        if self.meta_model is not None:
+            return self.meta_model.predict_proba(X_signals)[:, 1]
+        raw = np.dot(X_signals[:, :4], np.array([self.alpha_rank, self.beta_time, self.gamma_anomaly, self.delta_history]))
+        return np.clip(raw, 0.0, 1.0)
 
     def fuse_predictions(
         self,
@@ -102,7 +138,7 @@ class MultiSignalRiskFusionEngine:
         anomaly_sub_scores: Dict[str, float],
     ) -> List[ATMRiskPrediction]:
         """
-        Combine multi-stage outputs into a list of standardized ATMRiskPrediction objects.
+        Produce final prioritized candidate ranking and actionable dispatch directives.
         """
         raw_scores = ranked_candidates_df["ranking_score"].values
         calibrated_probs = self.calibrator.calibrate(raw_scores)
@@ -146,7 +182,6 @@ class MultiSignalRiskFusionEngine:
             anom_score = float(anomaly_score)
 
             # Multi-Signal Fused Risk Score
-            # Combines calibrated ranking probability with time urgency, anomaly, and historical hotspot
             fused_score = (
                 self.alpha_rank * p_cal
                 + self.beta_time * time_score
@@ -222,12 +257,23 @@ class MultiSignalRiskFusionEngine:
         }
         joblib.dump(bundle, file_path)
 
-    def load(self, file_path: str) -> None:
-        """Load calibrator and fusion configuration."""
+    def load(self_or_cls, file_path: str) -> "MultiSignalRiskFusionEngine":
+        """Load calibrator and fusion configuration (supports both instance and class method invocation)."""
         bundle = joblib.load(file_path)
-        self.calibrator = bundle["calibrator"]
+        calibrator = bundle["calibrator"]
         w = bundle["weights"]
-        self.alpha_rank = w["alpha_rank"]
-        self.beta_time = w["beta_time"]
-        self.gamma_anomaly = w["gamma_anomaly"]
-        self.delta_history = w["delta_history"]
+        if isinstance(self_or_cls, type):
+            engine = self_or_cls(
+                alpha_rank=w["alpha_rank"],
+                beta_time=w["beta_time"],
+                gamma_anomaly=w["gamma_anomaly"],
+                delta_history=w["delta_history"],
+                calibrator=calibrator,
+            )
+            return engine
+        self_or_cls.alpha_rank = w["alpha_rank"]
+        self_or_cls.beta_time = w["beta_time"]
+        self_or_cls.gamma_anomaly = w["gamma_anomaly"]
+        self_or_cls.delta_history = w["delta_history"]
+        self_or_cls.calibrator = calibrator
+        return self_or_cls

@@ -15,11 +15,7 @@ CIPHER-25257-main/
 CIPHER-main/
 CIPHER_FINAL_2025-main/
 
-# Large dataset files exceeding GitHub 100MB limit
-datasets/final/rank_pairs_train.csv
-datasets/final/rank_pairs_val.csv
-datasets/final/rank_pairs_test.csv
-datasets/final/rank_pairs_part*.csv/
-*.csv.gz
+# Datasets (multi-GB data files)
+datasets/
 
 

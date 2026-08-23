@@ -20,8 +20,9 @@ def trained_pipeline(tmp_path_factory):
     pipeline = CIPHERPipeline()
     metrics = pipeline.train(
         dataset_dir=DATASET_DIR,
-        n_ranker_estimators=80,
-        n_time_estimators=60,
+        n_ranker_estimators=40,
+        n_time_estimators=30,
+        rank_sample_rows=25000,
     )
     print("\n--- Pipeline Training Complete ---")
     print(f"Ranker NDCG@5: {metrics['ranker_metrics'].get('NDCG@5', 0):.4f}")

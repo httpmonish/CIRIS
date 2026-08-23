@@ -31,6 +31,9 @@ from src.ml.xai.explainer import TreeSHAPExplainer
 from src.ml.routing.guardrails import OperationalGuardrails
 
 
+from src.ml.data.loader import DatasetLoader
+
+
 class CIPHERPipeline:
     """
     End-to-End Predictive Cybercrime Analytics Pipeline.
@@ -96,32 +99,32 @@ class CIPHERPipeline:
 
     def train(
         self,
-        dataset_dir: str,
+        dataset_dir: str = "datasets/final",
         n_ranker_estimators: int = 120,
         n_time_estimators: int = 80,
+        rank_sample_rows: Optional[int] = None,
     ) -> Dict[str, Any]:
         """
-        Train all supervised and unsupervised models from dataset directory.
+        Train all supervised and unsupervised models from dataset directory via DatasetLoader.
         """
+        loader = DatasetLoader(dataset_dir)
+
         # Load tables
-        self.atm_master_df = pd.read_csv(os.path.join(dataset_dir, "atm_master.csv"))
-        self.withdrawals_df = pd.read_csv(os.path.join(dataset_dir, "withdrawals.csv"))
-        self.graph_edges_df = pd.read_csv(os.path.join(dataset_dir, "graph_edges.csv"))
-        self.case_links_df = pd.read_csv(os.path.join(dataset_dir, "case_links.csv"))
-        if os.path.exists(os.path.join(dataset_dir, "upi_entities.csv")):
-            self.upi_df = pd.read_csv(os.path.join(dataset_dir, "upi_entities.csv"))
+        self.atm_master_df = loader.load_atm_master()
+        self.withdrawals_df = loader.load_withdrawals()
+        self.graph_edges_df = loader.load_graph_edges()
+        self.case_links_df = loader.load_case_links()
+        self.upi_df = loader.load_upi_entities()
 
         self._init_offline_intelligence()
 
         # Load split datasets
-        train_rank = pd.read_csv(os.path.join(dataset_dir, "train", "rank_pairs_train.csv"))
-        val_rank = pd.read_csv(os.path.join(dataset_dir, "validation", "rank_pairs_val.csv"))
+        train_rank = loader.load_rank_split("train", nrows=rank_sample_rows)
+        val_rank = loader.load_rank_split("val", nrows=rank_sample_rows // 4 if rank_sample_rows else None)
 
-        train_time = pd.read_csv(os.path.join(dataset_dir, "train", "time_train.csv"))
-        val_time = pd.read_csv(os.path.join(dataset_dir, "validation", "time_val.csv"))
-        complaints_df = pd.read_csv(os.path.join(dataset_dir, "complaints.csv"))
-
-        train_anom = pd.read_csv(os.path.join(dataset_dir, "train", "anomaly_train.csv"))
+        train_time, val_time, _ = loader.load_time_splits()
+        complaints_df = loader.load_complaints()
+        train_anom, val_anom, _ = loader.load_anomaly_splits()
 
         # 1. Train ATM Ranker
         self.ranker = ATMRanker(n_estimators=n_ranker_estimators, learning_rate=0.08)

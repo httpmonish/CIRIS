@@ -150,6 +150,21 @@ class AnomalyDetector:
 
         return norm_anomaly, sub_scores
 
+    def predict_anomaly_scores(self, df: pd.DataFrame) -> np.ndarray:
+        """Compute calibrated anomaly scores for a DataFrame."""
+        if not self.is_fitted or self.model is None:
+            raise RuntimeError("AnomalyDetector is not fitted.")
+        X = df[self.FEATURE_COLUMNS].copy()
+        for col in self.FEATURE_COLUMNS:
+            X[col] = pd.to_numeric(X[col], errors="coerce").fillna(0.0)
+        raw_scores = self.model.decision_function(X)
+        clipped_score = np.clip(raw_scores, self.score_min, self.score_max)
+        if self.score_max > self.score_min:
+            norm = 1.0 - ((clipped_score - self.score_min) / (self.score_max - self.score_min))
+        else:
+            norm = np.full(len(X), 0.5)
+        return np.clip(norm, 0.0, 1.0)
+
     def save(self, file_path: str) -> None:
         """Save fitted AnomalyDetector bundle."""
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -162,11 +177,16 @@ class AnomalyDetector:
         }
         joblib.dump(bundle, file_path)
 
-    def load(self, file_path: str) -> None:
-        """Load fitted AnomalyDetector bundle."""
+    def load(self_or_cls, file_path: str) -> "AnomalyDetector":
+        """Load fitted AnomalyDetector bundle (supports both instance and class method invocation)."""
         bundle = joblib.load(file_path)
-        self.model = bundle["model"]
-        self.score_min = bundle["score_min"]
-        self.score_max = bundle["score_max"]
-        self.FEATURE_COLUMNS = bundle["feature_columns"]
-        self.is_fitted = bundle["is_fitted"]
+        if isinstance(self_or_cls, type):
+            detector = self_or_cls()
+        else:
+            detector = self_or_cls
+        detector.model = bundle["model"]
+        detector.score_min = bundle["score_min"]
+        detector.score_max = bundle["score_max"]
+        detector.FEATURE_COLUMNS = bundle["feature_columns"]
+        detector.is_fitted = bundle["is_fitted"]
+        return detector

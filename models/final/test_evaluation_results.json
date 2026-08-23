@@ -1,0 +1,69 @@
+{
+  "evaluation_timestamp": "2026-08-23T21:33:41.576677",
+  "test_ranking_metrics": {
+    "NDCG@1": 0.3313513193704887,
+    "NDCG@3": 0.38150431492405923,
+    "NDCG@5": 0.41506430183516785,
+    "NDCG@10": 0.45835594394533996,
+    "MRR": 0.41641679681633215,
+    "HitRate@1": 0.33049343272985443,
+    "HitRate@3": 0.4206602768903088,
+    "HitRate@5": 0.5026624068157615,
+    "HitRate@10": 0.6361377351792687,
+    "brier_score": 0.002039174694641831
+  },
+  "time_test_metrics": {
+    "regression_MAE_hours": 4.9519056874210925,
+    "regression_RMSE_hours": 7.508892702842963,
+    "classification_Accuracy": 0.23855165069222578,
+    "classification_Macro_F1": 0.17686213935716913
+  },
+  "anomaly_test_metrics": {
+    "n_test_samples": 5634,
+    "mean_anomaly_score": 0.377271029050633,
+    "std_anomaly_score": 0.24052386350421168,
+    "high_anomaly_rate": 0.11377351792687256
+  },
+  "e2e_benchmark": {
+    "n_evaluated_cases": 300,
+    "retrieval_recall_at_candidate_pool": 0.8,
+    "cipher_v4": {
+      "hit_rate_top1": 0.07333333333333333,
+      "hit_rate_top3": 0.21333333333333335,
+      "hit_rate_top5": 0.2833333333333333,
+      "hit_rate_top10": 0.4166666666666667
+    },
+    "baseline_nearest_atm": {
+      "hit_rate_top1": 0.0033333333333333335,
+      "hit_rate_top3": 0.013333333333333334,
+      "hit_rate_top5": 0.013333333333333334,
+      "hit_rate_top10": 0.023333333333333334
+    },
+    "baseline_pure_hotspot": {
+      "hit_rate_top1": 0.0,
+      "hit_rate_top3": 0.0033333333333333335,
+      "hit_rate_top5": 0.0033333333333333335,
+      "hit_rate_top10": 0.016666666666666666
+    },
+    "baseline_skyvar_sih2025": {
+      "hit_rate_top1": 0.0,
+      "hit_rate_top3": 0.006666666666666667,
+      "hit_rate_top5": 0.01,
+      "hit_rate_top10": 0.016666666666666666
+    },
+    "latency_profile_ms": {
+      "candidate_retrieval_p50": 100.22069999831729,
+      "candidate_retrieval_p95": 312.9766599999132,
+      "feature_building_p50": 3474.7600499995315,
+      "feature_building_p95": 9406.31998499903,
+      "ranker_inference_p50": 14.424850000068545,
+      "ranker_inference_p95": 32.72229000103836,
+      "time_model_p50": 4.9261000003753,
+      "anomaly_detector_p50": 20.07179999964137,
+      "fusion_p50": 170.2789999999368,
+      "total_e2e_latency_p50_ms": 3814.2793999977584,
+      "total_e2e_latency_p95_ms": 10155.361695004467,
+      "mean_total_latency_ms": 4651.012133333219
+    }
+  }
+}
