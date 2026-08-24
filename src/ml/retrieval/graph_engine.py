@@ -79,19 +79,26 @@ class TemporalGraphEngine:
 
         edges_t = self.raw_edges[self.raw_edges["ts"] <= as_of_T]
         G = nx.DiGraph()
+        if edges_t.empty:
+            return G
 
-        for _, row in edges_t.iterrows():
-            u = str(row["src_account_id"]).strip()
-            v = str(row["dst_account_id"]).strip()
-            amt = float(row.get("amount", 0.0))
-            cid = str(row.get("complaint_id", "")).strip()
+        srcs = edges_t["src_account_id"].values
+        dsts = edges_t["dst_account_id"].values
+        amts = edges_t["amount"].values if "amount" in edges_t.columns else np.zeros(len(edges_t))
+        cids = edges_t["complaint_id"].values if "complaint_id" in edges_t.columns else np.full(len(edges_t), "")
 
-            if G.has_edge(u, v):
-                G[u][v]["weight"] += amt
-                G[u][v]["count"] += 1
-                G[u][v]["cases"].add(cid)
+        for u, v, amt, cid in zip(srcs, dsts, amts, cids):
+            u_str = str(u).strip()
+            v_str = str(v).strip()
+            cid_str = str(cid).strip()
+
+            if G.has_edge(u_str, v_str):
+                ed = G[u_str][v_str]
+                ed["weight"] += float(amt)
+                ed["count"] += 1
+                ed["cases"].add(cid_str)
             else:
-                G.add_edge(u, v, weight=amt, count=1, cases={cid})
+                G.add_edge(u_str, v_str, weight=float(amt), count=1, cases={cid_str})
         return G
 
     def get_account_graph_features_as_of_T(self, account_id: str, as_of_T: datetime) -> Dict[str, float]:

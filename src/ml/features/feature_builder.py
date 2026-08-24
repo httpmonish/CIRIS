@@ -180,6 +180,16 @@ class FeatureBuilder:
                 graph_feats["linked_complaint_count_as_of_T"] = acc_feats.get("linked_complaint_count_as_of_T", 0.0)
                 graph_feats["fraud_cluster_membership"] = 1.0 if complaint.complaint_id in self.graph_engine.case_to_cluster else 0.0
 
+        # Precompute all ATM hotspot stats strictly as of T once for all candidates
+        all_h_stats = self.hotspot_cache.get_all_atm_stats_as_of_T(t_pred)
+        default_h_stats = {
+            "historical_complaints_as_of_T": 0.0,
+            "historical_cashout_count_as_of_T": 0.0,
+            "historical_cashout_rate_as_of_T": self.hotspot_cache.prior_cashout_rate,
+            "historical_avg_loss_as_of_T": self.hotspot_cache.global_avg_loss,
+            "historical_hotspot_score_as_of_T": 0.0,
+        }
+
         # -------------------------------------------------------------
         # Construct Rows per Candidate ATM
         # -------------------------------------------------------------
@@ -203,7 +213,7 @@ class FeatureBuilder:
             in_behavioural = int("behavioural" in cand.retrieval_sources)
 
             # Historical Hotspot Stats strictly as of T
-            h_stats = self.hotspot_cache.get_atm_stats_as_of_T(atm_id, as_of_T=t_pred)
+            h_stats = all_h_stats.get(str(atm_id).strip(), default_h_stats)
 
             loc_type_str = str(meta.get("location_type", cand.location_type))
             loc_type_code = self.LOCATION_TYPE_MAP.get(loc_type_str, 0)

@@ -96,6 +96,38 @@ class HistoricalHotspotCache:
             "historical_hotspot_score_as_of_T": float(hotspot_score),
         }
 
+    def get_all_atm_stats_as_of_T(self, as_of_T: datetime) -> Dict[str, Dict[str, float]]:
+        """
+        Precompute historical statistics for ALL ATMs strictly before time T using vectorized groupby.
+        Returns mapping from atm_id -> stats dict.
+        """
+        if self.withdrawals_df.empty:
+            return {}
+
+        prior_wds = self.withdrawals_df[self.withdrawals_df["ts"] < as_of_T]
+        if prior_wds.empty:
+            return {}
+
+        agg = prior_wds.groupby("atm_id")["withdrawal_amount"].agg(["count", "mean"])
+        stats_map = {}
+        for atm_id, row in agg.iterrows():
+            atm_str = str(atm_id).strip()
+            cashout_count = float(row["count"])
+            avg_loss = float(row["mean"])
+            complaint_count = cashout_count
+            smoothed_rate = (cashout_count + self.smoothing_prior_weight * self.prior_cashout_rate) / (
+                complaint_count + self.smoothing_prior_weight
+            )
+            hotspot_score = np.log1p(cashout_count) * (avg_loss / 25000.0) * smoothed_rate
+            stats_map[atm_str] = {
+                "historical_complaints_as_of_T": complaint_count,
+                "historical_cashout_count_as_of_T": cashout_count,
+                "historical_cashout_rate_as_of_T": float(smoothed_rate),
+                "historical_avg_loss_as_of_T": avg_loss,
+                "historical_hotspot_score_as_of_T": float(hotspot_score),
+            }
+        return stats_map
+
     def get_top_hotspots_as_of_T(self, as_of_T: datetime, top_k: int = 50) -> List[Tuple[str, float]]:
         """
         Get the Top-K most active historical hotspot ATMs across the entire network as of time T.
