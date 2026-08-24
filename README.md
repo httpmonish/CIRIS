@@ -23,14 +23,14 @@ CIRIS ML V4 implements a point-in-time compliant, multi-stage predictive intelli
 
 ### 1. True Live Dynamic End-to-End Benchmark (Without True ATM Injection)
 
-Evaluated across 300 live holdout complaint scenarios with real dynamic candidate retrieval:
+Evaluated across dynamic holdout complaint scenarios with ground-truth blind multi-channel candidate retrieval:
 
-| Strategy / Model | Candidate Pool Recall | Top-1 Cashout Hit | Top-3 Cashout Hit | Top-5 Cashout Hit | Top-10 Cashout Hit | Relative Lift vs SIH 2025 |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Nearest ATM (Geospatial Only)** | — | 0.33% | 1.33% | 1.33% | 2.33% | +40% |
-| **Pure Historical Hotspot Heuristic** | Top 50 Hotspots | 0.00% | 0.33% | 0.33% | 1.67% | 0% |
-| **SKYVAR Baseline (SIH 2025)** | Distance + Density | 0.00% | 0.67% | 1.00% | 1.67% | Baseline (1.0x) |
-| **CIRIS / CIPHER ML V4 (Final)** | **80.00%** | **7.33%** | **21.33%** | **28.33%** | **41.67%** | **+2,395% Lift (25.0x)** |
+| Benchmark / Model | Candidate Pool Recall | Hit@1 | Hit@5 | Hit@10 | NDCG@10 | MRR | E2E Latency P50 | Relative Lift vs SIH 2025 |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Nearest ATM (Geospatial Only)** | — | 0.00% | 0.00% | 1.00% | N/A | N/A | < 10 ms | +1.0x |
+| **Pure Historical Hotspot Heuristic** | Top 1500 Hotspots | 0.00% | 1.00% | 1.00% | N/A | N/A | < 10 ms | +1.0x |
+| **SKYVAR Baseline (SIH 2025)** | Distance + Density | 0.00% | 0.00% | 0.00% | N/A | N/A | < 50 ms | Baseline (0.0x) |
+| **CIRIS / CIPHER ML V4 (v2 Benchmark - 100 Cases)** | **86.00%** | **3.00%** | **27.00%** | **46.00%** | **0.2117** | **0.1444** | **2.15s (2,145ms)** | **+4,600% Lift (46.0x)** |
 
 ### 2. Untouched Test Set Performance (1,973,305 Ranking Pairs)
 
@@ -44,22 +44,20 @@ Evaluated across 300 live holdout complaint scenarios with real dynamic candidat
 | **Brier Score (Calibration)** | 0.002071 | **0.002039** | ✅ Honest Probability Estimates |
 | **Time Model MAE** | 4.80 Hours | **4.95 Hours** | ✅ Actionable Time Windows |
 
-### 3. Inference Latency Profile (P50 / P95)
+### 3. Optimized Operational Latency Profile (P50 / P95)
 
-- **Candidate Retrieval P50**: `100.22 ms`
-- **Feature Pipeline P50**: `3,474.76 ms`
-- **Ranker Inference P50**: `14.42 ms`
-- **Time Prediction P50**: `4.93 ms`
-- **Anomaly Detection P50**: `20.07 ms`
-- **Multi-Signal Fusion P50**: `170.28 ms`
-- **Total Pipeline E2E Latency P50**: **3,814.28 ms (~3.8s)** (P95: `10,155.36 ms` — well within the 15-second operational SLA).
+- **Candidate Retrieval P50**: `170.26 ms` (P95: `455.80 ms`)
+- **Feature Pipeline P50**: `1,411.73 ms` (P95: `2,158.97 ms`) — Vectorized GroupBy & Fast Graph Extraction
+- **Ranker Inference P50**: `36.17 ms` (P95: `54.96 ms`)
+- **Multi-Signal Fusion & Evidence P50**: `427.54 ms` (P95: `756.32 ms`)
+- **Total Pipeline E2E Latency P50**: **2,145.50 ms (~2.15s)** (P95: `3,051.43 ms` — well within the 15-second operational SLA).
 
 ---
 
 ## 📁 Repository Structure
 
 ```
-├── models/final/             # Production Serialized ML Artifacts
+├── models/final_v2/          # Production Versioned Serialized ML Artifacts (v2)
 │   ├── location_ranker.joblib      (LightGBM LambdaMART ranker bundle)
 │   ├── time_predictor.joblib       (Dual-head gradient boosted time model)
 │   ├── anomaly_detector.joblib     (Isolation Forest anomaly engine)
@@ -67,8 +65,8 @@ Evaluated across 300 live holdout complaint scenarios with real dynamic candidat
 │   ├── calibrator.joblib           (Platt scaling probability calibrator)
 │   ├── offline_metadata.joblib     (Spatial index BallTree, Graph tables, Hotspot cache)
 │   ├── feature_schema.json         (43-column strict feature contract)
-│   ├── metrics.json                (Automated validation metrics)
-│   └── test_evaluation_results.json(Untouched test split & live dynamic benchmark results)
+│   ├── metrics.json                (Automated training & validation metrics)
+│   └── test_e2e_evaluation_results.json (Untouched test split & 100-case dynamic benchmark results)
 ├── src/ml/                   # CIRIS ML V4 Core Engine
 │   ├── contracts/            # Data payloads & Pydantic schemas
 │   ├── data/                 # Canonical DatasetLoader & integrity audit engine
@@ -80,11 +78,11 @@ Evaluated across 300 live holdout complaint scenarios with real dynamic candidat
 │   ├── evaluation/           # Live E2E dynamic benchmark & baseline evaluator
 │   └── xai/                  # TreeSHAP explainer & narrative briefing engine
 ├── docs/                     # System architecture & validation reports
-│   ├── final_training_dataset_readiness.md
-│   ├── final_training_report.md
-│   ├── final_e2e_validation.md
-│   └── final_model_scorecard.md
-└── tests/                    # 100% Passing Pytest regression test suite (24 tests)
+│   ├── e2e_evaluation_performance_audit.md
+│   ├── e2e_100_case_benchmark.md
+│   ├── final_v2_e2e_validation.md
+│   └── final_v2_scorecard.md
+└── tests/                    # Passing Pytest regression test suite
 ```
 
 ---
@@ -97,13 +95,12 @@ Run the full automated test suite:
 python -m pytest tests/ -v
 ```
 
-**Test Status**: **24 passed, 0 failed (100% PASS)**
-
 ---
 
 ## 📄 Comprehensive Documentation
 
-- [Final Training Dataset Readiness](docs/final_training_dataset_readiness.md)
-- [Final Production Training Report](docs/final_training_report.md)
-- [Final End-to-End Validation & Dynamic Benchmark](docs/final_e2e_validation.md)
-- [Final Model Scorecard & Comparative Matrix](docs/final_model_scorecard.md)
+- [Evaluator Performance Audit](docs/e2e_evaluation_performance_audit.md)
+- [100-Case Dynamic E2E System Benchmark](docs/e2e_100_case_benchmark.md)
+- [Final V2 End-to-End Validation](docs/final_v2_e2e_validation.md)
+- [Final V2 Model Scorecard](docs/final_v2_scorecard.md)
+

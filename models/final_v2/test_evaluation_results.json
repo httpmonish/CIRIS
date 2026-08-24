@@ -1,17 +1,17 @@
 {
-  "checkpoint_timestamp": "2026-08-25T00:19:13.205261",
-  "n_cases_completed": 25,
-  "mean_candidates": 2666.28,
-  "dynamic_retrieval_union_recall": 0.92,
+  "checkpoint_timestamp": "2026-08-25T00:47:57.727205",
+  "n_cases_completed": 100,
+  "mean_candidates": 2515.19,
+  "dynamic_retrieval_union_recall": 0.86,
   "retrieval_stats": {
-    "recall_at_50": 2,
-    "recall_at_100": 4,
-    "recall_at_200": 5,
-    "recall_at_300": 10,
-    "union_recall": 23,
-    "missed_count": 2
+    "recall_at_50": 7,
+    "recall_at_100": 16,
+    "recall_at_200": 24,
+    "recall_at_300": 32,
+    "union_recall": 86,
+    "missed_count": 14
   },
-  "cipher_hit10": 0.48,
-  "median_geo_error_km": 674.5901307823248,
-  "latency_p50_total_ms": 3149.2725999996765
+  "cipher_hit10": 0.46,
+  "median_geo_error_km": 631.294531965863,
+  "latency_p50_total_ms": 2145.5003499977465
 }
