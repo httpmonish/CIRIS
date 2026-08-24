@@ -1,0 +1,17 @@
+{
+  "checkpoint_timestamp": "2026-08-25T00:47:02.180851",
+  "n_cases_completed": 75,
+  "mean_candidates": 2464.826666666667,
+  "dynamic_retrieval_union_recall": 0.84,
+  "retrieval_stats": {
+    "recall_at_50": 5,
+    "recall_at_100": 12,
+    "recall_at_200": 19,
+    "recall_at_300": 22,
+    "union_recall": 63,
+    "missed_count": 12
+  },
+  "cipher_hit10": 0.4533333333333333,
+  "median_geo_error_km": 616.8444544413925,
+  "latency_p50_total_ms": 2065.801899996586
+}

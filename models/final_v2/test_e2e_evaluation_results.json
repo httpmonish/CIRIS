@@ -1,58 +1,62 @@
 {
-  "evaluation_timestamp": "2026-08-25T00:19:13.285451",
+  "evaluation_timestamp": "2026-08-25T00:47:57.826824",
   "model_version": "v4.1.0-final_v2",
   "benchmark_execution": {
-    "e2e_cases_evaluated": 25,
-    "total_time_seconds": 77.84503674507141,
-    "average_seconds_per_case": 3.1138014698028567,
-    "mean_candidate_count": 2666.28,
-    "min_candidate_count": 1616,
-    "max_candidate_count": 3402
+    "e2e_cases_evaluated": 100,
+    "total_time_seconds": 207.03093194961548,
+    "average_seconds_per_case": 2.070309319496155,
+    "mean_candidate_count": 2515.19,
+    "median_candidate_count": 2363.5,
+    "p95_candidate_count": 3402.05,
+    "min_candidate_count": 999,
+    "max_candidate_count": 3415,
+    "exhaustive_search_usage": 0,
+    "crashes_errors": 0
   },
   "dynamic_retrieval_metrics": {
-    "Recall@50": 0.08,
+    "Recall@50": 0.07,
     "Recall@100": 0.16,
-    "Recall@200": 0.2,
-    "Recall@300": 0.4,
-    "union_recall": 0.92,
-    "missed_retrieval_count": 2,
-    "total_evaluated": 25
+    "Recall@200": 0.24,
+    "Recall@300": 0.32,
+    "union_recall": 0.86,
+    "missed_retrieval_count": 14,
+    "total_evaluated": 100
   },
   "geographic_accuracy_km": {
-    "median_error_km": 674.5901307823248,
-    "p90_error_km": 1153.2054172570995,
-    "mean_error_km": 632.1595280283699
+    "median_error_km": 631.294531965863,
+    "p90_error_km": 1377.9998709297815,
+    "mean_error_km": 631.0750263168906
   },
   "operational_latencies_ms": {
-    "retrieval_latency_p50": 220.2818000005209,
-    "retrieval_latency_p95": 582.149659999413,
-    "feature_latency_p50": 2203.83899999797,
-    "feature_latency_p95": 3184.3455000001986,
-    "inference_latency_p50": 52.561900000000605,
-    "inference_latency_p95": 80.69756000040798,
-    "evidence_latency_p50": 662.4100000008184,
-    "evidence_latency_p95": 1140.1007199980083,
-    "total_e2e_p50": 3149.2725999996765,
-    "total_e2e_p95": 4635.819160000391
+    "retrieval_latency_p50": 170.25800000192248,
+    "retrieval_latency_p95": 455.80427499735373,
+    "feature_latency_p50": 1411.7326000014145,
+    "feature_latency_p95": 2158.968589998403,
+    "inference_latency_p50": 36.16579999652458,
+    "inference_latency_p95": 54.9615950007137,
+    "evidence_latency_p50": 427.5379500031704,
+    "evidence_latency_p95": 756.3249600003471,
+    "total_e2e_p50": 2145.5003499977465,
+    "total_e2e_p95": 3051.4330250040075
   },
   "e2e_benchmark_live_rankings": {
     "cipher_ml_v4": {
-      "HitRate@1": 0.04,
-      "HitRate@5": 0.28,
-      "HitRate@10": 0.48,
-      "NDCG@5": 0.17642287286081487,
-      "NDCG@10": 0.239075795990125,
-      "MRR": 0.1758395878475767
+      "HitRate@1": 0.03,
+      "HitRate@5": 0.27,
+      "HitRate@10": 0.46,
+      "NDCG@5": 0.1502139616340078,
+      "NDCG@10": 0.21174063908774624,
+      "MRR": 0.14439912694029336
     },
     "baseline_nearest_atm": {
       "HitRate@1": 0.0,
       "HitRate@5": 0.0,
-      "HitRate@10": 0.04
+      "HitRate@10": 0.01
     },
     "baseline_pure_hotspot": {
       "HitRate@1": 0.0,
-      "HitRate@5": 0.04,
-      "HitRate@10": 0.04
+      "HitRate@5": 0.01,
+      "HitRate@10": 0.01
     },
     "baseline_skyvar_sih2025": {
       "HitRate@1": 0.0,

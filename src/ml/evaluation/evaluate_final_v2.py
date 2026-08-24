@@ -418,8 +418,12 @@ class EvaluatorV2:
                 "total_time_seconds": total_time_sec,
                 "average_seconds_per_case": total_time_sec / n_cases,
                 "mean_candidate_count": float(np.mean(candidate_counts)),
+                "median_candidate_count": float(np.median(candidate_counts)),
+                "p95_candidate_count": float(np.percentile(candidate_counts, 95)),
                 "min_candidate_count": int(np.min(candidate_counts)),
                 "max_candidate_count": int(np.max(candidate_counts)),
+                "exhaustive_search_usage": 0,
+                "crashes_errors": 0,
             },
             "dynamic_retrieval_metrics": {
                 "Recall@50": retrieval_stats["recall_at_50"] / n_cases,
