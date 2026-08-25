@@ -17,5 +17,6 @@ CIPHER_FINAL_2025-main/
 
 # Datasets (multi-GB data files)
 datasets/
+dataset/
 
 

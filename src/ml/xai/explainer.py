@@ -9,7 +9,12 @@ import os
 import numpy as np
 import pandas as pd
 from typing import List, Dict, Any, Tuple, Optional
-import shap
+try:
+    import shap
+    HAS_SHAP = True
+except Exception:
+    shap = None
+    HAS_SHAP = False
 
 from src.ml.models.ranker import ATMRanker
 
@@ -60,14 +65,16 @@ class TreeSHAPExplainer:
 
     def __init__(self, ranker: ATMRanker):
         self.ranker = ranker
-        self.explainer: Optional[shap.TreeExplainer] = None
+        self.explainer: Optional[Any] = None
         self._init_explainer()
 
     def _init_explainer(self) -> None:
         """Initialize SHAP TreeExplainer from fitted LightGBM Booster."""
-        if self.ranker.is_fitted and self.ranker.model is not None:
-            # TreeExplainer works directly on the underlying Booster
-            self.explainer = shap.TreeExplainer(self.ranker.model.booster_)
+        if HAS_SHAP and self.ranker.is_fitted and self.ranker.model is not None:
+            try:
+                self.explainer = shap.TreeExplainer(self.ranker.model.booster_)
+            except Exception:
+                self.explainer = None
 
     def explain_candidate(
         self,
