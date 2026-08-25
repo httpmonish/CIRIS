@@ -1,5 +1,8 @@
 # CIRIS — Final System Benchmark & Evaluation
 
+> [!NOTE]
+> **SUPERSEDED** — See [docs/ciris_final_honest_scorecard.md](file:///e:/CIRIS-SIH2026/docs/ciris_final_honest_scorecard.md) for current authoritative numbers and [docs/metrics_changelog.md](file:///e:/CIRIS-SIH2026/docs/metrics_changelog.md) for metric history.
+
 ## Overview
 This benchmark evaluates the performance of the upgraded CIRIS (SIH 2026 Edition) system against a simple static rule baseline and the pre-reframe CIRIS ML V4 system across transaction risk, network detection, mule identification, endpoint classification, ATM candidate ranking, time window prediction, and latency.
 

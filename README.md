@@ -1,46 +1,65 @@
 # CIRIS — Predictive Cybercrime Analytics & ATM Cashout Interception System
 
-**CIRIS** (Smart India Hackathon 2026 Edition) is a state-of-the-art predictive cybercrime intelligence platform engineered to intercept high-velocity financial cyber fraud (UPI scams, digital arrest, phishing, investment fraud) at ATMs before cashouts occur.
+> [!NOTE]
+> **SUPERSEDED / SINGLE SOURCE OF TRUTH NOTICE**:
+> For current authoritative numbers, see [docs/ciris_final_honest_scorecard.md](file:///e:/CIRIS-SIH2026/docs/ciris_final_honest_scorecard.md). For complete metric evolution history, see [docs/metrics_changelog.md](file:///e:/CIRIS-SIH2026/docs/metrics_changelog.md).
+
+**CIRIS** (Smart India Hackathon 2026 Edition) is a predictive cybercrime intelligence platform engineered to trace, analyze, and intercept high-velocity financial cyber fraud (UPI scams, digital arrest, phishing, investment fraud) across multi-hop mule networks and ATM cashout endpoints.
 
 ---
 
 ## 🚀 Key Highlights & Architecture
 
-CIRIS ML V4 implements a point-in-time compliant, multi-stage predictive intelligence pipeline trained on **11,932,605 ranking instances**:
+CIRIS implements a multi-stage predictive intelligence pipeline and multi-layer case intelligence architecture trained on **11,932,605 ranking instances**:
 
+### 1. Predictive ATM Ranking Pipeline
 - **Stage -1: Data Contracts & Partitioning** — Strict temporal boundaries ($t \le T_{\text{complaint}}$) with zero temporal lookahead leakage.
-- **Stage 0: Hybrid Candidate Retrieval Engine** — BallTree Geospatial Search ($100\text{ km}$ / $100\text{-kNN}$) + Historical Hotspot Cache (Top-100) + Temporal Mule Graph Multi-Hop Walk ($80.00\%$ Candidate Pool Recall).
+- **Stage 0: Hybrid Candidate Retrieval Engine** — BallTree Geospatial Search ($250\text{ km}$ / $200\text{-kNN}$) + Historical Hotspot Cache (Top-1500) + Temporal Mule Graph Multi-Hop Walk ($86.00\%$ Candidate Pool Recall).
 - **Stage 1: 43-Column Point-in-Time Feature Pipeline** — Spatial proximity, decayed historical cashout rates, account velocity, and graph centrality.
-- **Stage 2: ATM Candidate Ranking** — LightGBM LambdaMART ranker optimized for NDCG across 5,000 national ATMs.
-- **Stage 3: Time-to-Cashout Prediction** — Dual-head gradient boosted continuous delay regressor ($\text{MAE} = 4.80\text{h}$) and 5-class Law Enforcement Agency dispatch window classifier.
+- **Stage 2: ATM Candidate Ranking** — LightGBM LambdaMART ranker optimized for NDCG across national ATMs.
+- **Stage 3: Time-to-Cashout Prediction** — Dual-head gradient boosted continuous delay regressor ($\text{MAE} = 4.95\text{h}$) and 5-class Law Enforcement Agency dispatch window classifier.
 - **Stage 4: Unsupervised Anomaly Detection** — Isolation Forest anomaly scoring engine identifying high-risk mule behavior.
-- **Stage 5: Probability Calibration & Multi-Signal Risk Fusion** — Platt scaling calibrator ($\text{Brier Score} = 0.002039$) and multi-signal meta-fusion engine.
+- **Stage 5: Probability Calibration & Risk Fusion** — Platt scaling calibrator ($\text{Brier Score} = 0.002039$) and multi-signal meta-fusion engine.
 - **Stage 6: TreeSHAP Explainability & Graph Tracing** — Audit-grade local feature attributions and automated Law Enforcement Agency narrative briefing generation.
+
+### 2. Multi-Layer Case Intelligence Suite
+Tested & verified via automated unit test suite [`tests/test_case_intelligence_e2e.py`](file:///e:/CIRIS-SIH2026/tests/test_case_intelligence_e2e.py):
+
+| Intelligence Engine | Implementation Source | Unit Test Link | Status & Verification |
+|---|---|---|:---:|
+| **Entity Resolution Engine** | [`src/ml/features/entity_resolution.py`](file:///e:/CIRIS-SIH2026/src/ml/features/entity_resolution.py) | [`test_entity_resolution`](file:///e:/CIRIS-SIH2026/tests/test_case_intelligence_e2e.py#L59) | ✅ Verified |
+| **Money-Flow Graph Engine** | [`src/ml/retrieval/money_flow_graph.py`](file:///e:/CIRIS-SIH2026/src/ml/retrieval/money_flow_graph.py) | [`test_money_flow_graph`](file:///e:/CIRIS-SIH2026/tests/test_case_intelligence_e2e.py#L71) | ✅ Verified |
+| **Transaction Fragmentation Detector** | [`src/ml/features/fragmentation_detector.py`](file:///e:/CIRIS-SIH2026/src/ml/features/fragmentation_detector.py) | [`test_fragmentation_detector`](file:///e:/CIRIS-SIH2026/tests/test_case_intelligence_e2e.py#L85) | ✅ Verified |
+| **Mule Network Intelligence** | [`src/ml/models/mule_network.py`](file:///e:/CIRIS-SIH2026/src/ml/models/mule_network.py) | [`test_mule_network_intelligence`](file:///e:/CIRIS-SIH2026/tests/test_case_intelligence_e2e.py#L95) | ✅ Verified |
+| **Amount-at-Risk Engine** | [`src/ml/features/amount_at_risk.py`](file:///e:/CIRIS-SIH2026/src/ml/features/amount_at_risk.py) | [`test_amount_at_risk_engine`](file:///e:/CIRIS-SIH2026/tests/test_case_intelligence_e2e.py#L113) | ✅ Verified |
+| **Endpoint Type Classifier** | [`src/ml/routing/endpoint_classifier.py`](file:///e:/CIRIS-SIH2026/src/ml/routing/endpoint_classifier.py) | [`test_endpoint_classifier`](file:///e:/CIRIS-SIH2026/tests/test_case_intelligence_e2e.py#L124) | ✅ Verified |
+| **Intervention Workflow Engine** | [`src/ml/routing/intervention.py`](file:///e:/CIRIS-SIH2026/src/ml/routing/intervention.py) | [`test_intervention_recommendation`](file:///e:/CIRIS-SIH2026/tests/test_case_intelligence_e2e.py#L138) | ✅ Verified |
 
 ---
 
-## 📊 Final Performance Scorecard & Benchmark
+## 📊 Performance Scorecard & Benchmark Summary
 
-### 1. True Live Dynamic End-to-End Benchmark (Without True ATM Injection)
+### 1. Absolute Live Dynamic End-to-End Comparison (100 Cases)
 
-Evaluated across dynamic holdout complaint scenarios with ground-truth blind multi-channel candidate retrieval:
+> [!NOTE]
+> **Zero-Lift Rule**: Per the Master Hardening Audit, percentage "lift" multipliers against near-zero baselines are eliminated. Baseline and CIRIS ML V4 metrics are reported side-by-side in absolute terms.
 
-| Benchmark / Model | Candidate Pool Recall | Hit@1 | Hit@5 | Hit@10 | NDCG@10 | MRR | E2E Latency P50 | Relative Lift vs SIH 2025 |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Nearest ATM (Geospatial Only)** | — | 0.00% | 0.00% | 1.00% | N/A | N/A | < 10 ms | +1.0x |
-| **Pure Historical Hotspot Heuristic** | Top 1500 Hotspots | 0.00% | 1.00% | 1.00% | N/A | N/A | < 10 ms | +1.0x |
-| **SKYVAR Baseline (SIH 2025)** | Distance + Density | 0.00% | 0.00% | 0.00% | N/A | N/A | < 50 ms | Baseline (0.0x) |
-| **CIRIS / CIPHER ML V4 (v2 Benchmark - 100 Cases)** | **86.00%** | **3.00%** | **27.00%** | **46.00%** | **0.2117** | **0.1444** | **2.15s (2,145ms)** | **+4,600% Lift (46.0x)** |
+| Model / Baseline | Candidate Pool Recall | Hit@1 | Hit@5 | Hit@10 | NDCG@10 | MRR | E2E Latency P50 |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Nearest ATM (Geospatial Only)** | — | 0.00% | 0.00% | 1.00% | N/A | N/A | < 10 ms |
+| **Pure Historical Hotspot Heuristic** | Top 1500 Hotspots | 0.00% | 1.00% | 1.00% | N/A | N/A | < 10 ms |
+| **SKYVAR Baseline (SIH 2025)** | Distance + Density | 0.00% | 0.00% | 0.00% | N/A | N/A | < 50 ms |
+| **CIRIS / CIPHER ML V4** | **86.00%** | **3.00%** | **27.00%** | **46.00%** | **0.2117** | **0.1444** | **2.15s (2,145ms)** |
 
 ### 2. Untouched Test Set Performance (1,973,305 Ranking Pairs)
 
 | Metric | Validation Set (1.94M rows) | Untouched Test Set (1.97M rows) | Status |
 | :--- | :---: | :---: | :---: |
-| **NDCG@1** | 0.3365 | **0.3314** | ✅ Robust Generalization |
-| **NDCG@5** | 0.4280 | **0.4151** | ✅ Robust Generalization |
-| **NDCG@10** | 0.4736 | **0.4584** | ✅ Robust Generalization |
-| **Mean Reciprocal Rank (MRR)** | 0.4280 | **0.4164** | ✅ High Precision |
-| **HitRate@10** | 66.12% | **63.61%** | ✅ Substantial Discriminative Power |
+| **NDCG@1** | 0.3365 | **0.3314** | ✅ Generalization Verified |
+| **NDCG@5** | 0.4280 | **0.4151** | ✅ Generalization Verified |
+| **NDCG@10** | 0.4736 | **0.4584** | ✅ Generalization Verified |
+| **Mean Reciprocal Rank (MRR)** | 0.4280 | **0.4164** | ✅ Generalization Verified |
+| **HitRate@10** | 66.12% | **63.61%** | ✅ Generalization Verified |
 | **Brier Score (Calibration)** | 0.002071 | **0.002039** | ✅ Honest Probability Estimates |
 | **Time Model MAE** | 4.80 Hours | **4.95 Hours** | ✅ Actionable Time Windows |
 
@@ -58,31 +77,18 @@ Evaluated across dynamic holdout complaint scenarios with ground-truth blind mul
 
 ```
 ├── models/final_v2/          # Production Versioned Serialized ML Artifacts (v2)
-│   ├── location_ranker.joblib      (LightGBM LambdaMART ranker bundle)
-│   ├── time_predictor.joblib       (Dual-head gradient boosted time model)
-│   ├── anomaly_detector.joblib     (Isolation Forest anomaly engine)
-│   ├── fusion_engine.joblib        (Multi-signal risk fusion meta-model)
-│   ├── calibrator.joblib           (Platt scaling probability calibrator)
-│   ├── offline_metadata.joblib     (Spatial index BallTree, Graph tables, Hotspot cache)
-│   ├── feature_schema.json         (43-column strict feature contract)
-│   ├── metrics.json                (Automated training & validation metrics)
-│   └── test_e2e_evaluation_results.json (Untouched test split & 100-case dynamic benchmark results)
-├── src/ml/                   # CIRIS ML V4 Core Engine
-│   ├── contracts/            # Data payloads & Pydantic schemas
+├── src/ml/                   # CIRIS ML V4 Core Engine & Case Intelligence
+│   ├── contracts/            # Schemas, Complaint Payload, Case Intelligence Objects
 │   ├── data/                 # Canonical DatasetLoader & integrity audit engine
-│   ├── features/             # Vectorized point-in-time feature engineering
-│   ├── models/               # LambdaRanker, TimePredictor, AnomalyDetector, RiskFusion
-│   ├── retrieval/            # SpatialIndex BallTree, HotspotCache, CandidateRetriever
-│   ├── routing/              # Operational guardrails & LEA/Bank dispatch routing
-│   ├── training/             # Full-scale multi-stage training orchestrator
-│   ├── evaluation/           # Live E2E dynamic benchmark & baseline evaluator
+│   ├── features/             # FeatureBuilder, Entity Resolution, Fragmentation, Amount-at-Risk
+│   ├── models/               # LambdaRanker, TimePredictor, AnomalyDetector, Mule Network, RiskFusion
+│   ├── retrieval/            # SpatialIndex BallTree, HotspotCache, TemporalGraphEngine, CandidateRetriever
+│   ├── routing/              # EndpointTypeClassifier, InterventionRecommendationEngine
 │   └── xai/                  # TreeSHAP explainer & narrative briefing engine
-├── docs/                     # System architecture & validation reports
-│   ├── e2e_evaluation_performance_audit.md
-│   ├── e2e_100_case_benchmark.md
-│   ├── final_v2_e2e_validation.md
-│   └── final_v2_scorecard.md
-└── tests/                    # Passing Pytest regression test suite
+├── docs/                     # Documentation & Authoritative Scorecards
+│   ├── ciris_final_honest_scorecard.md  (SINGLE SOURCE OF TRUTH SCORECARD)
+│   └── metrics_changelog.md              (APPEND-ONLY METRICS HISTORICAL LOG)
+└── tests/                    # Automated Pytest regression test suite
 ```
 
 ---
@@ -97,10 +103,9 @@ python -m pytest tests/ -v
 
 ---
 
-## 📄 Comprehensive Documentation
+## 📄 Authoritative Documentation & Audit Logs
 
-- [Evaluator Performance Audit](docs/e2e_evaluation_performance_audit.md)
-- [100-Case Dynamic E2E System Benchmark](docs/e2e_100_case_benchmark.md)
-- [Final V2 End-to-End Validation](docs/final_v2_e2e_validation.md)
-- [Final V2 Model Scorecard](docs/final_v2_scorecard.md)
-
+- [Final Honest Performance Scorecard](docs/ciris_final_honest_scorecard.md) — **Single Source of Truth**
+- [Metrics Historical Changelog](docs/metrics_changelog.md) — **Append-Only Evolution Log**
+- [Release Readiness Assessment](docs/ciris_release_readiness.md)
+- [Public Dataset Audit](docs/public_dataset_audit.md)

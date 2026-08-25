@@ -1,5 +1,8 @@
 # CIPHER ML V4 — 100-Case Dynamic End-to-End System Benchmark Report
 
+> [!NOTE]
+> **SUPERSEDED** — See [docs/ciris_final_honest_scorecard.md](file:///e:/CIRIS-SIH2026/docs/ciris_final_honest_scorecard.md) for current authoritative numbers and [docs/metrics_changelog.md](file:///e:/CIRIS-SIH2026/docs/metrics_changelog.md) for metric history.
+
 > **Document Status:** Complete & Verified  
 > **Date:** August 25, 2026  
 > **Model Version:** `v4.1.0-final_v2` (`models/final_v2/`)  

@@ -1,0 +1,79 @@
+{
+  "local_same_district": {
+    "cases": 15,
+    "ciris_recall": 1.0,
+    "ciris_hit1": 0.0,
+    "ciris_hit5": 0.0,
+    "ciris_hit10": 0.06666666666666667,
+    "ciris_ndcg10": 0.02222222222222222,
+    "ciris_mrr": 0.031821876410963,
+    "nearest_hit10": 0.0,
+    "skyvar_hit10": 0.0
+  },
+  "cross_district_same_state": {
+    "cases": 15,
+    "ciris_recall": 0.9333333333333333,
+    "ciris_hit1": 0.0,
+    "ciris_hit5": 0.4666666666666667,
+    "ciris_hit10": 0.7333333333333333,
+    "ciris_ndcg10": 0.27072734899255113,
+    "ciris_mrr": 0.13470733530946793,
+    "nearest_hit10": 0.0,
+    "skyvar_hit10": 0.0
+  },
+  "cross_state": {
+    "cases": 15,
+    "ciris_recall": 0.8,
+    "ciris_hit1": 0.0,
+    "ciris_hit5": 0.3333333333333333,
+    "ciris_hit10": 0.4666666666666667,
+    "ciris_ndcg10": 0.21129891296218126,
+    "ciris_mrr": 0.14018649761334942,
+    "nearest_hit10": 0.0,
+    "skyvar_hit10": 0.0
+  },
+  "cold_atms": {
+    "cases": 15,
+    "ciris_recall": 0.8666666666666667,
+    "ciris_hit1": 0.06666666666666667,
+    "ciris_hit5": 0.06666666666666667,
+    "ciris_hit10": 0.06666666666666667,
+    "ciris_ndcg10": 0.06666666666666667,
+    "ciris_mrr": 0.08639897048502368,
+    "nearest_hit10": 0.0,
+    "skyvar_hit10": 0.0
+  },
+  "high_graph_evidence": {
+    "cases": 15,
+    "ciris_recall": 0.8666666666666667,
+    "ciris_hit1": 0.0,
+    "ciris_hit5": 0.13333333333333333,
+    "ciris_hit10": 0.26666666666666666,
+    "ciris_ndcg10": 0.12856841158730545,
+    "ciris_mrr": 0.09917481052053444,
+    "nearest_hit10": 0.0,
+    "skyvar_hit10": 0.0
+  },
+  "low_graph_evidence": {
+    "cases": 15,
+    "ciris_recall": 0.6666666666666666,
+    "ciris_hit1": 0.0,
+    "ciris_hit5": 0.06666666666666667,
+    "ciris_hit10": 0.06666666666666667,
+    "ciris_ndcg10": 0.042061983571430504,
+    "ciris_mrr": 0.039004065579508265,
+    "nearest_hit10": 0.0,
+    "skyvar_hit10": 0.0
+  },
+  "pooled_total": {
+    "cases": 73,
+    "ciris_recall": 0.8493150684931506,
+    "ciris_hit1": 0.0136986301369863,
+    "ciris_hit5": 0.1917808219178082,
+    "ciris_hit10": 0.2876712328767123,
+    "ciris_ndcg10": 0.12595420570172294,
+    "ciris_mrr": 0.08841602213568288,
+    "nearest_hit10": 0.0,
+    "skyvar_hit10": 0.0
+  }
+}

@@ -1,5 +1,8 @@
 # CIRIS — Final ML Release Sign-Off Document
 
+> [!NOTE]
+> **SUPERSEDED** — See [docs/ciris_final_honest_scorecard.md](file:///e:/CIRIS-SIH2026/docs/ciris_final_honest_scorecard.md) for current authoritative numbers and [docs/metrics_changelog.md](file:///e:/CIRIS-SIH2026/docs/metrics_changelog.md) for metric history.
+
 ## Executive Release Overview
 This document represents the formal ML Release Verification Sign-Off for **CIRIS** (Smart India Hackathon 2026 Edition). The machine learning pipeline, entity resolution framework, money-flow graph engine, transaction fragmentation detector, mule network scoring model, amount-at-risk accounting layer, endpoint type classifier, and intervention recommendation workflow have undergone rigorous release verification.
 

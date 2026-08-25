@@ -1,5 +1,8 @@
 # CIRIS — Release Baseline Snapshot
 
+> [!NOTE]
+> **SUPERSEDED** — See [docs/ciris_final_honest_scorecard.md](file:///e:/CIRIS-SIH2026/docs/ciris_final_honest_scorecard.md) for current authoritative numbers and [docs/metrics_changelog.md](file:///e:/CIRIS-SIH2026/docs/metrics_changelog.md) for metric history.
+
 ## System & Release Metadata
 - **Git Commit**: `de13db5680f3f2491ba5f5c47b64d5f5f727b736`
 - **Release Version**: `v4.1.0-final_v2`

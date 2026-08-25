@@ -1,5 +1,8 @@
 # CIRIS — Release Readiness Assessment Report
 
+> [!NOTE]
+> **SUPERSEDED** — See [docs/ciris_final_honest_scorecard.md](file:///e:/CIRIS-SIH2026/docs/ciris_final_honest_scorecard.md) for current authoritative numbers and [docs/metrics_changelog.md](file:///e:/CIRIS-SIH2026/docs/metrics_changelog.md) for metric history.
+
 ## Executive Summary
 This document provides an honest release readiness audit for the CIRIS SIH 2026 machine learning and case intelligence architecture. Components are evaluated strictly using **GREEN**, **YELLOW**, and **RED** status ratings based on empirical verification evidence.
 
