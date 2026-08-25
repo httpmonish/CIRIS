@@ -24,6 +24,10 @@ class TransactionFragmentationDetector:
         """Standardize column names and datetime types."""
         if not self.transactions_df.empty:
             col_map = {
+                "src_account_id": "source_account",
+                "dst_account_id": "destination_account",
+                "source_node": "source_account",
+                "target_node": "destination_account",
                 "source": "source_account",
                 "target": "destination_account",
                 "src": "source_account",

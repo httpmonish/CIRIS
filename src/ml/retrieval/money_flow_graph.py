@@ -35,6 +35,10 @@ class MoneyFlowGraphEngine:
         """Standardize column names and parse timestamps."""
         if not self.edges_df.empty:
             col_map = {
+                "src_account_id": "source_account",
+                "dst_account_id": "destination_account",
+                "source_node": "source_account",
+                "target_node": "destination_account",
                 "source": "source_account",
                 "target": "destination_account",
                 "src": "source_account",
