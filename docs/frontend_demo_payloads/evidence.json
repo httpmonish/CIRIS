@@ -1,0 +1,23 @@
+{
+  "case_id": "CASE-DEMO-001",
+  "MODEL_EVIDENCE": [
+    { "feature": "spatial_distance_km", "importance": 0.35, "direction": "HIGH_RISK", "label": "Proximity to Complaint (4.2 km)" },
+    { "feature": "mule_chain_velocity", "importance": 0.28, "direction": "HIGH_RISK", "label": "Rapid In-Out Flow (< 30 min)" }
+  ],
+  "GRAPH_EVIDENCE": [
+    "Target account ACC_MULE_001 has high degree centrality in mule network",
+    "Linked to 3 unflagged recipient accounts in cluster CLUST_001"
+  ],
+  "TRANSACTION_EVIDENCE": [
+    "70% of disputed funds moved within 30 minutes of victim transfer",
+    "Transaction fragmentation pattern matching structuring behavior"
+  ],
+  "HISTORICAL_EVIDENCE": [
+    "ATM_9981 has 5 previous recorded cybercrime cashouts in past 30 days",
+    "High historical risk score: 0.85"
+  ],
+  "GEOGRAPHIC_EVIDENCE": [
+    "Predicted cashout location within known high-risk withdrawal hotspot",
+    "Proximity radius < 5 km from complaint origin"
+  ]
+}

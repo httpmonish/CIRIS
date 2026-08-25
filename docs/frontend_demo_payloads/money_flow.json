@@ -1,0 +1,30 @@
+{
+  "case_id": "CASE-DEMO-001",
+  "nodes": [
+    { "id": "ACC_VICTIM_001", "type": "VICTIM", "label": "Victim Account", "risk": 0.0 },
+    { "id": "ACC_MULE_001", "type": "MULE", "label": "Primary Mule ACC_MULE_001", "risk": 0.85 },
+    { "id": "ATM_9981", "type": "ATM", "label": "SBI ATM - Andheri West", "risk": 0.88 }
+  ],
+  "edges": [
+    {
+      "source": "ACC_VICTIM_001",
+      "target": "ACC_MULE_001",
+      "amount": 50000.0,
+      "timestamp": "2026-08-25T16:15:00Z",
+      "transaction_id": "TX_DEMO_1",
+      "transaction_type": "IMPS",
+      "risk": 0.85,
+      "case_link": "CASE-DEMO-001"
+    },
+    {
+      "source": "ACC_MULE_001",
+      "target": "ATM_9981",
+      "amount": 35000.0,
+      "timestamp": "2026-08-25T16:45:00Z",
+      "transaction_id": "TX_DEMO_2",
+      "transaction_type": "ATM_WITHDRAWAL",
+      "risk": 0.88,
+      "case_link": "CASE-DEMO-001"
+    }
+  ]
+}

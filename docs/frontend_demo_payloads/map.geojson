@@ -1,0 +1,35 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [72.8697, 19.1136]
+      },
+      "properties": {
+        "id": "CASE-DEMO-001",
+        "type": "HIGH_RISK_HOTSPOT",
+        "risk": 0.88,
+        "city": "Mumbai",
+        "fraud_type": "Investment Cyber Fraud",
+        "priority": "P1"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [72.8710, 19.1150]
+      },
+      "properties": {
+        "id": "ATM_9981",
+        "type": "PREDICTED_ATM",
+        "name": "SBI ATM - Andheri West",
+        "risk": 0.88,
+        "case_id": "CASE-DEMO-001",
+        "predicted_time_window": "3-6h"
+      }
+    }
+  ]
+}

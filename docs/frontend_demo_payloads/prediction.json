@@ -1,0 +1,22 @@
+{
+  "case_id": "CASE-DEMO-001",
+  "endpoint_type": "ATM",
+  "atm_id": "ATM_9981",
+  "atm_name": "SBI ATM - Andheri West",
+  "rank": 1,
+  "score": 0.88,
+  "confidence": 0.85,
+  "location": {
+    "city": "Mumbai",
+    "district": "Mumbai",
+    "state": "Maharashtra",
+    "latitude": 19.1150,
+    "longitude": 72.8710
+  },
+  "predicted_time_window": "3-6h",
+  "predicted_delay_hours": 3.5,
+  "supporting_evidence": [
+    { "feature": "spatial_distance_km", "importance": 0.35, "direction": "HIGH_RISK", "label": "Proximity to Complaint (4.2 km)" },
+    { "feature": "mule_chain_velocity", "importance": 0.28, "direction": "HIGH_RISK", "label": "Rapid In-Out Flow (< 30 min)" }
+  ]
+}

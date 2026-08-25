@@ -19,4 +19,6 @@ CIPHER_FINAL_2025-main/
 datasets/
 dataset/
 
-
+# Databases & Environment Secrets
+*.db
+.env

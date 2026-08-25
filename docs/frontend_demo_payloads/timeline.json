@@ -1,0 +1,9 @@
+{
+  "case_id": "CASE-DEMO-001",
+  "timeline": [
+    { "timestamp": "2026-08-25T16:00:00Z", "type": "COMPLAINT", "description": "Victim reported Investment Cyber Fraud loss of INR 50,000", "source": "NCRP_1930", "actor": "VICTIM" },
+    { "timestamp": "2026-08-25T16:15:00Z", "type": "TRANSACTION", "description": "IMPS transfer of INR 50,000 to mule account ACC_MULE_001", "source": "BANK_LOG", "actor": "SYSTEM" },
+    { "timestamp": "2026-08-25T16:30:00Z", "type": "ATM_PREDICTION", "description": "Predicted withdrawal at SBI ATM - Andheri West (ATM_9981) in 3-6h", "source": "CIRIS_ML_V4", "actor": "CIRIS_ENGINE" },
+    { "timestamp": "2026-08-25T16:45:00Z", "type": "INTERVENTION", "description": "Recommended HOLD REVIEW for INR 15,000 remaining on ACC_MULE_001", "source": "INTERVENTION_SERVICE", "actor": "SYSTEM" }
+  ]
+}

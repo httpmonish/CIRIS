@@ -1,0 +1,26 @@
+{
+  "entity_id": "ENT_001",
+  "entity_type": "SUSPECT_MULE",
+  "risk_score": 0.85,
+  "mule_candidate": true,
+  "cluster_id": "CLUST_001",
+  "accounts": [
+    { "account_id": "ACC_MULE_001", "bank_name": "State Bank of India", "risk_score": 0.85 }
+  ],
+  "upi_identifiers": [
+    { "upi_id": "mule001@sbi", "handle": "sbi" }
+  ],
+  "cards": [
+    { "card_id": "CARD_001", "card_type": "DEBIT", "bank_name": "State Bank of India" }
+  ],
+  "mobiles": [
+    { "mobile_id": "MOB_001", "operator": "Airtel" }
+  ],
+  "devices": [
+    { "device_id": "DEV_001", "type": "Mobile", "os": "Android" }
+  ],
+  "evidence_tags": [
+    "Rapid In-Out Flow Velocity (< 30 min)",
+    "High Degree Centrality in Mule Graph"
+  ]
+}

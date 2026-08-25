@@ -1,0 +1,13 @@
+{
+  "intervention_id": "INT-DEMO-001",
+  "case_id": "CASE-DEMO-001",
+  "recommended_action": "HOLD REVIEW",
+  "confidence_score": 0.88,
+  "action_rationale": "High risk score (0.88) with INR 15,000 unwithdrawn balance remaining in mule account ACC_MULE_001.",
+  "potential_hold_amount": 15000.0,
+  "authorization_boundary": "Authorized Bank / LEA Officer Review Required",
+  "status": "PENDING_REVIEW",
+  "reviewed_by": null,
+  "review_notes": "",
+  "updated_at": "2026-08-25T18:00:00Z"
+}
