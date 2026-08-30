@@ -1,0 +1,32 @@
+[
+  {
+    "evidence_id": "EVID_001",
+    "case_id": "CASE_000001",
+    "category": "TRANSACTION",
+    "title": "Hop 1 Transfer",
+    "description": "₹150,000.00 transferred via UPI from victim to ACC_••••••42.",
+    "confidence": 1.0,
+    "severity": "HIGH",
+    "timestamp": "2026-08-30T14:52:00+00:00"
+  },
+  {
+    "evidence_id": "EVID_002",
+    "case_id": "CASE_000001",
+    "category": "MODEL",
+    "title": "ML V4 ATM Cashout Interception Prediction",
+    "description": "Rank 1 prediction at SBI ATM - Andheri West Station with confidence 0.92 in window 0-3h.",
+    "confidence": 0.92,
+    "severity": "CRITICAL",
+    "timestamp": "2026-08-30T15:10:00+00:00"
+  },
+  {
+    "evidence_id": "EVID_003",
+    "case_id": "CASE_000001",
+    "category": "GEOGRAPHIC",
+    "title": "Victim Origin & Hotspot Proximity",
+    "description": "Originating complaint registered in Mumbai (Mumbai Suburban, Maharashtra).",
+    "confidence": 0.95,
+    "severity": "MEDIUM",
+    "timestamp": "2026-08-30T15:10:00+00:00"
+  }
+]

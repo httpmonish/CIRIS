@@ -1,239 +1,194 @@
 """
-Case Management & Intelligence Endpoints for CIRIS API v1.
+CIRIS Phase 4 — Cases & Investigation API Router.
+Primary unified investigation workspace endpoint (/cases/{id}/investigation)
+and lifecycle actions (assign, acknowledge, escalate, resolve, close, notes, feedback, search).
 """
 
-from typing import Optional, List, Dict, Any
-from datetime import datetime
-from fastapi import APIRouter, Depends, HTTPException, Query, status
-from pydantic import BaseModel, Field
-from sqlalchemy.orm import Session
-
-from src.api.dependencies import get_db_session
+from typing import Any, Dict, List, Optional
+from fastapi import APIRouter, HTTPException, Query, Depends
+from src.db.operational_models import (
+    CaseAssignRequest,
+    CaseInvestigationWorkspace,
+    CaseLifecycleRecord,
+    CaseNote,
+    CaseNoteCreateRequest,
+    CaseStatus,
+    InvestigatorFeedbackCreateRequest,
+    PriorityLevel,
+)
 from src.services.case_service import CaseService
-from src.services.money_flow_service import MoneyFlowService
-from src.services.prediction_service import PredictionService
+from src.services.investigation_service import InvestigationService
 
-router = APIRouter(prefix="/cases", tags=["Cases & Intelligence"])
-
-
-class CaseCreateRequest(BaseModel):
-    complaint_id: str = Field(..., example="CMP_2026_0001")
-    complaint_timestamp: Optional[datetime] = Field(default_factory=datetime.utcnow)
-    reported_loss_amount: float = Field(..., example=50000.0)
-    fraud_type: str = Field("Investment Cyber Fraud", example="Investment Cyber Fraud")
-    victim_location: Optional[Dict[str, Any]] = Field(
-        default_factory=lambda: {
-            "state": "Maharashtra",
-            "district": "Mumbai",
-            "city": "Mumbai",
-            "latitude": 19.1136,
-            "longitude": 72.8697,
-        }
-    )
-    available_entity_identifiers: Optional[Dict[str, Any]] = Field(default_factory=dict)
+router = APIRouter(prefix="/cases", tags=["Case Management & Investigation"])
 
 
-@router.post("", status_code=status.HTTP_201_CREATED)
-def create_case(
-    req: CaseCreateRequest,
-    db: Session = Depends(get_db_session),
+def get_case_service() -> CaseService:
+    return CaseService()
+
+
+def get_investigation_service() -> InvestigationService:
+    return InvestigationService()
+
+
+@router.get("/search", summary="Search Cases across identifiers")
+def search_cases(
+    q: str = Query(..., min_length=2, description="Search term (Case ID, Account, City, Fraud Type)"),
+    limit: int = Query(20, ge=1, le=100),
+    service: InvestigationService = Depends(get_investigation_service)
+):
+    return service.search_cases(query=q, limit=limit)
+
+
+@router.get("/{case_id}/investigation", response_model=CaseInvestigationWorkspace, summary="Unified Case Investigation Workspace")
+def get_case_investigation(
+    case_id: str,
+    service: InvestigationService = Depends(get_investigation_service)
 ):
     """
-    Create a new fraud case from a complaint payload and execute CIRIS ML V4 intelligence.
+    Primary API for Investigator UI: Returns complete case intelligence,
+    evidence chain, timeline, predictions, money flow, intervention recommendation, and audit trail.
     """
     try:
-        svc = CaseService(db)
-        case_model, intel = svc.create_case(
-            complaint_id=req.complaint_id,
-            reported_loss_amount=req.reported_loss_amount,
-            fraud_type=req.fraud_type,
-            complaint_timestamp=req.complaint_timestamp,
-            victim_location=req.victim_location,
-            available_entity_identifiers=req.available_entity_identifiers,
-        )
-        return {
-            "case_id": case_model.case_id,
-            "complaint_id": case_model.complaint_id,
-            "status": case_model.status,
-            "priority": case_model.priority,
-            "analysis_status": "COMPLETED",
-            "overall_risk_score": case_model.overall_risk_score,
-            "created_at": case_model.created_at.isoformat(),
-        }
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Failed to create case: {str(e)}")
+        return service.get_case_investigation(case_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
-@router.get("")
-def list_cases(
-    page: int = Query(1, ge=1),
-    page_size: int = Query(20, ge=1, le=100),
-    status_filter: Optional[str] = Query(None, alias="status"),
-    priority_filter: Optional[str] = Query(None, alias="priority"),
-    min_risk: Optional[float] = Query(None, ge=0.0, le=1.0),
-    search: Optional[str] = None,
-    db: Session = Depends(get_db_session),
-):
-    """
-    Retrieve paginated list of CIRIS cases with filtering by status, priority, risk, or keyword.
-    """
-    svc = CaseService(db)
-    items, total = svc.list_cases(
-        page=page,
-        page_size=page_size,
-        status=status_filter,
-        priority=priority_filter,
-        min_risk=min_risk,
-        search=search,
-    )
-
-    cases_data = []
-    for c in items:
-        cases_data.append({
-            "case_id": c.case_id,
-            "complaint_id": c.complaint_id,
-            "status": c.status,
-            "priority": c.priority,
-            "created_at": c.created_at.isoformat(),
-            "complaint_timestamp": c.complaint_timestamp.isoformat() if c.complaint_timestamp else "",
-            "reported_loss_amount": c.reported_loss_amount,
-            "fraud_type": c.fraud_type,
-            "overall_risk_score": c.overall_risk_score,
-            "city": c.city,
-            "state": c.state,
-        })
-
-    return {
-        "page": page,
-        "page_size": page_size,
-        "total": total,
-        "cases": cases_data,
-    }
-
-
-@router.get("/{case_id}")
-def get_case_by_id(
-    case_id: str,
-    db: Session = Depends(get_db_session),
-):
-    """
-    Get detailed summary of a specific CIRIS case.
-    """
-    svc = CaseService(db)
-    case = svc.get_case(case_id)
+@router.get("/{case_id}", response_model=CaseLifecycleRecord, summary="Get Case Lifecycle Detail")
+def get_case_detail(case_id: str, service: CaseService = Depends(get_case_service)):
+    case = service.get_case(case_id)
     if not case:
-        raise HTTPException(status_code=404, detail=f"Case {case_id} not found.")
-
-    return {
-        "case_id": case.case_id,
-        "complaint_id": case.complaint_id,
-        "status": case.status,
-        "priority": case.priority,
-        "created_at": case.created_at.isoformat(),
-        "updated_at": case.updated_at.isoformat() if case.updated_at else "",
-        "prediction_timestamp": case.complaint_timestamp.isoformat() if case.complaint_timestamp else "",
-        "victim": {
-            "victim_id": case.victim_entity_id,
-            "state": case.state,
-            "district": case.district,
-            "city": case.city,
-            "latitude": case.latitude,
-            "longitude": case.longitude,
-        },
-        "reported_loss": case.reported_loss_amount,
-        "fraud_type": case.fraud_type,
-        "risk": {
-            "overall_risk_score": case.overall_risk_score,
-            "confidence_tier": "HIGH" if case.overall_risk_score >= 0.80 else "MEDIUM",
-        },
-    }
+        raise HTTPException(status_code=404, detail=f"Case {case_id} not found")
+    return case
 
 
-@router.get("/{case_id}/intelligence")
-def get_case_intelligence(
+@router.post("/{case_id}/acknowledge", response_model=CaseLifecycleRecord, summary="Acknowledge Case")
+def acknowledge_case(
     case_id: str,
-    db: Session = Depends(get_db_session),
+    actor: str = Query(..., description="Investigator ID"),
+    notes: Optional[str] = None,
+    service: CaseService = Depends(get_case_service)
 ):
-    """
-    Get unified CIRIS Case Intelligence object containing case risk, connected entities,
-    money flow paths, ATM & endpoint predictions, amount at risk, evidence, and interventions.
-    """
-    svc = CaseService(db)
-    intel = svc.get_case_intelligence(case_id)
-    if not intel:
-        raise HTTPException(status_code=404, detail=f"Case intelligence for {case_id} not found.")
-    return intel
+    try:
+        return service.transition_status(
+            case_id=case_id,
+            target_status=CaseStatus.ACKNOWLEDGED,
+            actor=actor,
+            notes=notes
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/{case_id}/money-flow")
-def get_case_money_flow(
+@router.post("/{case_id}/assign", response_model=CaseLifecycleRecord, summary="Assign Case to Investigator/Team")
+def assign_case(
     case_id: str,
-    max_hops: int = Query(3, ge=1, le=5),
-    db: Session = Depends(get_db_session),
+    req: CaseAssignRequest,
+    service: CaseService = Depends(get_case_service)
 ):
-    """
-    Get graph-ready nodes and edges for visualizing transaction money flow.
-    """
-    svc = MoneyFlowService(db)
-    return svc.get_case_money_flow(case_id, max_hops=max_hops)
+    try:
+        return service.assign_case(
+            case_id=case_id,
+            owner=req.owner,
+            assigned_by=req.assigned_by,
+            team=req.team,
+            notes=req.notes
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/{case_id}/prediction")
-def get_case_prediction(
+@router.post("/{case_id}/escalate", response_model=CaseLifecycleRecord, summary="Escalate Case to Supervisor/LEA")
+def escalate_case(
     case_id: str,
-    db: Session = Depends(get_db_session),
+    actor: str = Query(..., description="Investigator ID"),
+    notes: str = Query(..., description="Reason for escalation"),
+    service: CaseService = Depends(get_case_service)
 ):
-    """
-    Get primary ATM risk prediction, location, time window, and SHAP evidence for a case.
-    """
-    svc = PredictionService(db)
-    return svc.get_atm_prediction(case_id)
+    try:
+        return service.transition_status(
+            case_id=case_id,
+            target_status=CaseStatus.ESCALATED,
+            actor=actor,
+            notes=notes
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/{case_id}/endpoints")
-def get_case_endpoints(
+@router.post("/{case_id}/resolve", response_model=CaseLifecycleRecord, summary="Resolve Case with Outcome")
+def resolve_case(
     case_id: str,
-    db: Session = Depends(get_db_session),
+    actor: str = Query(...),
+    notes: Optional[str] = None,
+    service: CaseService = Depends(get_case_service)
 ):
-    """
-    Get candidate endpoint predictions (ATM, Merchant, Onward Transfer, Unknown).
-    """
-    svc = PredictionService(db)
-    return svc.get_endpoints(case_id)
+    try:
+        return service.transition_status(
+            case_id=case_id,
+            target_status=CaseStatus.RESOLVED,
+            actor=actor,
+            notes=notes
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/{case_id}/amount-at-risk")
-def get_case_amount_at_risk(
+@router.post("/{case_id}/close", response_model=CaseLifecycleRecord, summary="Close Case")
+def close_case(
     case_id: str,
-    db: Session = Depends(get_db_session),
+    actor: str = Query(...),
+    notes: Optional[str] = None,
+    service: CaseService = Depends(get_case_service)
 ):
-    """
-    Get deterministic Amount-at-Risk accounting breakdown.
-    """
-    svc = PredictionService(db)
-    return svc.get_amount_at_risk(case_id)
+    try:
+        return service.transition_status(
+            case_id=case_id,
+            target_status=CaseStatus.CLOSED,
+            actor=actor,
+            notes=notes
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/{case_id}/evidence")
-def get_case_evidence(
+@router.post("/{case_id}/notes", response_model=CaseNote, summary="Add Investigator Note")
+def add_case_note(
     case_id: str,
-    db: Session = Depends(get_db_session),
+    req: CaseNoteCreateRequest,
+    service: CaseService = Depends(get_case_service)
 ):
-    """
-    Get categorized evidence attributions (MODEL, GRAPH, TRANSACTION, HISTORICAL, GEOGRAPHIC).
-    """
-    svc = PredictionService(db)
-    return svc.get_evidence(case_id)
+    try:
+        return service.add_note(
+            case_id=case_id,
+            author=req.author,
+            content=req.content,
+            visibility=req.visibility
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
-@router.get("/{case_id}/timeline")
-def get_case_timeline(
+@router.get("/{case_id}/notes", response_model=List[CaseNote], summary="Get Case Notes")
+def get_case_notes(case_id: str, service: CaseService = Depends(get_case_service)):
+    return service.get_notes(case_id)
+
+
+@router.post("/{case_id}/feedback", summary="Submit Investigator Outcome Feedback")
+def submit_feedback(
     case_id: str,
-    db: Session = Depends(get_db_session),
+    req: InvestigatorFeedbackCreateRequest,
+    service: CaseService = Depends(get_case_service)
 ):
-    """
-    Get chronological event timeline for a case.
-    """
-    svc = CaseService(db)
-    timeline = svc.get_case_timeline(case_id)
-    return {"case_id": case_id, "timeline": timeline}
+    try:
+        return service.record_feedback(case_id, req)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/{case_id}/correlations", summary="Get Cross-Case Correlations")
+def get_correlations(
+    case_id: str,
+    service: InvestigationService = Depends(get_investigation_service)
+):
+    return service.get_case_correlations(case_id)

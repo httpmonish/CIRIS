@@ -1,24 +1,36 @@
-__pycache__/
-*.py[cod]
-*$py.class
-.pytest_cache/
-.coverage
-htmlcov/
-*.log
-.DS_Store
+# Python virtual environment
 .venv/
 venv/
 ENV/
+env/
 
-# Baseline reference repositories
-CIPHER-25257-main/
-CIPHER-main/
-CIPHER_FINAL_2025-main/
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
 
-# Datasets (multi-GB data files)
-datasets/
-dataset/
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
 
-# Databases & Environment Secrets
-*.db
-.env
+# Temporary SQLite WAL / SHM files
+*.db-wal
+*.db-shm
+*.db-journal
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo

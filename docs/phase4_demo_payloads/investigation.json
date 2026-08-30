@@ -1,0 +1,118 @@
+{
+  "case_id": "CASE_000001",
+  "complaint_id": "CASE_000001",
+  "status": "INVESTIGATING",
+  "priority": "P1",
+  "risk_score": 0.88,
+  "urgency_score": 0.88,
+  "confidence": 0.92,
+  "amount_at_risk": 150000.0,
+  "reported_loss_amount": 150000.0,
+  "fraud_type": "ATM_CASHOUT_RISK",
+  "incident_timestamp": "2026-08-30T14:45:00+00:00",
+  "complaint_timestamp": "2026-08-30T15:10:00+00:00",
+  "victim_location": {
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "district": "Mumbai Suburban",
+    "area": "Andheri East",
+    "pincode": "400069",
+    "coordinates": [72.8697, 19.1136],
+    "bank": "HDFC Bank"
+  },
+  "assigned_owner": "OFFICER_KHAN",
+  "assigned_team": "ATM Rapid Interception Squad",
+  "executive_summary": "Case CASE_000001 (ATM_CASHOUT_RISK): Reported loss of ₹150,000.00 originating in Mumbai. Funds fragmented across 3 accounts. Target cash-out interception point identified at SBI ATM - Andheri West Station within 0-3h. Intervention recommendation: HOLD_REVIEW.",
+  "reasons_why": [
+    "High-velocity money dispersion observed across 3 mule hops.",
+    "ML V4 predicted terminal ATM cashout at SBI ATM - Andheri West Station with confidence 0.92.",
+    "Estimated victim loss at risk: ₹150,000.00.",
+    "Urgency classification index: 0.88."
+  ],
+  "timeline": [
+    {
+      "timestamp": "2026-08-30T14:45:00+00:00",
+      "event_type": "INCIDENT_OCCURRED",
+      "title": "Fraud Incident Compromise",
+      "description": "Victim compromised via ATM_CASHOUT_RISK (UPI)."
+    },
+    {
+      "timestamp": "2026-08-30T14:52:00+00:00",
+      "event_type": "FUND_TRANSFER_HOP",
+      "title": "Hop 1 Transfer",
+      "description": "Transferred ₹150,000.00 to ACC_••••••42."
+    },
+    {
+      "timestamp": "2026-08-30T15:10:00+00:00",
+      "event_type": "COMPLAINT_FILED",
+      "title": "Victim Complaint Lodged",
+      "description": "Formal report registered with urgency score 0.88."
+    }
+  ],
+  "evidence_chain": [
+    {
+      "evidence_id": "EVID_0001",
+      "case_id": "CASE_000001",
+      "category": "TRANSACTION",
+      "title": "Hop 1 Fund Transfer",
+      "description": "High velocity UPI fund transfer of ₹150,000.00 to mule account ACC_••••••42.",
+      "confidence": 1.0,
+      "severity": "HIGH"
+    }
+  ],
+  "predicted_endpoints": [
+    {
+      "endpoint_id": "ATM_000308",
+      "endpoint_type": "ATM",
+      "name": "SBI ATM - Andheri West Station",
+      "bank": "State Bank of India",
+      "rank": 1,
+      "score": 0.92,
+      "confidence": "HIGH",
+      "time_window": "0-3h",
+      "estimated_delay_hours": 1.5,
+      "distance_km": 2.4,
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "coordinates": [72.8428, 19.1197],
+      "historical_cashouts": 14,
+      "hotspot_score": 0.85,
+      "priority": "CRITICAL"
+    }
+  ],
+  "money_flow_network": {
+    "total_hops": 3,
+    "total_volume_moved": 150000.0,
+    "observed_remaining_amount": 150000.0,
+    "hops": [
+      {
+        "edge_id": "TX_001",
+        "from_account": "ACC_••••••11",
+        "to_account": "ACC_••••••42",
+        "amount": 150000.0,
+        "channel": "UPI",
+        "timestamp": "2026-08-30T14:52:00+00:00",
+        "hop_level": 1,
+        "is_cashout_endpoint": false
+      }
+    ]
+  },
+  "intervention_recommendation": {
+    "intervention_id": "INT_20260830_00001",
+    "case_id": "CASE_000001",
+    "recommendation": "HOLD_REVIEW",
+    "rationale": "High-confidence (0.92) cash-out prediction within imminent 0-3h window at ATM_000308. Loss volume (₹150,000.00) warrants priority holding review.",
+    "actionable_steps": [
+      "Notify bank nodal officer for immediate temporary lien review on destination account ACC_••••••42.",
+      "Dispatch local field squad to surveil SBI ATM - Andheri West Station.",
+      "Collect CCTV footage for time bracket 2026-08-30 15:00 - 18:00 UTC."
+    ],
+    "disclaimer": "DECISION SUPPORT ONLY: This recommendation requires review and authorization by an accredited law enforcement officer."
+  },
+  "sla_metrics": {
+    "age_hours": 0.35,
+    "created_at": "2026-08-30T15:10:00+00:00",
+    "sla_deadline": "2026-08-30T15:35:00+00:00",
+    "sla_status": "WITHIN_SLA"
+  }
+}

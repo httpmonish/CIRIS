@@ -1,0 +1,48 @@
+[
+  {
+    "event_id": "AUD_20260830151000_00001",
+    "case_id": "CASE_000001",
+    "actor": "SYSTEM_INTELLIGENCE",
+    "action": "ALERT_CREATED",
+    "timestamp": "2026-08-30T15:10:00+00:00",
+    "metadata": {
+      "alert_id": "ALT_20260830_00001",
+      "priority": "P1",
+      "risk_score": 0.88,
+      "amount_at_risk": 150000.0
+    }
+  },
+  {
+    "event_id": "AUD_20260830151200_00002",
+    "case_id": "CASE_000001",
+    "actor": "DISPATCHER_01",
+    "action": "CASE_ACKNOWLEDGED",
+    "timestamp": "2026-08-30T15:12:00+00:00",
+    "metadata": {
+      "notes": "Acknowledged and dispatched"
+    }
+  },
+  {
+    "event_id": "AUD_20260830151400_00003",
+    "case_id": "CASE_000001",
+    "actor": "SUPER_01",
+    "action": "CASE_ASSIGNED",
+    "timestamp": "2026-08-30T15:14:00+00:00",
+    "metadata": {
+      "owner": "OFFICER_KHAN",
+      "team": "ATM Rapid Interception Squad"
+    }
+  },
+  {
+    "event_id": "AUD_20260830151800_00004",
+    "case_id": "CASE_000001",
+    "actor": "OFFICER_KHAN",
+    "action": "INTERVENTION_REVIEWED",
+    "timestamp": "2026-08-30T15:18:00+00:00",
+    "metadata": {
+      "intervention_id": "INT_20260830_00001",
+      "action": "ACCEPT",
+      "notes": "Interception unit deployed to ATM_000308."
+    }
+  }
+]

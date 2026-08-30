@@ -1,0 +1,48 @@
+{
+  "case_id": "CASE_000001",
+  "hop_depth": 2,
+  "nodes": [
+    {
+      "id": "ACC_••••••11",
+      "label": "Victim Account",
+      "type": "VICTIM",
+      "risk_score": 0.1,
+      "total_volume": 150000.0,
+      "degree": 1
+    },
+    {
+      "id": "ACC_••••••42",
+      "label": "Mule Tier 1",
+      "type": "MULE",
+      "risk_score": 0.85,
+      "total_volume": 150000.0,
+      "degree": 2
+    },
+    {
+      "id": "ATM_000308",
+      "label": "SBI ATM - Andheri West",
+      "type": "ATM",
+      "risk_score": 0.92,
+      "total_volume": 150000.0,
+      "degree": 1
+    }
+  ],
+  "edges": [
+    {
+      "source": "ACC_••••••11",
+      "target": "ACC_••••••42",
+      "amount": 150000.0,
+      "channel": "UPI",
+      "timestamp": "2026-08-30T14:52:00+00:00",
+      "hop_level": 1
+    },
+    {
+      "source": "ACC_••••••42",
+      "target": "ATM_000308",
+      "amount": 150000.0,
+      "channel": "CASH_WITHDRAWAL",
+      "timestamp": "2026-08-30T15:15:00+00:00",
+      "hop_level": 2
+    }
+  ]
+}

@@ -1,140 +1,96 @@
 """
-CIRIS FastAPI Application Entry Point.
-
-Productization backend exposing predictive cybercrime investigation APIs,
-PostgreSQL persistence, frozen CIRIS ML V4 pipeline orchestration,
-alert workflows, intervention decision support, and GeoJSON GIS services.
+CIRIS - Cybercrime Intelligence & ATM Cash-out Interception System
+FastAPI Main Application Server.
 """
 
-import os
-import time
-import uuid
 import logging
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, status
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
-from src.db.schema import setup_database
-from src.services.intelligence_service import IntelligenceService
+from src.db.database import get_db_path
+from src.db.seed_gis_data import seed_gis_database
+from src.api.v1 import api_v1_router
 
-from src.api.v1.cases import router as cases_router
-from src.api.v1.entities import router as entities_router
-from src.api.v1.transactions import router as transactions_router
-from src.api.v1.atms import router as atms_router
-from src.api.v1.alerts import router as alerts_router
-from src.api.v1.intervention import router as intervention_router
-from src.api.v1.gis import router as gis_router
-from src.api.v1.networks import router as networks_router
-from src.api.v1.system import router as system_router
-
-# Setup structured logging
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
 )
-logger = logging.getLogger("ciris.app")
+logger = logging.getLogger("ciris.main")
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Lifespan event handler initializing DB tables and frozen ML pipeline once at startup."""
-    logger.info("Initializing CIRIS Productization Backend...")
-    setup_database()
-
-    # Load frozen CIRIS ML V4 Pipeline Engine once
-    intel_svc = IntelligenceService.get_instance()
-    intel_svc.initialize()
+    """Lifespan context manager for database initialization and warmup."""
+    logger.info("Initializing CIRIS Geospatial Platform...")
+    db_file = get_db_path()
+    if not db_file.exists():
+        logger.info("GIS Database not found at %s. Seeding database...", db_file)
+        try:
+            seed_gis_database(db_path=db_file, rebuild=False)
+        except Exception as e:
+            logger.error("Error during initial database seed: %s", e)
+    else:
+        logger.info("GIS Database verified at %s", db_file)
 
     yield
-
-    logger.info("Shutting down CIRIS Backend Service...")
+    logger.info("Shutting down CIRIS Geospatial Platform.")
 
 
 app = FastAPI(
-    title="CIRIS — Predictive Cybercrime Intelligence Platform",
-    description=(
-        "Proactive intelligence layer around cash-withdrawal and cybercrime predictions. "
-        "Transforms fraud complaints into structured case intelligence, money-flow graphs, "
-        "mule entity resolution, endpoint risk predictions, TreeSHAP evidence, and intervention recommendations."
-    ),
-    version="4.0.0-phase2",
-    docs_url="/docs",
-    redoc_url="/redoc",
-    lifespan=lifespan,
+    title="CIRIS - GIS Engine & Map Data Platform",
+    description="Geospatial Intelligence Backend for CIRIS SIH 2026. Provides high-performance GeoJSON map endpoints for cybercrime cases, predicted cash-out ATMs, money flow trajectories, risk hotspots, and nearby spatial search.",
+    version="1.0.0",
+    lifespan=lifespan
 )
 
-# CORS Configuration - Prevent allow_origins=["*"] in production settings
-allowed_origins = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173").split(",")
+# CORS middleware for local frontend development
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-# Structured Request Logging Middleware
-@app.middleware("http")
-async def log_requests(request: Request, call_next):
-    request_id = str(uuid.uuid4())
-    request.state.request_id = request_id
-    start_time = time.time()
-
-    response = await call_next(request)
-    duration_ms = (time.time() - start_time) * 1000
-
-    logger.info(
-        f"REQ_ID={request_id} METHOD={request.method} PATH={request.url.path} "
-        f"STATUS={response.status_code} LATENCY={duration_ms:.2f}ms"
-    )
-    response.headers["X-Request-ID"] = request_id
-    return response
+# Mount API v1 router
+app.include_router(api_v1_router)
 
 
-# Global Exception Handler returning clean structured JSON (no stack traces exposed to clients)
-@app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
-    request_id = getattr(request.state, "request_id", str(uuid.uuid4()))
-    logger.error(f"Unhandled exception for REQ_ID={request_id}: {exc}", exc_info=True)
-
-    return JSONResponse(
-        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content={
-            "error_code": "INTERNAL_SERVER_ERROR",
-            "message": "An internal server error occurred while processing the request.",
-            "request_id": request_id,
-        },
-    )
-
-
-# Root landing route
-@app.get("/")
+@app.get("/", tags=["Health & Status"])
 def root():
-    """Root route welcoming users and directing to OpenAPI Swagger UI."""
     return {
-        "title": "CIRIS — Predictive Cybercrime Intelligence Platform API",
-        "status": "ONLINE",
-        "swagger_docs": "/docs",
-        "redoc_docs": "/redoc",
-        "health_check": "/health",
-        "system_status": "/api/v1/system/status",
-        "demo_case": "/api/v1/cases/CASE-DEMO-001/intelligence",
+        "system": "CIRIS - Cybercrime Intelligence & ATM Cash-out Interception System",
+        "phase": "Phase 3A: GIS Engine + Map Data Foundation",
+        "status": "OPERATIONAL",
+        "version": "1.0.0",
+        "docs_url": "/docs",
+        "api_v1_base": "/api/v1",
+        "endpoints": {
+            "cases": "/api/v1/map/cases",
+            "predicted_atms": "/api/v1/map/predicted-atms",
+            "risk_heatmap": "/api/v1/map/risk",
+            "money_flow_networks": "/api/v1/map/networks",
+            "merchants": "/api/v1/map/merchants",
+            "nearby_search": "/api/v1/map/nearby",
+            "viewport_query": "/api/v1/map/viewport",
+            "layer_definitions": "/api/v1/map/layers",
+            "gis_stats": "/api/v1/map/stats"
+        }
     }
 
 
-# Include API v1 Routers under /api/v1
-app.include_router(cases_router, prefix="/api/v1")
-app.include_router(entities_router, prefix="/api/v1")
-app.include_router(transactions_router, prefix="/api/v1")
-app.include_router(atms_router, prefix="/api/v1")
-app.include_router(alerts_router, prefix="/api/v1")
-app.include_router(intervention_router, prefix="/api/v1")
-app.include_router(gis_router, prefix="/api/v1")
-app.include_router(networks_router, prefix="/api/v1")
-app.include_router(system_router)
+@app.get("/health", tags=["Health & Status"])
+def health():
+    db_file = get_db_path()
+    return {
+        "status": "healthy",
+        "database_connected": db_file.exists(),
+        "database_path": str(db_file)
+    }
+
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("src.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("src.main:app", host="127.0.0.1", port=8000, reload=True)

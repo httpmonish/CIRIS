@@ -1,302 +1,352 @@
 """
-Case Service for CIRIS Productization.
-
-Manages case lifecycle, case creation, database persistence, filtering,
-timeline aggregation, and audit logging.
+CIRIS Phase 4 — Case Lifecycle Management & Assignment Service.
+Handles state transitions, investigator/team assignments, notes, feedback, and SLA ageing.
 """
 
-import uuid
+import json
 import logging
-from typing import List, Dict, Any, Optional, Tuple
-from datetime import datetime
+import sqlite3
+from datetime import datetime, timedelta, timezone
+from typing import Any, Dict, List, Optional, Tuple
 
-from sqlalchemy.orm import Session
-from sqlalchemy import select, or_, and_, desc
-
-from src.db.models import (
-    CaseModel,
-    PredictionModel,
-    AlertModel,
-    CaseEventModel,
-    EvidenceModel,
-    InterventionModel,
-    EntityModel,
-    AccountModel,
+from src.db.database import get_db_connection
+from src.db.operational_models import (
+    CaseLifecycleRecord,
+    CaseNote,
+    CaseStatus,
+    InvestigatorFeedbackCreateRequest,
+    InvestigatorOutcome,
+    PriorityLevel,
 )
-from src.ml.contracts.schemas import ComplaintPayload, VictimLocation
-from src.ml.contracts.case_intelligence import CaseIntelligenceObject
-from src.services.intelligence_service import IntelligenceService
+from src.services.audit_service import AuditService
 
-logger = logging.getLogger("ciris.case_service")
+logger = logging.getLogger("ciris.services.case")
+
+ALLOWED_TRANSITIONS = {
+    CaseStatus.NEW: [CaseStatus.ACKNOWLEDGED, CaseStatus.ASSIGNED, CaseStatus.INVESTIGATING, CaseStatus.CLOSED],
+    CaseStatus.ACKNOWLEDGED: [CaseStatus.ASSIGNED, CaseStatus.INVESTIGATING, CaseStatus.ESCALATED, CaseStatus.CLOSED],
+    CaseStatus.ASSIGNED: [CaseStatus.INVESTIGATING, CaseStatus.ESCALATED, CaseStatus.MONITORING, CaseStatus.CLOSED],
+    CaseStatus.INVESTIGATING: [CaseStatus.ESCALATED, CaseStatus.MONITORING, CaseStatus.RESOLVED, CaseStatus.CLOSED],
+    CaseStatus.ESCALATED: [CaseStatus.INVESTIGATING, CaseStatus.RESOLVED, CaseStatus.CLOSED],
+    CaseStatus.MONITORING: [CaseStatus.INVESTIGATING, CaseStatus.RESOLVED, CaseStatus.CLOSED],
+    CaseStatus.RESOLVED: [CaseStatus.CLOSED, CaseStatus.INVESTIGATING],  # Allows explicit reopen
+    CaseStatus.CLOSED: [CaseStatus.NEW]  # Reopen path requires NEW
+}
 
 
 class CaseService:
-    def __init__(self, db: Session):
-        self.db = db
-        self.intelligence_service = IntelligenceService.get_instance()
+    """Case Lifecycle & Workflow Service."""
 
-    def create_case(
+    def __init__(self, db_path: Optional[str] = None):
+        self.db_path = db_path
+        self.audit_service = AuditService(db_path)
+
+    def get_or_create_case(
         self,
         complaint_id: str,
-        reported_loss_amount: float,
-        fraud_type: str = "Unknown",
-        complaint_timestamp: Optional[datetime] = None,
-        victim_location: Optional[Dict[str, Any]] = None,
-        available_entity_identifiers: Optional[Dict[str, Any]] = None,
-    ) -> Tuple[CaseModel, CaseIntelligenceObject]:
-        """
-        Create a new CIRIS case from a fraud complaint and run intelligence pipeline.
-        """
-        now = datetime.utcnow()
-        c_time = complaint_timestamp or now
-        case_id = f"CASE-{complaint_id}"
+        priority: PriorityLevel = PriorityLevel.P2,
+        risk_score: float = 0.5,
+        amount_at_risk: float = 0.0,
+        endpoint_type: str = "ATM",
+        predicted_endpoint_id: Optional[str] = None,
+        summary: Optional[str] = None
+    ) -> CaseLifecycleRecord:
+        """Idempotently fetch or create case lifecycle record."""
+        now_iso = datetime.now(timezone.utc).isoformat()
+        with get_db_connection(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM case_lifecycle WHERE complaint_id = ?", (complaint_id,))
+            row = cursor.fetchone()
+            if row:
+                return self._row_to_case_record(row)
 
-        # Sanitize location
-        loc = victim_location or {}
-        lat = float(loc.get("latitude", 19.0760))
-        lng = float(loc.get("longitude", 72.8777))
-        state = loc.get("state", "Maharashtra")
-        district = loc.get("district", "Mumbai")
-        city = loc.get("city", "Mumbai")
+            # Check if complaint exists in geo_cases
+            cursor.execute("SELECT reported_loss_amount, urgency_score, fraud_type FROM geo_cases WHERE complaint_id = ?", (complaint_id,))
+            gcase = cursor.fetchone()
+            if gcase:
+                amount_at_risk = float(gcase["reported_loss_amount"] or amount_at_risk)
+                risk_score = float(gcase["urgency_score"] or risk_score)
 
-        # Create or update existing CaseModel in DB
-        existing_case = self.db.query(CaseModel).filter(
-            or_(CaseModel.case_id == case_id, CaseModel.complaint_id == complaint_id)
-        ).first()
-        if existing_case:
-            case_model = existing_case
-        else:
-            case_model = CaseModel(
-                case_id=case_id,
-                complaint_id=complaint_id,
-                victim_entity_id=f"VICTIM_{case_id}",
-                complaint_timestamp=c_time,
-                reported_loss_amount=reported_loss_amount,
-                fraud_type=fraud_type,
-                latitude=lat,
-                longitude=lng,
-                state=state,
-                district=district,
-                city=city,
-                status="ANALYZING",
-                priority="P2",
-                created_at=now,
+            case_id = f"CASE_{complaint_id.replace('CASE_', '')}"
+            sla_deadline = (datetime.now(timezone.utc) + timedelta(hours=4 if priority == PriorityLevel.P3 else (1 if priority == PriorityLevel.P2 else 0.25))).isoformat()
+
+            cursor.execute("""
+            INSERT INTO case_lifecycle (
+                case_id, complaint_id, priority, status, risk_score,
+                amount_at_risk, endpoint_type, predicted_endpoint_id,
+                summary, created_at, updated_at, sla_deadline
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            """, (
+                case_id, complaint_id, priority.value, CaseStatus.NEW.value,
+                risk_score, amount_at_risk, endpoint_type, predicted_endpoint_id,
+                summary or f"Investigation into {complaint_id}", now_iso, now_iso, sla_deadline
+            ))
+
+            # Insert audit record directly on the same connection cursor
+            event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
+            cursor.execute("""
+            INSERT INTO audit_trail (event_id, case_id, actor, action, timestamp, metadata_json)
+            VALUES (?, ?, ?, ?, ?, ?);
+            """, (
+                event_id, case_id, "SYSTEM_REGISTRATION", "CASE_CREATED", now_iso,
+                json.dumps({"complaint_id": complaint_id, "priority": priority.value, "amount_at_risk": amount_at_risk})
+            ))
+            conn.commit()
+
+            cursor.execute("SELECT * FROM case_lifecycle WHERE case_id = ?", (case_id,))
+            return self._row_to_case_record(cursor.fetchone())
+
+    def get_case(self, case_id: str) -> Optional[CaseLifecycleRecord]:
+        """Fetch case by ID or complaint ID."""
+        gcase_data = None
+        with get_db_connection(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM case_lifecycle WHERE case_id = ? OR complaint_id = ?", (case_id, case_id))
+            row = cursor.fetchone()
+            if row:
+                return self._row_to_case_record(row)
+            
+            # Check geo_cases
+            cursor.execute("SELECT complaint_id, reported_loss_amount, urgency_score FROM geo_cases WHERE complaint_id = ?", (case_id,))
+            gcase = cursor.fetchone()
+            if gcase:
+                gcase_data = {
+                    "complaint_id": gcase["complaint_id"],
+                    "loss": float(gcase["reported_loss_amount"] or 0.0),
+                    "urgency": float(gcase["urgency_score"] or 0.5)
+                }
+
+        if gcase_data:
+            return self.get_or_create_case(
+                complaint_id=gcase_data["complaint_id"],
+                amount_at_risk=gcase_data["loss"],
+                risk_score=gcase_data["urgency"]
             )
-            self.db.add(case_model)
-            self.db.commit()
+        return None
 
-        # Build ComplaintPayload for ML Intelligence Pipeline
-        payload = ComplaintPayload(
-            complaint_id=complaint_id,
-            complaint_timestamp=c_time,
-            fraud_type=fraud_type,
-            reported_loss_amount=reported_loss_amount,
-            victim_location=VictimLocation(
-                state=state,
-                district=district,
-                city=city,
-                latitude=lat,
-                longitude=lng,
-            ),
-        )
-
-        # Log audit event
-        self.add_audit_event(
-            case_id=case_id,
-            event_type="CASE_CREATED",
-            actor="SYSTEM",
-            description=f"Case created for complaint {complaint_id} with loss INR {reported_loss_amount:,.2f}",
-            source="NCRP_1930",
-        )
-
-        # Execute CIRIS Case Intelligence
-        intel_obj = self.intelligence_service.run_case_intelligence(payload)
-
-        # Update case model with ML overall risk
-        case_model.overall_risk_score = intel_obj.overall_case_risk
-        case_model.overall_confidence = intel_obj.overall_confidence
-        case_model.priority = "P1" if intel_obj.overall_case_risk >= 0.80 or reported_loss_amount >= 100000 else "P2"
-        case_model.status = "REVIEW"
-        case_model.updated_at = datetime.utcnow()
-
-        # Persist predictions to DB
-        for rank_idx, pred in enumerate(intel_obj.potential_endpoints, start=1):
-            pred_id = f"PRED-{case_id}-{rank_idx}"
-            existing_pred = self.db.query(PredictionModel).filter(PredictionModel.prediction_id == pred_id).first()
-            if not existing_pred:
-                loc_det = pred.location_details or {}
-                pred_db = PredictionModel(
-                    prediction_id=pred_id,
-                    case_id=case_id,
-                    endpoint_type=pred.endpoint_type,
-                    target_id=pred.endpoint_id,
-                    target_name=pred.endpoint_name,
-                    rank=rank_idx,
-                    score=pred.fused_risk_score,
-                    confidence=pred.probability,
-                    confidence_tier="HIGH" if pred.fused_risk_score >= 0.80 else "MEDIUM",
-                    predicted_time_window=pred.predicted_time_window,
-                    predicted_delay_hours=pred.predicted_delay_hours,
-                    latitude=loc_det.get("latitude", lat),
-                    longitude=loc_det.get("longitude", lng),
-                    evidence_json={"shap": pred.evidence_attributions},
-                )
-                self.db.add(pred_db)
-
-        # Persist alert to DB if actionable
-        if intel_obj.overall_case_risk >= 0.60:
-            alert_id = f"ALT-{case_id}"
-            existing_alert = self.db.query(AlertModel).filter(AlertModel.alert_id == alert_id).first()
-            if not existing_alert:
-                top_ep = intel_obj.potential_endpoints[0] if intel_obj.potential_endpoints else None
-                ep_summary = f"{top_ep.endpoint_type} Cashout Prediction at {top_ep.endpoint_name}" if top_ep else "Fraud Alert"
-                alert_db = AlertModel(
-                    alert_id=alert_id,
-                    case_id=case_id,
-                    priority=case_model.priority,
-                    risk_score=intel_obj.overall_case_risk,
-                    confidence=intel_obj.overall_confidence,
-                    endpoint_summary=ep_summary,
-                    amount=reported_loss_amount,
-                    status="NEW",
-                )
-                self.db.add(alert_db)
-
-        # Persist intervention recommendation
-        interv_id = f"INT-{case_id}"
-        existing_interv = self.db.query(InterventionModel).filter(InterventionModel.intervention_id == interv_id).first()
-        if not existing_interv and intel_obj.intervention_recommendation:
-            rec = intel_obj.intervention_recommendation
-            interv_db = InterventionModel(
-                intervention_id=interv_id,
-                case_id=case_id,
-                recommended_action=rec.recommended_action,
-                confidence_score=rec.confidence_score,
-                action_rationale=rec.action_rationale,
-                potential_hold_amount=rec.potential_hold_amount,
-                authorization_boundary=rec.authorization_boundary,
-                status="PENDING_REVIEW",
-            )
-            self.db.add(interv_db)
-
-        # Log completion audit event
-        self.add_audit_event(
-            case_id=case_id,
-            event_type="ANALYSIS_COMPLETED",
-            actor="CIRIS_ENGINE",
-            description=f"Intelligence pipeline completed. Risk score: {intel_obj.overall_case_risk:.2f}",
-            source="CIRIS_ML_V4",
-        )
-
-        self.db.commit()
-        return case_model, intel_obj
-
-    def list_cases(
-        self,
-        page: int = 1,
-        page_size: int = 20,
-        status: Optional[str] = None,
-        priority: Optional[str] = None,
-        min_risk: Optional[float] = None,
-        search: Optional[str] = None,
-    ) -> Tuple[List[CaseModel], int]:
-        """Query paginated cases with status, priority, risk, and keyword search filters."""
-        query = self.db.query(CaseModel)
-
-        if status:
-            query = query.filter(CaseModel.status == status.upper())
-        if priority:
-            query = query.filter(CaseModel.priority == priority.upper())
-        if min_risk is not None:
-            query = query.filter(CaseModel.overall_risk_score >= min_risk)
-        if search:
-            search_pattern = f"%{search}%"
-            query = query.filter(
-                or_(
-                    CaseModel.case_id.ilike(search_pattern),
-                    CaseModel.complaint_id.ilike(search_pattern),
-                    CaseModel.fraud_type.ilike(search_pattern),
-                    CaseModel.city.ilike(search_pattern),
-                    CaseModel.district.ilike(search_pattern),
-                )
-            )
-
-        total_count = query.count()
-        offset = (page - 1) * page_size
-        items = query.order_by(desc(CaseModel.created_at)).offset(offset).limit(page_size).all()
-        return items, total_count
-
-    def get_case(self, case_id: str) -> Optional[CaseModel]:
-        """Fetch case by case_id."""
-        return self.db.query(CaseModel).filter(CaseModel.case_id == case_id).first()
-
-    def get_case_intelligence(self, case_id: str) -> Optional[CaseIntelligenceObject]:
-        """Retrieve full CaseIntelligenceObject for a case."""
-        case = self.get_case(case_id)
-        if not case:
-            return None
-
-        # Check cache
-        cached = self.intelligence_service.get_cached_intelligence(case_id)
-        if cached:
-            cached.case_id = case.case_id
-            return cached
-
-        # Re-run intelligence pipeline for case
-        payload = ComplaintPayload(
-            complaint_id=case.complaint_id,
-            complaint_timestamp=case.complaint_timestamp,
-            fraud_type=case.fraud_type,
-            reported_loss_amount=case.reported_loss_amount,
-            victim_location=VictimLocation(
-                state=case.state,
-                district=case.district,
-                city=case.city,
-                latitude=case.latitude,
-                longitude=case.longitude,
-            ),
-        )
-        intel = self.intelligence_service.run_case_intelligence(payload)
-        intel.case_id = case.case_id
-        return intel
-
-    def get_case_timeline(self, case_id: str) -> List[Dict[str, Any]]:
-        """Construct chronological timeline of complaint, transaction, ML prediction, and investigator events."""
-        events = self.db.query(CaseEventModel).filter(CaseEventModel.case_id == case_id).order_by(CaseEventModel.timestamp).all()
-        result = []
-        for ev in events:
-            result.append({
-                "event_id": ev.event_id,
-                "timestamp": ev.timestamp.isoformat() if ev.timestamp else datetime.utcnow().isoformat(),
-                "type": ev.event_type,
-                "description": ev.description,
-                "source": ev.source,
-                "actor": ev.actor,
-                "metadata": ev.metadata_json or {},
-            })
-        return result
-
-    def add_audit_event(
+    def transition_status(
         self,
         case_id: str,
-        event_type: str,
-        actor: str = "INVESTIGATOR",
-        description: str = "",
-        source: str = "CIRIS_API",
-        metadata_json: Optional[Dict[str, Any]] = None,
-    ) -> CaseEventModel:
-        """Log audit event to case_events table."""
-        event_id = f"EVT-{uuid.uuid4().hex[:8]}"
-        ev = CaseEventModel(
-            event_id=event_id,
-            case_id=case_id,
-            event_type=event_type,
-            actor=actor,
-            description=description,
-            source=source,
-            timestamp=datetime.utcnow(),
-            metadata_json=metadata_json or {},
+        target_status: CaseStatus,
+        actor: str,
+        notes: Optional[str] = None,
+        resolution_outcome: Optional[InvestigatorOutcome] = None
+    ) -> CaseLifecycleRecord:
+        """Perform validated state transition."""
+        case = self.get_case(case_id)
+        if not case:
+            raise ValueError(f"Case {case_id} not found")
+
+        current = case.status
+        allowed = ALLOWED_TRANSITIONS.get(current, [])
+        if target_status not in allowed and target_status != current:
+            raise ValueError(f"Invalid status transition from {current.value} to {target_status.value}. Allowed: {[s.value for s in allowed]}")
+
+        now_iso = datetime.now(timezone.utc).isoformat()
+        with get_db_connection(self.db_path) as conn:
+            cursor = conn.cursor()
+
+            updates = ["status = ?", "updated_at = ?"]
+            params = [target_status.value, now_iso]
+
+            if target_status == CaseStatus.ACKNOWLEDGED and not case.acknowledged_at:
+                updates.append("acknowledged_at = ?")
+                params.append(now_iso)
+            elif target_status == CaseStatus.INVESTIGATING and not case.first_review_at:
+                updates.append("first_review_at = ?")
+                params.append(now_iso)
+            elif target_status == CaseStatus.RESOLVED:
+                updates.append("resolved_at = ?")
+                params.append(now_iso)
+                if resolution_outcome:
+                    updates.append("resolution_outcome = ?")
+                    params.append(resolution_outcome.value)
+            elif target_status == CaseStatus.CLOSED:
+                updates.append("closed_at = ?")
+                params.append(now_iso)
+
+            params.append(case.case_id)
+            cursor.execute(f"UPDATE case_lifecycle SET {', '.join(updates)} WHERE case_id = ?", params)
+
+            # Audit event directly on same cursor
+            action_name = f"CASE_{target_status.value}"
+            event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
+            cursor.execute("""
+            INSERT INTO audit_trail (event_id, case_id, actor, action, timestamp, metadata_json)
+            VALUES (?, ?, ?, ?, ?, ?);
+            """, (
+                event_id, case.case_id, actor, action_name, now_iso,
+                json.dumps({"previous_status": current.value, "target_status": target_status.value, "notes": notes})
+            ))
+            conn.commit()
+
+        return self.get_case(case_id)
+
+    def assign_case(
+        self,
+        case_id: str,
+        owner: str,
+        assigned_by: str,
+        team: Optional[str] = None,
+        notes: Optional[str] = None
+    ) -> CaseLifecycleRecord:
+        """Assign case to investigator/team."""
+        case = self.get_case(case_id)
+        if not case:
+            raise ValueError(f"Case {case_id} not found")
+
+        now_iso = datetime.now(timezone.utc).isoformat()
+        with get_db_connection(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            UPDATE case_lifecycle
+            SET owner = ?, team = ?, status = ?, assigned_at = ?, updated_at = ?
+            WHERE case_id = ?;
+            """, (owner, team, CaseStatus.ASSIGNED.value, now_iso, now_iso, case.case_id))
+
+            event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
+            cursor.execute("""
+            INSERT INTO audit_trail (event_id, case_id, actor, action, timestamp, metadata_json)
+            VALUES (?, ?, ?, ?, ?, ?);
+            """, (
+                event_id, case.case_id, assigned_by, "CASE_ASSIGNED", now_iso,
+                json.dumps({"owner": owner, "team": team, "notes": notes})
+            ))
+            conn.commit()
+
+        return self.get_case(case_id)
+
+    def add_note(self, case_id: str, author: str, content: str, visibility: str = "INTERNAL") -> CaseNote:
+        """Add investigator observation note."""
+        case = self.get_case(case_id)
+        if not case:
+            raise ValueError(f"Case {case_id} not found")
+
+        now_iso = datetime.now(timezone.utc).isoformat()
+        note_id = f"NOTE_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
+
+        with get_db_connection(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT INTO case_notes (note_id, case_id, author, created_at, content, visibility)
+            VALUES (?, ?, ?, ?, ?, ?);
+            """, (note_id, case.case_id, author, now_iso, content, visibility))
+
+            event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
+            cursor.execute("""
+            INSERT INTO audit_trail (event_id, case_id, actor, action, timestamp, metadata_json)
+            VALUES (?, ?, ?, ?, ?, ?);
+            """, (
+                event_id, case.case_id, author, "NOTE_ADDED", now_iso,
+                json.dumps({"note_id": note_id, "visibility": visibility})
+            ))
+            conn.commit()
+
+        return CaseNote(
+            note_id=note_id,
+            case_id=case.case_id,
+            author=author,
+            created_at=now_iso,
+            content=content,
+            visibility=visibility
         )
-        self.db.add(ev)
-        self.db.commit()
-        return ev
+
+    def get_notes(self, case_id: str) -> List[CaseNote]:
+        """Fetch all notes for a case."""
+        case = self.get_case(case_id)
+        if not case:
+            return []
+
+        with get_db_connection(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            SELECT note_id, case_id, author, created_at, content, visibility
+            FROM case_notes
+            WHERE case_id = ?
+            ORDER BY created_at DESC;
+            """, (case.case_id,))
+            return [
+                CaseNote(
+                    note_id=r["note_id"],
+                    case_id=r["case_id"],
+                    author=r["author"],
+                    created_at=r["created_at"],
+                    content=r["content"],
+                    visibility=r["visibility"]
+                )
+                for r in cursor.fetchall()
+            ]
+
+    def record_feedback(self, case_id: str, req: InvestigatorFeedbackCreateRequest) -> Dict[str, Any]:
+        """Record post-investigation outcome feedback."""
+        case = self.get_case(case_id)
+        if not case:
+            raise ValueError(f"Case {case_id} not found")
+
+        now_iso = datetime.now(timezone.utc).isoformat()
+        fb_id = f"FB_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
+
+        with get_db_connection(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT INTO investigator_feedback (
+                feedback_id, case_id, investigator_id, outcome, notes,
+                actual_cashout_atm_id, actual_loss_recovered, submitted_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+            """, (
+                fb_id, case.case_id, req.investigator_id, req.outcome.value,
+                req.notes, req.actual_cashout_atm_id, req.actual_loss_recovered, now_iso
+            ))
+
+            # Automatically transition to RESOLVED with outcome
+            cursor.execute("""
+            UPDATE case_lifecycle
+            SET status = ?, resolved_at = ?, resolution_outcome = ?, updated_at = ?
+            WHERE case_id = ?;
+            """, (CaseStatus.RESOLVED.value, now_iso, req.outcome.value, now_iso, case.case_id))
+
+            event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
+            cursor.execute("""
+            INSERT INTO audit_trail (event_id, case_id, actor, action, timestamp, metadata_json)
+            VALUES (?, ?, ?, ?, ?, ?);
+            """, (
+                event_id, case.case_id, req.investigator_id, "FEEDBACK_SUBMITTED", now_iso,
+                json.dumps({
+                    "feedback_id": fb_id,
+                    "outcome": req.outcome.value,
+                    "actual_loss_recovered": req.actual_loss_recovered
+                })
+            ))
+            conn.commit()
+
+        return {
+            "feedback_id": fb_id,
+            "case_id": case.case_id,
+            "outcome": req.outcome.value,
+            "submitted_at": now_iso,
+            "status": "RECORDED"
+        }
+
+    def _row_to_case_record(self, r: sqlite3.Row) -> CaseLifecycleRecord:
+        return CaseLifecycleRecord(
+            case_id=r["case_id"],
+            complaint_id=r["complaint_id"],
+            priority=PriorityLevel(r["priority"]),
+            status=CaseStatus(r["status"]),
+            owner=r["owner"],
+            team=r["team"],
+            risk_score=float(r["risk_score"] or 0.0),
+            amount_at_risk=float(r["amount_at_risk"] or 0.0),
+            endpoint_type=r["endpoint_type"] or "UNKNOWN",
+            predicted_endpoint_id=r["predicted_endpoint_id"],
+            summary=r["summary"],
+            created_at=r["created_at"],
+            updated_at=r["updated_at"],
+            sla_deadline=r["sla_deadline"],
+            acknowledged_at=r["acknowledged_at"],
+            assigned_at=r["assigned_at"],
+            first_review_at=r["first_review_at"],
+            resolved_at=r["resolved_at"],
+            closed_at=r["closed_at"],
+            resolution_outcome=InvestigatorOutcome(r["resolution_outcome"]) if r["resolution_outcome"] else None
+        )

@@ -1,111 +1,101 @@
 """
-Alert Workflow Endpoints for CIRIS API v1.
+CIRIS Phase 4 — Alerts API Router.
+Endpoints for alert listing, detail, acknowledgement, assignment, escalation, and closure.
 """
 
-from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel, Field
-from sqlalchemy.orm import Session
-from src.api.dependencies import get_db_session
+from typing import List, Optional
+from fastapi import APIRouter, HTTPException, Query, Depends
+from src.db.operational_models import (
+    Alert,
+    AlertAcknowledgeRequest,
+    AlertAssignRequest,
+    AlertEscalateRequest,
+    CaseStatus,
+    PriorityLevel,
+)
 from src.services.alert_service import AlertService
 
-router = APIRouter(prefix="/alerts", tags=["Alerts & Workflows"])
+router = APIRouter(prefix="/alerts", tags=["Alerts & Prioritization"])
 
 
-class AssignAlertRequest(BaseModel):
-    assigned_to: str = Field(..., example="Officer_Sharma_LEA")
+def get_alert_service() -> AlertService:
+    return AlertService()
 
 
-class EscalateAlertRequest(BaseModel):
-    reason: str = Field("High value remaining in mule account near high-velocity withdrawal hotspot", example="Immediate LEA intervention requested")
-
-
-@router.get("")
+@router.get("", response_model=List[Alert], summary="List Operational Alerts")
 def list_alerts(
-    page: int = Query(1, ge=1),
-    page_size: int = Query(20, ge=1, le=100),
-    status_filter: Optional[str] = Query(None, alias="status"),
-    priority_filter: Optional[str] = Query(None, alias="priority"),
-    assigned_to: Optional[str] = Query(None, alias="assigned_to"),
-    db: Session = Depends(get_db_session),
+    case_id: Optional[str] = Query(None, description="Filter by case ID"),
+    priority: Optional[PriorityLevel] = Query(None, description="Filter by priority tier (P1-P4)"),
+    status: Optional[CaseStatus] = Query(None, description="Filter by alert status"),
+    limit: int = Query(50, ge=1, le=500),
+    offset: int = Query(0, ge=0),
+    service: AlertService = Depends(get_alert_service)
 ):
-    """
-    Get paginated alert list with priority (P1-P4), status, and assignment filters.
-    """
-    svc = AlertService(db)
-    items, total = svc.list_alerts(
-        page=page,
-        page_size=page_size,
-        status=status_filter,
-        priority=priority_filter,
-        assigned_to=assigned_to,
-    )
-
-    alerts_data = []
-    for a in items:
-        alerts_data.append({
-            "alert_id": a.alert_id,
-            "case_id": a.case_id,
-            "priority": a.priority,
-            "risk_score": a.risk_score,
-            "confidence": a.confidence,
-            "endpoint_summary": a.endpoint_summary,
-            "amount": a.amount,
-            "created_at": a.created_at.isoformat(),
-            "status": a.status,
-            "assigned_to": a.assigned_to,
-        })
-
-    return {
-        "page": page,
-        "page_size": page_size,
-        "total": total,
-        "alerts": alerts_data,
-    }
+    return service.get_alerts(case_id=case_id, priority=priority, status=status, limit=limit, offset=offset)
 
 
-@router.post("/{alert_id}/acknowledge")
+@router.get("/{alert_id}", response_model=Alert, summary="Get Alert Detail")
+def get_alert(alert_id: str, service: AlertService = Depends(get_alert_service)):
+    alert = service.get_alert_by_id(alert_id)
+    if not alert:
+        raise HTTPException(status_code=404, detail=f"Alert {alert_id} not found")
+    return alert
+
+
+@router.post("/{alert_id}/acknowledge", response_model=Alert, summary="Acknowledge Alert")
 def acknowledge_alert(
     alert_id: str,
-    db: Session = Depends(get_db_session),
+    req: AlertAcknowledgeRequest,
+    service: AlertService = Depends(get_alert_service)
 ):
-    """
-    Acknowledge an investigator alert.
-    """
-    svc = AlertService(db)
-    alert = svc.acknowledge_alert(alert_id)
-    if not alert:
-        raise HTTPException(status_code=404, detail=f"Alert {alert_id} not found.")
-    return {"alert_id": alert.alert_id, "status": alert.status, "acknowledged": True}
+    try:
+        return service.acknowledge_alert(alert_id, acknowledged_by=req.acknowledged_by, notes=req.notes)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
-@router.post("/{alert_id}/assign")
+@router.post("/{alert_id}/assign", response_model=Alert, summary="Assign Alert to Investigator")
 def assign_alert(
     alert_id: str,
-    req: AssignAlertRequest,
-    db: Session = Depends(get_db_session),
+    req: AlertAssignRequest,
+    service: AlertService = Depends(get_alert_service)
 ):
-    """
-    Assign an alert to an investigator or bank analyst.
-    """
-    svc = AlertService(db)
-    alert = svc.assign_alert(alert_id, assigned_to=req.assigned_to)
-    if not alert:
-        raise HTTPException(status_code=404, detail=f"Alert {alert_id} not found.")
-    return {"alert_id": alert.alert_id, "status": alert.status, "assigned_to": alert.assigned_to}
+    try:
+        return service.assign_alert(
+            alert_id,
+            assigned_to=req.assigned_to,
+            assigned_by=req.assigned_by,
+            assigned_team=req.assigned_team
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
-@router.post("/{alert_id}/escalate")
+@router.post("/{alert_id}/escalate", response_model=Alert, summary="Escalate Alert to Supervisor/LEA")
 def escalate_alert(
     alert_id: str,
-    req: EscalateAlertRequest,
-    db: Session = Depends(get_db_session),
+    req: AlertEscalateRequest,
+    service: AlertService = Depends(get_alert_service)
 ):
-    """
-    Escalate alert priority to P1.
-    """
-    svc = AlertService(db)
-    alert = svc.escalate_alert(alert_id, reason=req.reason)
-    if not alert:
-        raise HTTPException(status_code=404, detail=f"Alert {alert_id} not found.")
-    return {"alert_id": alert.alert_id, "status": alert.status, "priority": alert.priority}
+    try:
+        return service.escalate_alert(
+            alert_id,
+            reason=req.reason,
+            requested_by=req.requested_by,
+            target_role=req.target_role
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.post("/{alert_id}/close", response_model=Alert, summary="Close Alert")
+def close_alert(
+    alert_id: str,
+    closed_by: str = Query(..., description="User ID"),
+    reason: str = Query(..., description="Reason for closure"),
+    service: AlertService = Depends(get_alert_service)
+):
+    try:
+        return service.close_alert(alert_id, closed_by=closed_by, reason=reason)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
