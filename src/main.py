@@ -9,6 +9,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from pathlib import Path
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, HTMLResponse
+
 from src.db.database import get_db_path
 from src.db.seed_gis_data import seed_gis_database
 from src.api.v1 import api_v1_router
@@ -18,6 +22,10 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
 )
 logger = logging.getLogger("ciris.main")
+
+# Directory paths
+BASE_DIR = Path(__file__).resolve().parent.parent
+FRONTEND_DIR = BASE_DIR / "CIRIS REAL SIH PROJECT FRONTEND"
 
 
 @asynccontextmanager
@@ -57,15 +65,29 @@ app.add_middleware(
 # Mount API v1 router
 app.include_router(api_v1_router)
 
+# Mount static files for frontend assets if directory exists
+if FRONTEND_DIR.exists():
+    app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
 
-@app.get("/", tags=["Health & Status"])
+
+@app.get("/", tags=["UI & Dashboard"])
+def index():
+    """Serve the CIRIS interactive intelligence frontend dashboard."""
+    index_file = FRONTEND_DIR / "index.html"
+    if index_file.exists():
+        return FileResponse(str(index_file))
+    return root()
+
+
+@app.get("/api-info", tags=["Health & Status"])
 def root():
     return {
         "system": "CIRIS - Cybercrime Intelligence & ATM Cash-out Interception System",
-        "phase": "Phase 3A: GIS Engine + Map Data Foundation",
+        "phase": "Phase 3A/4: GIS Engine + Operational Intelligence",
         "status": "OPERATIONAL",
         "version": "1.0.0",
         "docs_url": "/docs",
+        "frontend_url": "/",
         "api_v1_base": "/api/v1",
         "endpoints": {
             "cases": "/api/v1/map/cases",
@@ -76,7 +98,9 @@ def root():
             "nearby_search": "/api/v1/map/nearby",
             "viewport_query": "/api/v1/map/viewport",
             "layer_definitions": "/api/v1/map/layers",
-            "gis_stats": "/api/v1/map/stats"
+            "gis_stats": "/api/v1/map/stats",
+            "alerts": "/api/v1/alerts",
+            "investigations": "/api/v1/cases/search"
         }
     }
 

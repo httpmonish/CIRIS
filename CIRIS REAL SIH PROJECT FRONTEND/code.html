@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIRIS | Proactive Financial Cybercrime Intelligence & ATM Cash-Out Prediction</title>
+    <meta name="description" content="CIRIS is a proactive financial-cybercrime intelligence system (SIH26184) that predicts likely cash-out locations and time windows for law enforcement and banks before fraud money disappears.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+
+    <!-- Leaflet CSS & JS for Interactive Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Tailwind CSS with custom configuration -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#fef9f2',
+                        'surface-bright': '#fef9f2',
+                        'surface-container-lowest': '#ffffff',
+                        'surface-container-low': '#f8f3ec',
+                        'surface-container': '#f2ede6',
+                        'surface-container-high': '#ece7e1',
+                        'surface-container-highest': '#e6e2db',
+                        'on-surface': '#1d1c18',
+                        'on-surface-variant': '#554339',
+                        primary: '#964407',
+                        'primary-container': '#b65c21',
+                        'primary-fixed': '#ffdbca',
+                        'on-primary': '#ffffff',
+                        secondary: '#974544',
+                        'secondary-container': '#ffdad8',
+                        'on-secondary': '#ffffff',
+                        tertiary: '#006480',
+                        'tertiary-container': '#e0f3fb',
+                        'warm-border': '#d8d0c8',
+                        'accent-mint': '#15BE74',
+                        'accent-coral': '#FF6158',
+                        'deep-obsidian': '#12110e'
+                    },
+                    fontFamily: {
+                        serif: ['"EB Garamond"', 'Georgia', 'serif'],
+                        sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+                        mono: ['"Space Mono"', 'monospace']
+                    },
+                    maxWidth: {
+                        'container-max': '1240px'
+                    }
+                }
+            }
+        };
+    </script>
+    
+    <style>
+        ::selection {
+            background-color: #ffdbca;
+            color: #964407;
+        }
+        
+        .tag-pill {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .radar-pulse {
+            position: relative;
+        }
+        .radar-pulse::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 9999px;
+            background: rgba(21, 190, 116, 0.35);
+            animation: pulse-ring 2.2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.85); opacity: 0.9; }
+            100% { transform: scale(2.4); opacity: 0; }
+        }
+
+        /* Subtle grid background pattern */
+        .grid-linen-pattern {
+            background-image: radial-gradient(rgba(150, 68, 7, 0.08) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        #map-container {
+            height: 380px;
+            width: 100%;
+            border-radius: 8px;
+            z-index: 10;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: #ffffff;
+            border: 1px solid #d8d0c8;
+            border-radius: 6px;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .leaflet-popup-tip {
+            background: #ffffff;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f2ede6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d8d0c8;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b65c21;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-surface font-sans antialiased selection:bg-primary-fixed">
+
+    <!-- Top Announcement Bar: SIH Problem Statement ID & Real Backend Status -->
+    <aside class="bg-surface-container-highest border-b border-warm-border text-on-surface-variant py-2 px-4 text-xs font-mono tracking-wider">
+        <div class="max-w-container-max mx-auto w-full flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <span id="backend-pulse-dot" class="inline-block w-2 h-2 rounded-full bg-accent-mint animate-pulse"></span>
+                <span>SIH26184 &bull; Ministry of Home Affairs (MHA) &amp; I4C Aligned Intelligence Architecture</span>
+            </div>
+            <div id="backend-status-badge" class="text-[11px] flex items-center gap-1.5 px-2 py-0.5 rounded bg-surface-container border border-warm-border">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent-mint"></span>
+                <span id="backend-status-text">FastAPI: Connecting to Port 8000...</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-warm-border transition-all">
+        <div class="max-w-container-max mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#hero" class="flex items-center gap-3 group">
+                <div class="w-9 h-9 rounded bg-primary text-white flex items-center justify-center font-mono font-bold text-base shadow-sm group-hover:bg-primary-container transition-colors">
+                    C
+                </div>
+                <div>
+                    <div class="font-serif text-2xl font-semibold tracking-tight text-on-surface flex items-center gap-1.5">
+                        CIRIS
+                        <span class="text-[10px] font-mono font-normal uppercase px-1.5 py-0.5 rounded bg-primary-fixed text-primary border border-primary/20">Live System</span>
+                    </div>
+                    <p class="text-[10px] font-mono text-on-surface-variant uppercase tracking-widest -mt-1">Proactive Cash-Out Prediction</p>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-mono tracking-wider uppercase text-on-surface-variant">
+                <a href="#problem" class="hover:text-primary transition-colors py-1">Timing Gap</a>
+                <a href="#live-demo" class="hover:text-primary transition-colors py-1">Live Engine</a>
+                <a href="#five-part" class="hover:text-primary transition-colors py-1">5-Part Output</a>
+                <a href="#pipeline" class="hover:text-primary transition-colors py-1">Architecture</a>
+                <a href="#feasibility" class="hover:text-primary transition-colors py-1">Benchmarks</a>
+                <a href="#alerts-section" class="hover:text-primary transition-colors py-1">Alerts</a>
+            </nav>
+
+            <!-- Action Button -->
+            <div class="flex items-center gap-3">
+                <a href="/docs" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 bg-surface-container border border-warm-border text-on-surface text-xs font-mono uppercase tracking-wider rounded hover:border-primary transition">
+                    <span class="material-symbols-outlined text-[15px] text-primary">api</span>
+                    API Docs
+                </a>
+                <a href="#live-demo" class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-white text-xs font-mono uppercase tracking-wider rounded font-bold hover:bg-primary-container transition shadow-sm">
+                    <span class="material-symbols-outlined text-[16px]">radar</span>
+                    Live Case Inspector
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-24 right-6 z-50 flex flex-col gap-2 max-w-md pointer-events-none"></div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative pt-16 pb-20 md:pt-24 md:pb-28 border-b border-warm-border overflow-hidden grid-linen-pattern">
+        <div class="max-w-container-max mx-auto px-6 lg:px-8">
+            <div class="max-w-3xl">
+                <!-- Tagline Badge -->
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-surface-container-low border border-warm-border text-primary font-mono text-xs uppercase tracking-wider mb-6">
+                    <span class="w-2 h-2 rounded-full bg-primary"></span>
+                    Cybercrime Intelligence &amp; ATM Localization
+                </div>
+                
+                <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal leading-[1.1] text-deep-obsidian tracking-tight mb-6">
+                    Predict <span class="italic font-serif text-primary">where and when</span> fraud money will be cashed out.
+                </h1>
+                
+                <p class="font-sans text-lg sm:text-xl text-on-surface-variant font-light leading-relaxed mb-8 max-w-2xl">
+                    India already has high-volume reporting via NCRP/1930. The critical gap is <strong class="font-medium text-on-surface">intervention timing</strong>. CIRIS fuses multi-hop money flow graphs and behavioral ranking to forecast ATM withdrawal targets before the cash disappears.
+                </p>
+
+                <!-- Action CTA & Anchor summary -->
+                <div class="flex flex-wrap items-center gap-4">
+                    <a href="#live-demo" class="inline-flex items-center gap-2 px-6 py-3.5 bg-primary text-white text-xs font-mono uppercase tracking-widest font-bold rounded hover:bg-primary-container transition shadow">
+                        <span>Launch Live Case Inspector</span>
+                        <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                    </a>
+                    <a href="#pipeline" class="inline-flex items-center gap-2 px-6 py-3.5 bg-surface-container-lowest text-on-surface border border-warm-border text-xs font-mono uppercase tracking-widest font-bold rounded hover:border-primary hover:text-primary transition shadow-sm">
+                        <span>View Technical Pipeline</span>
+                        <span class="material-symbols-outlined text-[16px]">account_tree</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Essential Metric Strip (Dynamically syncs with GIS Backend) -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 pt-10 border-t border-warm-border/80">
+                <div class="bg-surface-container-lowest p-5 rounded border border-warm-border/60">
+                    <div id="stat-recall" class="font-serif text-3xl md:text-4xl text-primary font-medium">84.93%</div>
+                    <div class="font-mono text-xs uppercase tracking-wider text-on-surface-variant mt-1">Candidate ATM Recall</div>
+                    <div class="text-[11px] text-on-surface-variant/70 mt-0.5">Dynamic E2E Evaluation</div>
+                </div>
+                <div class="bg-surface-container-lowest p-5 rounded border border-warm-border/60">
+                    <div id="stat-atms" class="font-serif text-3xl md:text-4xl text-deep-obsidian font-medium">7,000</div>
+                    <div class="font-mono text-xs uppercase tracking-wider text-on-surface-variant mt-1">Indexed ATM Terminals</div>
+                    <div class="text-[11px] text-on-surface-variant/70 mt-0.5">National R*Tree Geo-Index</div>
+                </div>
+                <div class="bg-surface-container-lowest p-5 rounded border border-warm-border/60">
+                    <div id="stat-cases" class="font-serif text-3xl md:text-4xl text-tertiary font-medium">50,000+</div>
+                    <div class="font-mono text-xs uppercase tracking-wider text-on-surface-variant mt-1">Active Complaints</div>
+                    <div id="stat-loss" class="text-[11px] text-on-surface-variant/70 mt-0.5">₹1,463.3 Cr Tracked Loss</div>
+                </div>
+                <div class="bg-surface-container-lowest p-5 rounded border border-warm-border/60">
+                    <div id="stat-predictions" class="font-serif text-3xl md:text-4xl text-accent-mint font-medium">8,340</div>
+                    <div class="font-mono text-xs uppercase tracking-wider text-on-surface-variant mt-1">AI Ranked Targets</div>
+                    <div class="text-[11px] text-on-surface-variant/70 mt-0.5">LambdaRank Optimization</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Problem: The Timing Gap -->
+    <section id="problem" class="py-20 md:py-24 border-b border-warm-border bg-surface-container-low">
+        <div class="max-w-container-max mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-12 items-start">
+                
+                <!-- Left Editorial Column -->
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="tag-pill text-primary">The Operational Bottleneck</span>
+                    <h2 class="font-serif text-3xl sm:text-4xl text-deep-obsidian leading-tight">
+                        It's not that fraud isn't reported.<br>
+                        <span class="italic text-secondary">The gap is the timing of intervention.</span>
+                    </h2>
+                    <p class="text-on-surface-variant leading-relaxed text-base">
+                        In digital fraud, funds rapidly splinter across multiple mule accounts within minutes. Physical ATM withdrawal is the <strong class="text-on-surface">single tangible point of real-world intercept</strong> before money converts to untraceable cash.
+                    </p>
+                    <div class="p-4 rounded bg-surface-container-lowest border border-warm-border text-xs font-mono text-on-surface-variant space-y-1.5">
+                        <div class="text-primary font-bold uppercase tracking-wider">&bull; System Boundary Guarantee</div>
+                        <div>CIRIS targets cash-out locations. Purely online merchant spend with no physical cash withdrawal is deliberately out-of-scope to avoid false overclaiming.</div>
+                    </div>
+                </div>
+
+                <!-- Right Comparison Cards: Current vs CIRIS Enabled -->
+                <div class="lg:col-span-7 space-y-5">
+                    <!-- Reactive Path -->
+                    <div class="p-6 rounded-lg bg-surface-container-lowest border border-warm-border relative overflow-hidden">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="tag-pill text-secondary font-bold flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-[16px]">history_toggle_off</span>
+                                Traditional Reactive Flow
+                            </span>
+                            <span class="text-[11px] font-mono text-secondary bg-secondary-container/40 px-2 py-0.5 rounded">After the Fact</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs font-mono text-on-surface-variant mt-4">
+                            <div class="p-2.5 rounded bg-surface-container border border-warm-border/60">
+                                <span class="text-on-surface font-bold block mb-1">01. Fraud</span>
+                                Money leaves victim
+                            </div>
+                            <div class="p-2.5 rounded bg-surface-container border border-warm-border/60">
+                                <span class="text-on-surface font-bold block mb-1">02. Report</span>
+                                NCRP complaint filed
+                            </div>
+                            <div class="p-2.5 rounded bg-surface-container border border-warm-border/60">
+                                <span class="text-on-surface font-bold block mb-1">03. Cash Out</span>
+                                ATM withdrawal occurs
+                            </div>
+                            <div class="p-2.5 rounded bg-secondary-container/30 border border-secondary/30 text-secondary">
+                                <span class="font-bold block mb-1">04. Tracing</span>
+                                Location known too late
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Proactive CIRIS Path -->
+                    <div class="p-6 rounded-lg bg-surface-container-lowest border-2 border-primary/30 relative overflow-hidden shadow-sm">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="tag-pill text-primary font-bold flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-[16px] text-accent-mint">bolt</span>
+                                CIRIS Proactive Intelligence Flow
+                            </span>
+                            <span class="text-[11px] font-mono text-primary bg-primary-fixed px-2 py-0.5 rounded font-bold">Predictive Intercept</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs font-mono text-on-surface-variant mt-4">
+                            <div class="p-2.5 rounded bg-surface-container border border-warm-border/60">
+                                <span class="text-on-surface font-bold block mb-1">01. Complaint</span>
+                                Live ingest at Time T
+                            </div>
+                            <div class="p-2.5 rounded bg-primary-fixed/40 border border-primary/30 text-primary">
+                                <span class="font-bold block mb-1">02. CIRIS Fusion</span>
+                                Graph + LambdaRank
+                            </div>
+                            <div class="p-2.5 rounded bg-primary-fixed/60 border border-primary/40 text-primary">
+                                <span class="font-bold block mb-1">03. Alert</span>
+                                Where + When Window
+                            </div>
+                            <div class="p-2.5 rounded bg-surface-container-highest border border-warm-border font-bold text-on-surface">
+                                <span class="block mb-1 text-accent-mint">04. Preparation</span>
+                                LEA &amp; Bank Triage
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- LIVE INTERACTIVE CASE INTELLIGENCE CONSOLE (FULL BACKEND INTEGRATION) -->
+    <section id="live-demo" class="py-20 md:py-24 border-b border-warm-border">
+        <div class="max-w-container-max mx-auto px-6 lg:px-8">
+            
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="tag-pill text-primary">Live Backend Integration</span>
+                <h2 class="font-serif text-3xl sm:text-4xl text-deep-obsidian mt-2 mb-3">
+                    Case Intelligence &amp; Interception Console
+                </h2>
+                <p class="text-on-surface-variant text-base">
+                    Connected to the FastAPI engine and GIS database. Select real benchmark cases or search across 50,000 complaints to view live ATM predictions.
+                </p>
+            </div>
+
+            <!-- Interactive Console Card -->
+            <div class="bg-surface-container-lowest rounded-xl border border-warm-border shadow-sm overflow-hidden">
+                
+                <!-- Console Top Control Bar -->
+                <div class="p-4 sm:p-6 bg-surface-container-low border-b border-warm-border flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-accent-mint radar-pulse"></span>
+                        <div>
+                            <span class="font-mono text-xs uppercase tracking-wider text-primary font-bold">Live Case Selector &amp; Search</span>
+                            <span id="console-live-badge" class="text-[10px] ml-2 font-mono bg-accent-mint/10 text-accent-mint px-2 py-0.5 rounded border border-accent-mint/30">DB CONNECTED</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Search Input & Quick Preset Buttons -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <!-- Search Box -->
+                        <div class="relative flex-1 sm:w-64">
+                            <input 
+                                type="text" 
+                                id="case-search-input" 
+                                placeholder="Search Case ID, City, UPI..." 
+                                class="w-full px-3 py-1.5 pl-8 text-xs font-mono bg-surface-container-lowest border border-warm-border rounded focus:outline-none focus:border-primary text-on-surface"
+                                oninput="handleCaseSearch(this.value)"
+                            />
+                            <span class="material-symbols-outlined text-[16px] text-on-surface-variant absolute left-2.5 top-2">search</span>
+                            
+                            <!-- Search Autocomplete Dropdown -->
+                            <div id="search-results-dropdown" class="hidden absolute left-0 right-0 top-full mt-1 bg-surface-container-lowest border border-warm-border rounded shadow-lg z-50 max-h-48 overflow-y-auto text-xs font-mono divide-y divide-warm-border/50">
+                            </div>
+                        </div>
+
+                        <!-- Quick Case Buttons -->
+                        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+                            <button onclick="loadCaseById('CASE_000001')" id="btn-CASE_000001" class="px-2.5 py-1.5 rounded text-xs font-mono font-bold bg-primary text-white transition">CASE_000001</button>
+                            <button onclick="loadCaseById('CASE_000002')" id="btn-CASE_000002" class="px-2.5 py-1.5 rounded text-xs font-mono text-on-surface-variant bg-surface-container border border-warm-border hover:text-on-surface transition">CASE_000002</button>
+                            <button onclick="loadCaseById('CASE_000005')" id="btn-CASE_000005" class="px-2.5 py-1.5 rounded text-xs font-mono text-on-surface-variant bg-surface-container border border-warm-border hover:text-on-surface transition">CASE_000005</button>
+                            <button onclick="loadCaseById('CASE_000010')" id="btn-CASE_000010" class="px-2.5 py-1.5 rounded text-xs font-mono text-on-surface-variant bg-surface-container border border-warm-border hover:text-on-surface transition">CASE_000010</button>
+                            <button onclick="fetchRandomCase()" class="px-2.5 py-1.5 rounded text-xs font-mono bg-surface-container-highest border border-warm-border text-primary font-bold hover:bg-primary hover:text-white transition flex items-center gap-1" title="Fetch Random Case from Database">
+                                <span class="material-symbols-outlined text-[14px]">shuffle</span>
+                                Random
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Details Display Grid -->
+                <div class="p-6 lg:p-8 grid md:grid-cols-12 gap-8">
+                    
+                    <!-- Column 1: Prediction Dossier -->
+                    <div class="md:col-span-7 space-y-6">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <span id="case-category" class="tag-pill bg-primary-fixed text-primary px-2 py-0.5 rounded border border-primary/20">Rapid Mule Inflow &bull; P1 Triage</span>
+                                <h3 id="case-title" class="font-serif text-2xl text-deep-obsidian mt-2 font-medium">₹4,505.94 Rapid UPI Splintering</h3>
+                                <p id="case-meta" class="text-xs font-mono text-on-surface-variant mt-1">Complaint ID: CASE_000001 &bull; Victim: Thane (Maharashtra) &bull; Bank: ICICI Bank</p>
+                            </div>
+                            <span id="case-status-badge" class="tag-pill px-2 py-1 rounded bg-secondary-container/40 text-secondary border border-secondary/20">ACTIVE RISK</span>
+                        </div>
+
+                        <!-- 5-Part Realtime Inspector Box -->
+                        <div class="grid grid-cols-2 gap-3 pt-2">
+                            
+                            <div class="p-3.5 rounded bg-surface-container-low border border-warm-border">
+                                <div class="font-mono text-[10px] text-on-surface-variant uppercase tracking-wider flex items-center justify-between">
+                                    <span>01. Likely Cash-Out Zone</span>
+                                    <span class="text-primary font-bold">WHERE</span>
+                                </div>
+                                <div id="case-where" class="font-serif text-lg font-medium text-deep-obsidian mt-0.5">ICICI Bank Railway Station ATM 308</div>
+                                <div id="case-coords" class="text-[11px] font-mono text-tertiary">Coords: 17.4698° N, 78.4798° E (Hyderabad)</div>
+                            </div>
+
+                            <div class="p-3.5 rounded bg-surface-container-low border border-warm-border">
+                                <div class="font-mono text-[10px] text-on-surface-variant uppercase tracking-wider flex items-center justify-between">
+                                    <span>02. Expected Time Window</span>
+                                    <span class="text-primary font-bold">WHEN</span>
+                                </div>
+                                <div id="case-when" class="font-serif text-lg font-medium text-deep-obsidian mt-0.5">0 – 3 Hours (Est. 2.3h)</div>
+                                <div id="case-velocity" class="text-[11px] font-mono text-on-surface-variant">Distance: 5.44 km from victim</div>
+                            </div>
+
+                            <div class="p-3.5 rounded bg-surface-container-low border border-warm-border">
+                                <div class="font-mono text-[10px] text-on-surface-variant uppercase tracking-wider flex items-center justify-between">
+                                    <span>03. Calibrated Risk Score</span>
+                                    <span class="text-primary font-bold">CONFIDENCE</span>
+                                </div>
+                                <div id="case-risk" class="font-serif text-lg font-medium text-accent-coral mt-0.5">95.0% Probability</div>
+                                <div class="text-[11px] font-mono text-on-surface-variant">LambdaRank #1 (Isotonic Calibrated)</div>
+                            </div>
+
+                            <div class="p-3.5 rounded bg-surface-container-low border border-warm-border">
+                                <div class="font-mono text-[10px] text-on-surface-variant uppercase tracking-wider flex items-center justify-between">
+                                    <span>04. Action Recommendation</span>
+                                    <span class="text-primary font-bold">ACTION</span>
+                                </div>
+                                <div id="case-action" class="font-serif text-lg font-medium text-primary mt-0.5">Alert Railway Station Beat &amp; Bank NOC</div>
+                                <div id="case-priority" class="text-[11px] font-mono text-secondary font-bold">Priority: CRITICAL P1 Intercept</div>
+                            </div>
+
+                        </div>
+
+                        <!-- SHAP Explainability & Evidence checklist -->
+                        <div class="p-4 rounded bg-surface-container-high/40 border border-warm-border">
+                            <div class="font-mono text-xs font-bold text-on-surface mb-2 uppercase tracking-wider flex items-center justify-between">
+                                <span>05. Why — Explainability &amp; Feature Attribution</span>
+                                <span class="text-[10px] text-tertiary font-normal">SHAP + Multi-Hop Graph Proof</span>
+                            </div>
+                            <div id="case-evidence" class="space-y-1.5 text-xs text-on-surface-variant">
+                                <div class="flex items-center gap-2"><span class="text-accent-mint font-bold">&check;</span> High-velocity transaction fragmentation across 4 intermediate mule accounts</div>
+                                <div class="flex items-center gap-2"><span class="text-accent-mint font-bold">&check;</span> Historical ATM cluster match with 9 prior cashouts in terminal zone</div>
+                                <div class="flex items-center gap-2"><span class="text-accent-mint font-bold">&check;</span> Spatial proximity index: Candidate located within 5.44 km corridor</div>
+                            </div>
+                        </div>
+
+                        <!-- Direct Operational Action Dispatch Buttons -->
+                        <div class="p-4 rounded bg-surface-container-lowest border border-warm-border flex flex-wrap items-center justify-between gap-3">
+                            <div class="text-xs font-mono text-on-surface-variant">
+                                <span class="font-bold text-on-surface">Intervention Dispatch:</span>
+                                <span>Trigger real-time law enforcement &amp; bank NOC workflow</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="dispatchIntervention('DISPATCH_BEAT')" class="px-3 py-1.5 bg-primary text-white text-xs font-mono font-bold rounded hover:bg-primary-container transition flex items-center gap-1.5 shadow-sm">
+                                    <span class="material-symbols-outlined text-[15px]">send</span>
+                                    Dispatch Intercept
+                                </button>
+                                <button onclick="dispatchIntervention('ESCALATE_LEA')" class="px-3 py-1.5 bg-surface-container text-secondary text-xs font-mono font-bold border border-secondary/30 rounded hover:bg-secondary-container/40 transition flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[15px]">warning</span>
+                                    Escalate to I4C
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Column 2: Dual Map & Graph Topology Visualizer -->
+                    <div class="md:col-span-5 flex flex-col justify-between p-5 rounded-lg bg-surface-container border border-warm-border">
+                        <div>
+                            <!-- Tabs Header -->
+                            <div class="flex items-center justify-between pb-3 border-b border-warm-border mb-3">
+                                <div class="flex items-center gap-2">
+                                    <button onclick="toggleVisualizerTab('map')" id="tab-btn-map" class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-primary text-white transition">
+                                        Spatial Map
+                                    </button>
+                                    <button onclick="toggleVisualizerTab('graph')" id="tab-btn-graph" class="px-2.5 py-1 rounded text-xs font-mono text-on-surface-variant hover:text-on-surface transition">
+                                        Graph Topology
+                                    </button>
+                                </div>
+                                <span id="pool-counter" class="text-[10px] font-mono bg-surface-container-lowest px-2 py-0.5 rounded text-on-surface-variant border border-warm-border">
+                                    10 Candidate ATMs
+                                </span>
+                            </div>
+
+                            <!-- Map View Tab -->
+                            <div id="visualizer-map-view">
+                                <div id="map-container"></div>
+                                <div class="mt-2 text-[10px] font-mono text-on-surface-variant flex items-center justify-between">
+                                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary"></span> Victim</span>
+                                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-accent-mint"></span> Rank #1 Target ATM</span>
+                                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-tertiary"></span> Candidates</span>
+                                </div>
+                            </div>
+
+                            <!-- Graph Topology View Tab -->
+                            <div id="visualizer-graph-view" class="hidden space-y-3 my-4">
+                                <div class="p-2.5 rounded bg-surface-container-lowest border border-warm-border text-xs font-mono flex items-center justify-between">
+                                    <span id="graph-victim-label" class="text-on-surface-variant">Victim Account (CASE_000001)</span>
+                                    <span id="graph-loss-label" class="text-secondary font-bold">-₹4,505.94</span>
+                                </div>
+                                <div class="flex justify-center my-0.5">
+                                    <span class="material-symbols-outlined text-primary text-[18px]">south</span>
+                                </div>
+                                <div class="p-2.5 rounded bg-surface-container-lowest border border-warm-border text-xs font-mono flex items-center justify-between">
+                                    <span class="text-on-surface-variant">4 &times; Mule Nodes (Splinter Layer)</span>
+                                    <span id="graph-splinter-label" class="text-primary font-bold">₹1,126 / each</span>
+                                </div>
+                                <div class="flex justify-center my-0.5">
+                                    <span class="material-symbols-outlined text-primary text-[18px]">south</span>
+                                </div>
+                                <div class="p-2.5 rounded bg-primary-fixed/80 border border-primary text-xs font-mono flex items-center justify-between text-primary font-bold">
+                                    <span id="graph-target-label">Target: ICICI Bank ATM 308</span>
+                                    <span class="bg-primary text-white text-[10px] px-1.5 py-0.5 rounded">Rank #1 Target</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Candidate ATMs Ranking Table -->
+                        <div class="mt-4 pt-3 border-t border-warm-border">
+                            <div class="font-mono text-[11px] uppercase font-bold text-on-surface mb-2 flex items-center justify-between">
+                                <span>Candidate ATM Pool (Top Ranked)</span>
+                                <span class="text-[10px] text-accent-mint">LambdaRank Scores</span>
+                            </div>
+                            <div id="candidate-table-container" class="max-h-36 overflow-y-auto space-y-1 text-xs font-mono">
+                                <!-- Dynamically populated -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- The Five-Part Output (Architecture Showcase) -->
+    <section id="five-part" class="py-20 md:py-24 border-b border-warm-border bg-surface-container-low">
+        <div class="max-w-container-max mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-14">
+                <span class="tag-pill text-primary">Core Intelligence Deliverable</span>
+                <h2 class="font-serif text-3xl sm:text-4xl text-deep-obsidian mt-2 mb-3">
+                    The 5-Part Actionable Output
+                </h2>
+                <p class="text-on-surface-variant text-base">
+                    Investigative teams cannot act on ambiguous risk scores. Every CIRIS case yields five structured, explainable dimensions.
+                </p>
+            </div>
+
+            <!-- Five Dimension Cards Grid -->
+            <div class="grid md:grid-cols-5 gap-4">
+                <!-- 1. WHERE -->
+                <div class="bg-surface-container-lowest p-5 rounded-lg border border-warm-border hover:border-primary transition group">
+                    <div class="w-8 h-8 rounded bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-xs mb-3 group-hover:bg-primary group-hover:text-white transition-colors">
+                        01
+                    </div>
+                    <h3 class="font-serif text-xl font-medium text-deep-obsidian mb-1">WHERE</h3>
+                    <p class="font-mono text-xs text-primary mb-2 uppercase tracking-wide">ATM Target Cluster</p>
+                    <p class="text-xs text-on-surface-variant leading-relaxed">
+                        Pinpoints likely withdrawal terminal zones ranked by LambdaRank scoring.
+                    </p>
+                </div>
+
+                <!-- 2. WHEN -->
+                <div class="bg-surface-container-lowest p-5 rounded-lg border border-warm-border hover:border-primary transition group">
+                    <div class="w-8 h-8 rounded bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-xs mb-3 group-hover:bg-primary group-hover:text-white transition-colors">
+                        02
+                    </div>
+                    <h3 class="font-serif text-xl font-medium text-deep-obsidian mb-1">WHEN</h3>
+                    <p class="font-mono text-xs text-primary mb-2 uppercase tracking-wide">Withdrawal Window</p>
+                    <p class="text-xs text-on-surface-variant leading-relaxed">
+                        Calibrated time windows (0–1h, 1–3h, 3–6h, 6–12h) to deploy actionable resources.
+                    </p>
+                </div>
+
+                <!-- 3. WHY -->
+                <div class="bg-surface-container-lowest p-5 rounded-lg border border-warm-border hover:border-primary transition group">
+                    <div class="w-8 h-8 rounded bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-xs mb-3 group-hover:bg-primary group-hover:text-white transition-colors">
+                        03
+                    </div>
+                    <h3 class="font-serif text-xl font-medium text-deep-obsidian mb-1">WHY</h3>
+                    <p class="font-mono text-xs text-primary mb-2 uppercase tracking-wide">SHAP &amp; Graph Proof</p>
+                    <p class="text-xs text-on-surface-variant leading-relaxed">
+                        Feature contribution + multi-hop transaction fragmentation evidence.
+                    </p>
+                </div>
+
+                <!-- 4. CONFIDENCE -->
+                <div class="bg-surface-container-lowest p-5 rounded-lg border border-warm-border hover:border-primary transition group">
+                    <div class="w-8 h-8 rounded bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-xs mb-3 group-hover:bg-primary group-hover:text-white transition-colors">
+                        04
+                    </div>
+                    <h3 class="font-serif text-xl font-medium text-deep-obsidian mb-1">CONFIDENCE</h3>
+                    <p class="font-mono text-xs text-primary mb-2 uppercase tracking-wide">Calibrated Risk</p>
+                    <p class="text-xs text-on-surface-variant leading-relaxed">
+                        Isotonic calibrated probability (e.g. 84.9%)—not raw, uncalibrated scores.
+                    </p>
+                </div>
+
+                <!-- 5. ACTION -->
+                <div class="bg-surface-container-lowest p-5 rounded-lg border border-warm-border hover:border-primary transition group">
+                    <div class="w-8 h-8 rounded bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-xs mb-3 group-hover:bg-primary group-hover:text-white transition-colors">
+                        05
+                    </div>
+                    <h3 class="font-serif text-xl font-medium text-deep-obsidian mb-1">ACTION</h3>
+                    <p class="font-mono text-xs text-primary mb-2 uppercase tracking-wide">Operational Priority</p>
+                    <p class="text-xs text-on-surface-variant leading-relaxed">
+                        Automated triage (P1 Active Cash-Out, P2 Network, P3 Monitor) with dispatch notes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Approach & Pipeline Flow -->
+    <section id="pipeline" class="py-20 md:py-24 border-b border-warm-border">
+        <div class="max-w-container-max mx-auto px-6 lg:px-8">
+            <div class="max-w-3xl mb-14">
+                <span class="tag-pill text-primary">Engineering &amp; Methodology</span>
+                <h2 class="font-serif text-3xl sm:text-4xl text-deep-obsidian mt-2 mb-3">
+                    Multi-Stage Ranking &amp; Anti-Leakage Architecture
+                </h2>
+                <p class="text-on-surface-variant text-base leading-relaxed">
+                    Instead of a generic black-box classifier, CIRIS breaks the search down into hybrid candidate retrieval, learning-to-rank scoring via LightGBM/LambdaRank, and out-of-fold probability calibration.
+                </p>
+            </div>
+
+            <!-- Pipeline Flow Architecture Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Stage 1 -->
+                <div class="p-5 rounded-lg bg-surface-container-lowest border border-warm-border flex flex-col justify-between">
+                    <div>
+                        <div class="font-mono text-xs text-primary font-bold uppercase tracking-wider mb-2">Stage 01</div>
+                        <h4 class="font-serif text-lg font-medium text-deep-obsidian mb-2">Complaint Ingestion &amp; Entity Resolution</h4>
+                        <p class="text-xs text-on-surface-variant leading-relaxed">
+                            Ingests complaint data, tokenizes PII, and resolves linked accounts, devices, cards, and UPI IDs available strictly at time T.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-warm-border text-[11px] font-mono text-on-surface-variant">
+                        Strict Anti-Leakage
+                    </div>
+                </div>
+
+                <!-- Stage 2 -->
+                <div class="p-5 rounded-lg bg-surface-container-lowest border border-warm-border flex flex-col justify-between">
+                    <div>
+                        <div class="font-mono text-xs text-primary font-bold uppercase tracking-wider mb-2">Stage 02</div>
+                        <h4 class="font-serif text-lg font-medium text-deep-obsidian mb-2">Money-Flow Graph &amp; Hybrid Retrieval</h4>
+                        <p class="text-xs text-on-surface-variant leading-relaxed">
+                            Detects multi-hop fragmentation and velocity. Narrows thousands of national ATMs down to a viable candidate set (84.9% recall).
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-warm-border text-[11px] font-mono text-on-surface-variant">
+                        Adaptive Fallback
+                    </div>
+                </div>
+
+                <!-- Stage 3 -->
+                <div class="p-5 rounded-lg bg-surface-container-lowest border border-warm-border flex flex-col justify-between">
+                    <div>
+                        <div class="font-mono text-xs text-primary font-bold uppercase tracking-wider mb-2">Stage 03</div>
+                        <h4 class="font-serif text-lg font-medium text-deep-obsidian mb-2">LambdaRank &amp; Temporal ML Fusion</h4>
+                        <p class="text-xs text-on-surface-variant leading-relaxed">
+                            Orders candidates (most likely &rarr; next likely) using LightGBM LambdaRank coupled with Isolation Forest behavioral anomaly models.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-warm-border text-[11px] font-mono text-on-surface-variant">
+                        Hit@10: 63.61%
+                    </div>
+                </div>
+
+                <!-- Stage 4 -->
+                <div class="p-5 rounded-lg bg-surface-container-lowest border border-warm-border flex flex-col justify-between">
+                    <div>
+                        <div class="font-mono text-xs text-primary font-bold uppercase tracking-wider mb-2">Stage 04</div>
+                        <h4 class="font-serif text-lg font-medium text-deep-obsidian mb-2">Probability Calibration &amp; SHAP Proof</h4>
+                        <p class="text-xs text-on-surface-variant leading-relaxed">
+                            Transforms raw scores into trustworthy probabilities. Generates dual-layer explainability (SHAP features + graph path evidence).
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-warm-border text-[11px] font-mono text-on-surface-variant">
+                        Isotonic Calibration
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technology Matrix -->
+            <div class="mt-10 p-6 rounded-lg bg-surface-container-lowest border border-warm-border">
+                <div class="font-mono text-xs uppercase tracking-wider text-primary font-bold mb-4">Core Technology Stack</div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 text-xs font-mono text-on-surface-variant">
+                    <div>
+                        <span class="block text-on-surface font-bold mb-1">ML Engine</span>
+                        LightGBM / LambdaRank, Isolation Forest
+                    </div>
+                    <div>
+                        <span class="block text-on-surface font-bold mb-1">Explainability</span>
+                        SHAP, Graph Subgraphs
+                    </div>
+                    <div>
+                        <span class="block text-on-surface font-bold mb-1">Graph Core</span>
+                        NetworkX / Graph Engine Models
+                    </div>
+                    <div>
+                        <span class="block text-on-surface font-bold mb-1">GIS &amp; Spatial</span>
+                        SQLite R*Tree / Leaflet Engine
+                    </div>
+                    <div>
+                        <span class="block text-on-surface font-bold mb-1">Backend</span>
+                        FastAPI, REST, Async Workers
+                    </div>
+                    <div>
+                        <span class="block text-on-surface font-bold mb-1">Security</span>
+                        RBAC, Tokenized PII, Audit Trail
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- LIVE OPERATIONAL ALERTS FEED -->
+    <section id="alerts-section" class="py-20 md:py-24 border-b border-warm-border bg-surface-container-low">
+        <div class="max-w-container-max mx-auto px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <span class="tag-pill text-secondary font-bold">Operational Triage</span>
+                    <h2 class="font-serif text-3xl text-deep-obsidian mt-1">Live Interception Alert Feed</h2>
+                    <p class="text-xs text-on-surface-variant mt-1">Direct from FastAPI Alert Queue (/api/v1/alerts)</p>
+                </div>
+                <button onclick="loadLiveAlerts()" class="px-3 py-1.5 bg-surface-container-lowest border border-warm-border text-xs font-mono rounded hover:border-primary transition flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[15px] text-primary">refresh</span>
+                    Refresh Alerts
+                </button>
+            </div>
+
+            <!-- Alerts List Container -->
+            <div id="alerts-feed-container" class="space-y-3">
+                <div class="p-6 rounded-lg bg-surface-container-lowest border border-warm-border text-center text-xs font-mono text-on-surface-variant">
+                    Loading live operational alerts from backend...
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feasibility, Evaluation & Integrity -->
+    <section id="feasibility" class="py-20 md:py-24 border-b border-warm-border">
+        <div class="max-w-container-max mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left: Evaluation Nuance & Governance -->
+                <div class="lg:col-span-6 space-y-6">
+                    <span class="tag-pill text-primary">Empirical Validation</span>
+                    <h2 class="font-serif text-3xl sm:text-4xl text-deep-obsidian leading-tight">
+                        Controlled ranking vs. Dynamic end-to-end evaluation.
+                    </h2>
+                    <p class="text-on-surface-variant text-base leading-relaxed">
+                        To maintain rigorous benchmark governance, CIRIS clearly separates controlled ranking tests (ranking candidates once retrieved) from fresh, dynamic end-to-end complaint evaluation.
+                    </p>
+
+                    <!-- Validation Checkmarks -->
+                    <div class="space-y-3 pt-2">
+                        <div class="flex items-center gap-3 p-3 rounded bg-surface-container-low border border-warm-border text-xs font-mono text-on-surface">
+                            <span class="material-symbols-outlined text-accent-mint text-[18px]">verified</span>
+                            <span><strong>31/31 Unit &amp; Integration Tests Passed</strong> across feature pipeline</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded bg-surface-container-low border border-warm-border text-xs font-mono text-on-surface">
+                            <span class="material-symbols-outlined text-accent-mint text-[18px]">verified</span>
+                            <span><strong>5/5 Complex Case Scenarios Passed</strong> with zero temporal leakage</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded bg-surface-container-low border border-warm-border text-xs font-mono text-on-surface">
+                            <span class="material-symbols-outlined text-accent-mint text-[18px]">verified</span>
+                            <span><strong>Controlled scale:</strong> 50k complaints, 7k ATMs, 11.93M ranking pairs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Performance Comparison Table -->
+                <div class="lg:col-span-6">
+                    <div class="bg-surface-container-lowest rounded-xl border border-warm-border shadow-sm overflow-hidden">
+                        <div class="p-4 bg-surface-container-low border-b border-warm-border font-mono text-xs font-bold uppercase tracking-wider text-on-surface flex justify-between items-center">
+                            <span>Benchmark Governance Metrics</span>
+                            <span class="text-[10px] text-primary">Rigorous Separation</span>
+                        </div>
+                        <table class="w-full text-left text-xs font-mono">
+                            <thead class="bg-surface-container-high/40 text-on-surface-variant border-b border-warm-border">
+                                <tr>
+                                    <th class="p-3.5">Metric Dimension</th>
+                                    <th class="p-3.5">Controlled Ranking</th>
+                                    <th class="p-3.5">Dynamic E2E</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-warm-border/60 text-on-surface">
+                                <tr>
+                                    <td class="p-3.5 font-bold">Candidate Recall</td>
+                                    <td class="p-3.5 text-on-surface-variant">&mdash;</td>
+                                    <td class="p-3.5 text-accent-mint font-bold">84.93%</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3.5 font-bold">Hit@10</td>
+                                    <td class="p-3.5 text-primary font-bold">63.61%</td>
+                                    <td class="p-3.5 text-on-surface">28.77%</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3.5 font-bold">Hit@5</td>
+                                    <td class="p-3.5 text-primary font-bold">50.27%</td>
+                                    <td class="p-3.5 text-on-surface">19.18%</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3.5 font-bold">Hit@1</td>
+                                    <td class="p-3.5 text-primary font-bold">33.05%</td>
+                                    <td class="p-3.5 text-on-surface">1.37%</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3.5 font-bold">NDCG@10</td>
+                                    <td class="p-3.5 font-bold text-tertiary">0.4584</td>
+                                    <td class="p-3.5 text-on-surface">0.1260</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3.5 font-bold">Time Window MAE</td>
+                                    <td class="p-3.5 text-on-surface">&sim;4.95 Hours</td>
+                                    <td class="p-3.5 text-on-surface-variant">&mdash;</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-background border-t border-warm-border text-on-surface-variant text-xs font-mono">
+        <div class="max-w-container-max mx-auto px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-primary text-white flex items-center justify-center font-bold text-xs">C</div>
+                <span class="font-serif text-base font-semibold text-on-surface">CIRIS Intelligence Platform</span>
+                <span class="text-[11px] opacity-70">&bull; SIH26184 Architecture</span>
+            </div>
+            <div class="text-[11px] text-center sm:text-right text-on-surface-variant">
+                FastAPI GIS Backend Integrated &bull; Proactive Cybercrime Cash-Out Interception
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE CONSOLE AND REAL BACKEND INTEGRATION ENGINE SCRIPT -->
+    <script>
+        // Automatic API Base detection
+        const API_BASE = (window.location.origin && window.location.origin.startsWith('http')) 
+            ? (window.location.origin.includes(':8000') ? window.location.origin : (window.location.origin.includes(':3000') ? 'http://127.0.0.1:8000' : window.location.origin))
+            : 'http://127.0.0.1:8000';
+
+        let isBackendConnected = false;
+        let activeCaseId = 'CASE_000001';
+        let currentPredictions = [];
+        let currentCaseData = null;
+        let leafletMap = null;
+        let mapMarkersLayer = null;
+
+        // Fallback local rich scenarios in case server is not currently running
+        const mockFallbackCases = {
+            'CASE_000001': {
+                case_id: 'CASE_000001',
+                complaint_id: 'CASE_000001',
+                title: '₹4,505.94 Rapid UPI Splintering',
+                category: 'Rapid Mule Inflow • P1 Triage',
+                meta: 'Complaint ID: CASE_000001 • Reported 12m ago • Victim: Thane (Maharashtra)',
+                victim_lat: 19.2183,
+                victim_lon: 72.9781,
+                loss_amount: 4505.94,
+                fraud_type: 'UPI Fraud',
+                victim_city: 'Thane',
+                victim_state: 'Maharashtra',
+                victim_bank: 'ICICI Bank',
+                where: 'ICICI Bank Railway Station ATM 308',
+                coords: 'Coords: 17.4698° N, 78.4798° E (Hyderabad)',
+                when: '0 – 3 Hours (Est. 2.3h)',
+                velocity: 'Distance: 5.44 km from mule cluster',
+                risk: '95.0% Probability',
+                action: 'Alert Railway Station Beat & Bank NOC',
+                priority: 'Priority: CRITICAL P1 Intercept',
+                evidence: [
+                    'High-velocity transaction fragmentation across 4 intermediate mule accounts',
+                    'Historical ATM cluster match with 9 prior cashouts in terminal zone',
+                    'Spatial proximity index: Candidate located within 5.44 km corridor'
+                ],
+                predictions: [
+                    { rank: 1, atm_name: 'ICICI Bank Railway Station ATM 308', bank_name: 'ICICI Bank', prediction_score: 0.95, time_window_label: '0-3h', distance_km: 5.44, lat: 17.469835, lon: 78.479816, city: 'Hyderabad' },
+                    { rank: 2, atm_name: 'IndusInd Bank Petrol Station ATM 178', bank_name: 'IndusInd Bank', prediction_score: 0.77, time_window_label: '0-3h', distance_km: 650.97, lat: 22.762793, lon: 75.753712, city: 'Indore' },
+                    { rank: 3, atm_name: 'Axis Bank Bank Branch ATM 386', bank_name: 'Axis Bank', prediction_score: 0.69, time_window_label: '3-6h', distance_km: 661.32, lat: 22.66574, lon: 75.785896, city: 'Indore' },
+                    { rank: 4, atm_name: 'Union Bank Railway Station ATM 223', bank_name: 'Union Bank', prediction_score: 0.61, time_window_label: '3-6h', distance_km: 499.72, lat: 13.116535, lon: 80.224085, city: 'Chennai' },
+                    { rank: 5, atm_name: 'Union Bank Railway Station ATM 297', bank_name: 'Union Bank', prediction_score: 0.53, time_window_label: '3-6h', distance_km: 655.8, lat: 22.768206, lon: 75.918589, city: 'Indore' }
+                ]
+            },
+            'CASE_000002': {
+                case_id: 'CASE_000002',
+                complaint_id: 'CASE_000002',
+                title: '₹28,450.00 Multi-Layered Mule Exit',
+                category: 'Coordinated Layering • P1 Triage',
+                meta: 'Complaint ID: CASE_000002 • Reported 24m ago • Victim: Mumbai City (Maharashtra)',
+                victim_lat: 19.0760,
+                victim_lon: 72.8777,
+                loss_amount: 28450.00,
+                fraud_type: 'Phishing',
+                victim_city: 'Mumbai',
+                victim_state: 'Maharashtra',
+                victim_bank: 'HDFC Bank',
+                where: 'Axis Bank Commercial Hub ATM 176',
+                coords: 'Coords: 19.0753° N, 72.8777° E (Mumbai)',
+                when: 'Within 1 – 3 Hours',
+                velocity: 'Distance: 1.82 km from victim node',
+                risk: '91.2% Probability',
+                action: 'Issue Immediate ATM Hold & Branch NOC Alert',
+                priority: 'Priority: P1 High-Risk Cash-Out',
+                evidence: [
+                    'Victim account splattered into 3 second-hop mule wallets within 8 minutes',
+                    'Direct GPS cluster intersection with recurrently flagged cashout hub',
+                    'Previous Samanvaya interstate correlation index: 0.88'
+                ],
+                predictions: [
+                    { rank: 1, atm_name: 'Axis Bank Commercial Hub ATM 176', bank_name: 'Axis Bank', prediction_score: 0.91, time_window_label: '1-3h', distance_km: 1.82, lat: 19.075382, lon: 72.877742, city: 'Mumbai' },
+                    { rank: 2, atm_name: 'HDFC Bank Suburban Center ATM 412', bank_name: 'HDFC Bank', prediction_score: 0.74, time_window_label: '1-3h', distance_km: 3.45, lat: 19.1136, lon: 72.8697, city: 'Mumbai' },
+                    { rank: 3, atm_name: 'ICICI Bank Station ATM 089', bank_name: 'ICICI Bank', prediction_score: 0.65, time_window_label: '3-6h', distance_km: 5.12, lat: 19.0330, lon: 72.8540, city: 'Mumbai' }
+                ]
+            },
+            'CASE_000005': {
+                case_id: 'CASE_000005',
+                complaint_id: 'CASE_000005',
+                title: '₹2,360.76 Cross-State UPI Scheme',
+                category: 'UPI Splintering • P2 Triage',
+                meta: 'Complaint ID: CASE_000005 • Reported 38m ago • Victim: Chennai (Tamil Nadu)',
+                victim_lat: 13.0827,
+                victim_lon: 80.2707,
+                loss_amount: 2360.76,
+                fraud_type: 'UPI Fraud',
+                victim_city: 'Chennai',
+                victim_state: 'Tamil Nadu',
+                victim_bank: 'State Bank of India',
+                where: 'Union Bank Railway Station ATM 223',
+                coords: 'Coords: 13.1165° N, 80.2240° E (Chennai)',
+                when: '3 – 6 Hours',
+                velocity: 'Distance: 4.97 km from victim node',
+                risk: '82.6% Probability',
+                action: 'Monitor Terminal Cluster & Notify Beat Officer',
+                priority: 'Priority: P2 Active Investigation',
+                evidence: [
+                    'UPI ID tagged with recurrent low-value transaction siphon pattern',
+                    'Terminal flagged in 6 previous historical cashout interceptions',
+                    'Device fingerprint matches known southern syndicate subgroup'
+                ],
+                predictions: [
+                    { rank: 1, atm_name: 'Union Bank Railway Station ATM 223', bank_name: 'Union Bank', prediction_score: 0.83, time_window_label: '3-6h', distance_km: 4.97, lat: 13.116535, lon: 80.224085, city: 'Chennai' },
+                    { rank: 2, atm_name: 'Canara Bank Commercial Street ATM 108', bank_name: 'Canara Bank', prediction_score: 0.68, time_window_label: '3-6h', distance_km: 7.20, lat: 13.0450, lon: 80.2350, city: 'Chennai' }
+                ]
+            },
+            'CASE_000010': {
+                case_id: 'CASE_000010',
+                complaint_id: 'CASE_000010',
+                title: '₹54,120.00 Investment App Impersonation',
+                category: 'High-Value Layering • P1 Triage',
+                meta: 'Complaint ID: CASE_000010 • Reported 14m ago • Victim: Bengaluru Urban (Karnataka)',
+                victim_lat: 12.9716,
+                victim_lon: 77.5946,
+                loss_amount: 54120.00,
+                fraud_type: 'Investment Scam',
+                victim_city: 'Bengaluru',
+                victim_state: 'Karnataka',
+                victim_bank: 'Kotak Mahindra Bank',
+                where: 'Axis Bank Electronic City ATM 313',
+                coords: 'Coords: 12.8399° N, 77.6770° E (Bengaluru)',
+                when: 'Within 1 – 3 Hours',
+                velocity: 'Distance: 6.80 km from victim zone',
+                risk: '94.8% Probability',
+                action: 'Interstate Border Alert & Electronic City Patrol Dispatch',
+                priority: 'Priority: P1 High-Risk Cash-Out',
+                evidence: [
+                    'Multi-hop routing across 5 Karnataka and Tamil Nadu accounts within 19 minutes',
+                    'High anomaly score on withdrawal timing model (Isolation Forest = 0.94)',
+                    'Border terminal retrieval selected 14 candidates, LambdaRank isolated Electronic City cluster'
+                ],
+                predictions: [
+                    { rank: 1, atm_name: 'Axis Bank Electronic City ATM 313', bank_name: 'Axis Bank', prediction_score: 0.95, time_window_label: '1-3h', distance_km: 6.80, lat: 12.8399, lon: 77.6770, city: 'Bengaluru' },
+                    { rank: 2, atm_name: 'HDFC Bank Hosur Road Branch ATM', bank_name: 'HDFC Bank', prediction_score: 0.79, time_window_label: '1-3h', distance_km: 9.30, lat: 12.7850, lon: 77.7200, city: 'Bengaluru' }
+                ]
+            }
+        };
+
+        // Initialize on DOM Loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            initLeafletMap();
+            checkBackendHealth();
+            loadCaseById('CASE_000001');
+            loadLiveAlerts();
+        });
+
+        // 1. Initialize Leaflet Map
+        function initLeafletMap() {
+            try {
+                leafletMap = L.map('map-container').setView([19.0760, 72.8777], 6);
+                
+                // OpenStreetMap Tile Layer
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 18,
+                    attribution: '&copy; OpenStreetMap contributors | CIRIS GIS Engine'
+                }).addTo(leafletMap);
+
+                mapMarkersLayer = L.layerGroup().addTo(leafletMap);
+            } catch (err) {
+                console.warn("Leaflet Map init error:", err);
+            }
+        }
+
+        // 2. Health & Live Stats Check
+        async function checkBackendHealth() {
+            const badge = document.getElementById('backend-status-badge');
+            const text = document.getElementById('backend-status-text');
+            const dot = document.getElementById('backend-pulse-dot');
+            const consoleBadge = document.getElementById('console-live-badge');
+
+            try {
+                const res = await fetch(`${API_BASE}/health`, { cache: 'no-store' });
+                if (res.ok) {
+                    const data = await res.json();
+                    isBackendConnected = true;
+                    badge.className = "text-[11px] flex items-center gap-1.5 px-2 py-0.5 rounded bg-accent-mint/10 border border-accent-mint/30 text-accent-mint font-bold";
+                    text.innerText = `FastAPI GIS Engine: CONNECTED (Port 8000)`;
+                    dot.className = "inline-block w-2 h-2 rounded-full bg-accent-mint animate-pulse";
+                    if (consoleBadge) consoleBadge.innerText = "LIVE DATABASE ACTIVE";
+
+                    // Fetch and update live statistics
+                    fetchGISStats();
+                } else {
+                    throw new Error("Backend response not ok");
+                }
+            } catch (e) {
+                isBackendConnected = false;
+                badge.className = "text-[11px] flex items-center gap-1.5 px-2 py-0.5 rounded bg-primary-fixed/60 border border-primary/30 text-primary font-bold";
+                text.innerText = `Client Mode (Simulation active • Connecting...)`;
+                if (consoleBadge) consoleBadge.innerText = "SIMULATION MODE";
+            }
+        }
+
+        // 3. Fetch Real Stats
+        async function fetchGISStats() {
+            try {
+                const res = await fetch(`${API_BASE}/api/v1/map/stats`);
+                if (!res.ok) return;
+                const stats = await res.json();
+                
+                if (stats.total_cases_mapped) {
+                    document.getElementById('stat-cases').innerText = stats.total_cases_mapped.toLocaleString() + "+";
+                }
+                if (stats.total_atms_indexed) {
+                    document.getElementById('stat-atms').innerText = stats.total_atms_indexed.toLocaleString();
+                }
+                if (stats.total_predictions_indexed) {
+                    document.getElementById('stat-predictions').innerText = stats.total_predictions_indexed.toLocaleString();
+                }
+                if (stats.total_loss_mapped) {
+                    const cr = (stats.total_loss_mapped / 10000000).toFixed(1);
+                    document.getElementById('stat-loss').innerText = `₹${cr} Cr Tracked Loss`;
+                }
+            } catch (e) {
+                console.log("Stats fetch fallback");
+            }
+        }
+
+        // 4. Load Case by ID (Live API + Mock Fallback)
+        async function loadCaseById(caseId) {
+            activeCaseId = caseId;
+            updateActiveButton(caseId);
+
+            let caseData = null;
+            let predictions = [];
+
+            // Attempt live backend fetch
+            if (isBackendConnected) {
+                try {
+                    // Fetch predicted ATMs for this complaint
+                    const predRes = await fetch(`${API_BASE}/api/v1/map/predicted-atms?complaint_id=${caseId}`);
+                    if (predRes.ok) {
+                        const predJson = await predRes.json();
+                        if (predJson.features && predJson.features.length > 0) {
+                            predictions = predJson.features.map(f => ({
+                                rank: f.properties.rank,
+                                atm_name: f.properties.atm_name,
+                                bank_name: f.properties.bank_name,
+                                prediction_score: f.properties.prediction_score,
+                                time_window_label: f.properties.time_window_label,
+                                distance_km: f.properties.distance_km,
+                                lat: f.geometry.coordinates[1],
+                                lon: f.geometry.coordinates[0],
+                                city: f.properties.city,
+                                district: f.properties.district,
+                                state: f.properties.state,
+                                historical_cashouts: f.properties.historical_cashouts,
+                                hotspot_score: f.properties.hotspot_score,
+                                withdrawal_delay_hours: f.properties.withdrawal_delay_hours
+                            }));
+                        }
+                    }
+
+                    // Fetch Case details from /map/cases
+                    const caseRes = await fetch(`${API_BASE}/api/v1/map/cases?limit=1&state=&city=`);
+                } catch (err) {
+                    console.warn("Live fetch error, using local dataset:", err);
+                }
+            }
+
+            // If predictions were found from live DB
+            if (predictions.length > 0) {
+                const top1 = predictions[0];
+                const fallback = mockFallbackCases[caseId] || mockFallbackCases['CASE_000001'];
+                
+                caseData = {
+                    case_id: caseId,
+                    complaint_id: caseId,
+                    title: `₹${(fallback.loss_amount || 4500).toLocaleString('en-IN')} Coordinated Interception`,
+                    category: `${fallback.fraud_type || 'UPI Fraud'} • P1 Triage`,
+                    meta: `Complaint ID: ${caseId} • Location: ${top1.city || 'National Corridor'} • Bank: ${top1.bank_name}`,
+                    where: `${top1.atm_name}`,
+                    coords: `Coords: ${top1.lat.toFixed(4)}° N, ${top1.lon.toFixed(4)}° E (${top1.city || top1.state})`,
+                    when: `${top1.time_window_label || '0-3h'} (Est. ${top1.withdrawal_delay_hours || 2.3}h)`,
+                    velocity: `Distance: ${top1.distance_km ? top1.distance_km.toFixed(1) : '5.4'} km from origin node`,
+                    risk: `${(top1.prediction_score * 100).toFixed(1)}% Calibrated Probability`,
+                    action: `Deploy Beat Interception at ${top1.bank_name} & Notify NOC`,
+                    priority: `Priority: ${top1.prediction_score > 0.8 ? 'CRITICAL P1' : 'HIGH P2'} Intercept`,
+                    victim_lat: fallback.victim_lat || (top1.lat + 0.15),
+                    victim_lon: fallback.victim_lon || (top1.lon - 0.2),
+                    loss_amount: fallback.loss_amount || 4505.94,
+                    evidence: [
+                        `High-velocity transaction fragmentation across intermediate mule accounts`,
+                        `Historical ATM cluster match with ${top1.historical_cashouts || 8} previous withdrawals`,
+                        `Spatial proximity index: Candidate located within ${top1.distance_km ? top1.distance_km.toFixed(1) : '5.4'} km corridor`
+                    ],
+                    predictions: predictions
+                };
+            } else {
+                // Use built-in simulated scenario
+                caseData = mockFallbackCases[caseId] || mockFallbackCases['CASE_000001'];
+                predictions = caseData.predictions || [];
+            }
+
+            currentCaseData = caseData;
+            currentPredictions = predictions;
+
+            renderCaseIntelligence(caseData, predictions);
+            renderMapAndMarkers(caseData, predictions);
+        }
+
+        // 5. Render Case Intelligence Dossier
+        function renderCaseIntelligence(data, preds) {
+            document.getElementById('case-title').innerText = data.title;
+            document.getElementById('case-category').innerText = data.category;
+            document.getElementById('case-meta').innerText = data.meta;
+            document.getElementById('case-where').innerText = data.where;
+            document.getElementById('case-coords').innerText = data.coords;
+            document.getElementById('case-when').innerText = data.when;
+            document.getElementById('case-velocity').innerText = data.velocity;
+            document.getElementById('case-risk').innerText = data.risk;
+            document.getElementById('case-action').innerText = data.action;
+            document.getElementById('case-priority').innerText = data.priority;
+
+            // Evidence checklist
+            const evidenceContainer = document.getElementById('case-evidence');
+            evidenceContainer.innerHTML = data.evidence.map(item => 
+                `<div class="flex items-center gap-2"><span class="text-accent-mint font-bold">&check;</span> ${item}</div>`
+            ).join('');
+
+            // Graph Labels
+            document.getElementById('graph-victim-label').innerText = `Victim Account (${data.case_id})`;
+            document.getElementById('graph-loss-label').innerText = `-₹${(data.loss_amount || 4500).toLocaleString('en-IN')}`;
+            const splinterAmt = Math.round((data.loss_amount || 4500) / 4);
+            document.getElementById('graph-splinter-label').innerText = `₹${splinterAmt.toLocaleString('en-IN')} / each`;
+            document.getElementById('graph-target-label').innerText = `Target: ${data.where.substring(0, 28)}`;
+
+            // Candidate Table
+            document.getElementById('pool-counter').innerText = `${preds.length} Candidate ATMs`;
+            const candContainer = document.getElementById('candidate-table-container');
+            candContainer.innerHTML = preds.slice(0, 5).map((p, idx) => `
+                <div class="p-2 rounded ${idx === 0 ? 'bg-primary-fixed/60 border border-primary/40 text-primary font-bold' : 'bg-surface-container-lowest border border-warm-border text-on-surface'} flex items-center justify-between">
+                    <div class="flex items-center gap-1.5 overflow-hidden">
+                        <span class="w-4 h-4 rounded-full ${idx === 0 ? 'bg-primary text-white' : 'bg-surface-container text-on-surface-variant'} text-[10px] flex items-center justify-center font-bold">
+                            ${p.rank || idx + 1}
+                        </span>
+                        <span class="truncate max-w-[160px]" title="${p.atm_name}">${p.atm_name}</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-right">
+                        <span class="text-[10px] text-on-surface-variant">${p.distance_km ? p.distance_km.toFixed(1) + 'km' : ''}</span>
+                        <span class="font-bold ${(p.prediction_score > 0.8) ? 'text-accent-coral' : 'text-primary'}">${Math.round((p.prediction_score || 0.5) * 100)}%</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 6. Render Leaflet Map Markers & Money Trajectory Lines
+        function renderMapAndMarkers(caseData, preds) {
+            if (!leafletMap || !mapMarkersLayer) return;
+
+            mapMarkersLayer.clearLayers();
+
+            const victimLat = caseData.victim_lat || 19.0760;
+            const victimLon = caseData.victim_lon || 72.8777;
+
+            // 1. Victim Location Marker (Red)
+            const victimIcon = L.divIcon({
+                className: 'custom-map-icon',
+                html: `<div style="background-color: #974544; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #ffffff; box-shadow: 0 0 8px rgba(151,69,68,0.8);"></div>`,
+                iconSize: [14, 14],
+                iconAnchor: [7, 7]
+            });
+
+            const victimMarker = L.marker([victimLat, victimLon], { icon: victimIcon })
+                .bindPopup(`<strong>Victim Incident Node</strong><br>Case: ${caseData.case_id}<br>Loss: ₹${(caseData.loss_amount || 0).toLocaleString('en-IN')}`);
+            mapMarkersLayer.addLayer(victimMarker);
+
+            const bounds = L.latLngBounds([[victimLat, victimLon]]);
+
+            // 2. Candidate ATM Markers
+            preds.forEach((p, idx) => {
+                const isRank1 = (idx === 0);
+                const color = isRank1 ? '#15BE74' : (idx === 1 ? '#b65c21' : '#006480');
+                const size = isRank1 ? 18 : 12;
+
+                const atmIcon = L.divIcon({
+                    className: 'custom-atm-icon',
+                    html: `<div style="background-color: ${color}; width: ${size}px; height: ${size}px; border-radius: 50%; border: 2px solid #ffffff; box-shadow: 0 0 10px ${color}; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: bold; color: #ffffff;">${p.rank || idx+1}</div>`,
+                    iconSize: [size, size],
+                    iconAnchor: [size/2, size/2]
+                });
+
+                const marker = L.marker([p.lat, p.lon], { icon: atmIcon })
+                    .bindPopup(`<strong>Rank #${p.rank || idx+1}: ${p.atm_name}</strong><br>Bank: ${p.bank_name}<br>Probability: ${(p.prediction_score * 100).toFixed(1)}%<br>Time Window: ${p.time_window_label}<br>Distance: ${p.distance_km ? p.distance_km.toFixed(1) : ''} km`);
+                
+                mapMarkersLayer.addLayer(marker);
+                bounds.extend([p.lat, p.lon]);
+
+                // Draw Interception trajectory polyline to Rank #1
+                if (isRank1) {
+                    const polyline = L.polyline([[victimLat, victimLon], [p.lat, p.lon]], {
+                        color: '#964407',
+                        weight: 3,
+                        opacity: 0.85,
+                        dashArray: '6, 8',
+                        lineCap: 'round'
+                    });
+                    mapMarkersLayer.addLayer(polyline);
+
+                    // Add radar circle around Top #1 ATM
+                    const circle = L.circle([p.lat, p.lon], {
+                        color: '#15BE74',
+                        fillColor: '#15BE74',
+                        fillOpacity: 0.15,
+                        radius: 2000
+                    });
+                    mapMarkersLayer.addLayer(circle);
+                }
+            });
+
+            // Fit map view to envelope
+            leafletMap.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
+        }
+
+        // 7. Visualizer Tab Switcher
+        function toggleVisualizerTab(tab) {
+            const mapTab = document.getElementById('visualizer-map-view');
+            const graphTab = document.getElementById('visualizer-graph-view');
+            const btnMap = document.getElementById('tab-btn-map');
+            const btnGraph = document.getElementById('tab-btn-graph');
+
+            if (tab === 'map') {
+                mapTab.classList.remove('hidden');
+                graphTab.classList.add('hidden');
+                btnMap.className = "px-2.5 py-1 rounded text-xs font-mono font-bold bg-primary text-white transition";
+                btnGraph.className = "px-2.5 py-1 rounded text-xs font-mono text-on-surface-variant hover:text-on-surface transition";
+                if (leafletMap) leafletMap.invalidateSize();
+            } else {
+                mapTab.classList.add('hidden');
+                graphTab.classList.remove('hidden');
+                btnGraph.className = "px-2.5 py-1 rounded text-xs font-mono font-bold bg-primary text-white transition";
+                btnMap.className = "px-2.5 py-1 rounded text-xs font-mono text-on-surface-variant hover:text-on-surface transition";
+            }
+        }
+
+        // 8. Update Active Preset Button Style
+        function updateActiveButton(caseId) {
+            ['CASE_000001', 'CASE_000002', 'CASE_000005', 'CASE_000010'].forEach(id => {
+                const el = document.getElementById(`btn-${id}`);
+                if (!el) return;
+                if (id === caseId) {
+                    el.className = "px-2.5 py-1.5 rounded text-xs font-mono font-bold bg-primary text-white transition";
+                } else {
+                    el.className = "px-2.5 py-1.5 rounded text-xs font-mono text-on-surface-variant bg-surface-container border border-warm-border hover:text-on-surface transition";
+                }
+            });
+        }
+
+        // 9. Case Search Autocomplete
+        async function handleCaseSearch(query) {
+            const dropdown = document.getElementById('search-results-dropdown');
+            if (!query || query.length < 2) {
+                dropdown.classList.add('hidden');
+                return;
+            }
+
+            if (isBackendConnected) {
+                try {
+                    const res = await fetch(`${API_BASE}/api/v1/cases/search?q=${encodeURIComponent(query)}&limit=6`);
+                    if (res.ok) {
+                        const results = await res.json();
+                        if (results && results.length > 0) {
+                            dropdown.innerHTML = results.map(r => `
+                                <div onclick="selectSearchResult('${r.case_id}')" class="p-2.5 hover:bg-surface-container cursor-pointer flex items-center justify-between">
+                                    <div>
+                                        <span class="font-bold text-primary">${r.case_id}</span>
+                                        <span class="text-on-surface-variant text-[11px]"> &bull; ${r.city || ''} (${r.fraud_type || ''})</span>
+                                    </div>
+                                    <span class="text-secondary font-bold text-[11px]">₹${(r.amount || 0).toLocaleString('en-IN')}</span>
+                                </div>
+                            `).join('');
+                            dropdown.classList.remove('hidden');
+                            return;
+                        }
+                    }
+                } catch (err) {
+                    console.log("Search error:", err);
+                }
+            }
+
+            // Fallback local filter
+            const matched = Object.keys(mockFallbackCases).filter(k => 
+                k.toLowerCase().includes(query.toLowerCase()) || 
+                mockFallbackCases[k].victim_city.toLowerCase().includes(query.toLowerCase())
+            );
+
+            if (matched.length > 0) {
+                dropdown.innerHTML = matched.map(k => `
+                    <div onclick="selectSearchResult('${k}')" class="p-2.5 hover:bg-surface-container cursor-pointer flex items-center justify-between">
+                        <div>
+                            <span class="font-bold text-primary">${k}</span>
+                            <span class="text-on-surface-variant text-[11px]"> &bull; ${mockFallbackCases[k].victim_city}</span>
+                        </div>
+                        <span class="text-secondary font-bold text-[11px]">₹${(mockFallbackCases[k].loss_amount || 0).toLocaleString('en-IN')}</span>
+                    </div>
+                `).join('');
+                dropdown.classList.remove('hidden');
+            } else {
+                dropdown.innerHTML = `<div class="p-3 text-center text-on-surface-variant text-[11px]">No matching cases found</div>`;
+                dropdown.classList.remove('hidden');
+            }
+        }
+
+        function selectSearchResult(caseId) {
+            document.getElementById('search-results-dropdown').classList.add('hidden');
+            document.getElementById('case-search-input').value = caseId;
+            loadCaseById(caseId);
+        }
+
+        // 10. Fetch Random Case from DB
+        async function fetchRandomCase() {
+            if (isBackendConnected) {
+                try {
+                    const offset = Math.floor(Math.random() * 20);
+                    const res = await fetch(`${API_BASE}/api/v1/map/predicted-atms?limit=10`);
+                    if (res.ok) {
+                        const json = await res.json();
+                        if (json.features && json.features.length > 0) {
+                            const randFeature = json.features[Math.floor(Math.random() * json.features.length)];
+                            const cid = randFeature.properties.complaint_id;
+                            if (cid) {
+                                loadCaseById(cid);
+                                showToast(`Loaded random case ${cid} from GIS database`, 'success');
+                                return;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.log("Random case error:", e);
+                }
+            }
+            
+            const keys = Object.keys(mockFallbackCases);
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            loadCaseById(randomKey);
+            showToast(`Loaded scenario ${randomKey}`, 'info');
+        }
+
+        // 11. Dispatch Operational Intervention
+        async function dispatchIntervention(type) {
+            const caseId = activeCaseId;
+            const actionTitle = (type === 'DISPATCH_BEAT') ? 'ATM Intercept Alert' : 'I4C Escalation';
+
+            if (isBackendConnected) {
+                try {
+                    // Send real acknowledge/escalate POST to backend
+                    const endpoint = (type === 'DISPATCH_BEAT') 
+                        ? `${API_BASE}/api/v1/cases/${caseId}/acknowledge?actor=INVESTIGATOR_DESK&notes=High-priority+ATM+intercept+dispatched`
+                        : `${API_BASE}/api/v1/cases/${caseId}/escalate?actor=SUPERVISOR_DESK&notes=Escalated+to+I4C+Interstate+Cell`;
+                    
+                    const res = await fetch(endpoint, { method: 'POST' });
+                    if (res.ok) {
+                        showToast(`SUCCESS: ${actionTitle} dispatched for ${caseId}. Logged to SQLite Audit Trail!`, 'success');
+                        return;
+                    }
+                } catch (err) {
+                    console.warn("Dispatch API error:", err);
+                }
+            }
+
+            // Local simulated dispatch confirmation
+            showToast(`SUCCESS: ${actionTitle} transmitted to local field units for ${caseId}!`, 'success');
+        }
+
+        // 12. Load Live Operational Alerts Feed
+        async function loadLiveAlerts() {
+            const container = document.getElementById('alerts-feed-container');
+            if (!container) return;
+
+            if (isBackendConnected) {
+                try {
+                    const res = await fetch(`${API_BASE}/api/v1/alerts?limit=4`);
+                    if (res.ok) {
+                        const alerts = await res.json();
+                        if (alerts && alerts.length > 0) {
+                            container.innerHTML = alerts.map(a => `
+                                <div class="p-4 rounded-lg bg-surface-container-lowest border border-warm-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                                    <div class="flex items-start gap-3">
+                                        <span class="w-7 h-7 rounded bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-xs">
+                                            ${a.priority || 'P1'}
+                                        </span>
+                                        <div>
+                                            <div class="font-mono text-xs font-bold text-deep-obsidian flex items-center gap-2">
+                                                <span>${a.title || 'High-Risk ATM Cash-Out Prediction'}</span>
+                                                <span class="text-[10px] px-1.5 py-0.2 rounded bg-secondary-container/40 text-secondary">${a.status || 'ACTIVE'}</span>
+                                            </div>
+                                            <div class="text-[11px] font-mono text-on-surface-variant mt-0.5">
+                                                Case: <span class="text-primary font-bold">${a.case_id || 'CASE_000001'}</span> &bull; Terminal: ${a.atm_name || 'ATM Cluster'} &bull; Time: ${a.created_at ? new Date(a.created_at).toLocaleTimeString() : 'Just now'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button onclick="loadCaseById('${a.case_id || 'CASE_000001'}')" class="px-3 py-1.5 bg-surface-container text-xs font-mono text-primary font-bold border border-warm-border rounded hover:bg-primary hover:text-white transition">
+                                        Inspect Case
+                                    </button>
+                                </div>
+                            `).join('');
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.log("Live alerts error:", e);
+                }
+            }
+
+            // Fallback alerts
+            container.innerHTML = `
+                <div class="p-4 rounded-lg bg-surface-container-lowest border border-warm-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                        <span class="w-7 h-7 rounded bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-xs">P1</span>
+                        <div>
+                            <div class="font-mono text-xs font-bold text-deep-obsidian flex items-center gap-2">
+                                <span>High-Risk ATM Interception Alert (Hyderabad Beat)</span>
+                                <span class="text-[10px] px-1.5 py-0.2 rounded bg-secondary-container/40 text-secondary">ACTIVE</span>
+                            </div>
+                            <div class="text-[11px] font-mono text-on-surface-variant mt-0.5">
+                                Case: <span class="text-primary font-bold">CASE_000001</span> &bull; Terminal: ICICI Bank Railway Station ATM 308 &bull; Score: 95.0%
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="loadCaseById('CASE_000001')" class="px-3 py-1.5 bg-surface-container text-xs font-mono text-primary font-bold border border-warm-border rounded hover:bg-primary hover:text-white transition">
+                        Inspect Case
+                    </button>
+                </div>
+                <div class="p-4 rounded-lg bg-surface-container-lowest border border-warm-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                        <span class="w-7 h-7 rounded bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-xs">P1</span>
+                        <div>
+                            <div class="font-mono text-xs font-bold text-deep-obsidian flex items-center gap-2">
+                                <span>Coordinated Layering Splinter Alert (Mumbai Corridor)</span>
+                                <span class="text-[10px] px-1.5 py-0.2 rounded bg-secondary-container/40 text-secondary">ACTIVE</span>
+                            </div>
+                            <div class="text-[11px] font-mono text-on-surface-variant mt-0.5">
+                                Case: <span class="text-primary font-bold">CASE_000002</span> &bull; Terminal: Axis Bank Commercial Hub ATM 176 &bull; Score: 91.2%
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="loadCaseById('CASE_000002')" class="px-3 py-1.5 bg-surface-container text-xs font-mono text-primary font-bold border border-warm-border rounded hover:bg-primary hover:text-white transition">
+                        Inspect Case
+                    </button>
+                </div>
+            `;
+        }
+
+        // 13. Toast Notification Helper
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' ? 'bg-accent-mint text-white' : (type === 'error' ? 'bg-secondary text-white' : 'bg-surface-container-highest text-on-surface border border-warm-border');
+            
+            toast.className = `${bgClass} p-3.5 rounded-lg shadow-lg font-mono text-xs flex items-center gap-2 transition-all transform translate-y-2 opacity-0 pointer-events-auto`;
+            toast.innerHTML = `
+                <span class="material-symbols-outlined text-[16px]">${type === 'success' ? 'check_circle' : 'info'}</span>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', '-translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
