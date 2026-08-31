@@ -6,6 +6,7 @@ Handles state transitions, investigator/team assignments, notes, feedback, and S
 import json
 import logging
 import sqlite3
+import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -83,7 +84,7 @@ class CaseService:
             ))
 
             # Insert audit record directly on the same connection cursor
-            event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
+            event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}_{uuid.uuid4().hex[:6]}"
             cursor.execute("""
             INSERT INTO audit_trail (event_id, case_id, actor, action, timestamp, metadata_json)
             VALUES (?, ?, ?, ?, ?, ?);
@@ -170,7 +171,7 @@ class CaseService:
 
             # Audit event directly on same cursor
             action_name = f"CASE_{target_status.value}"
-            event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
+            event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}_{uuid.uuid4().hex[:6]}"
             cursor.execute("""
             INSERT INTO audit_trail (event_id, case_id, actor, action, timestamp, metadata_json)
             VALUES (?, ?, ?, ?, ?, ?);
@@ -204,7 +205,7 @@ class CaseService:
             WHERE case_id = ?;
             """, (owner, team, CaseStatus.ASSIGNED.value, now_iso, now_iso, case.case_id))
 
-            event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
+            event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}_{uuid.uuid4().hex[:6]}"
             cursor.execute("""
             INSERT INTO audit_trail (event_id, case_id, actor, action, timestamp, metadata_json)
             VALUES (?, ?, ?, ?, ?, ?);
@@ -232,7 +233,7 @@ class CaseService:
             VALUES (?, ?, ?, ?, ?, ?);
             """, (note_id, case.case_id, author, now_iso, content, visibility))
 
-            event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
+            event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}_{uuid.uuid4().hex[:6]}"
             cursor.execute("""
             INSERT INTO audit_trail (event_id, case_id, actor, action, timestamp, metadata_json)
             VALUES (?, ?, ?, ?, ?, ?);
@@ -305,7 +306,7 @@ class CaseService:
             WHERE case_id = ?;
             """, (CaseStatus.RESOLVED.value, now_iso, req.outcome.value, now_iso, case.case_id))
 
-            event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
+            event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}_{uuid.uuid4().hex[:6]}"
             cursor.execute("""
             INSERT INTO audit_trail (event_id, case_id, actor, action, timestamp, metadata_json)
             VALUES (?, ?, ?, ?, ?, ?);

@@ -3,6 +3,7 @@ CIRIS Phase 4 — Append-Only Audit Trail Service.
 Guarantees immutability and complete forensic traceability of all operational actions.
 """
 
+import uuid
 import json
 import logging
 from datetime import datetime, timezone
@@ -29,7 +30,7 @@ class AuditService:
     ) -> AuditEvent:
         """Append a new forensic audit event."""
         now_iso = datetime.now(timezone.utc).isoformat()
-        event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}"
+        event_id = f"AUD_{int(datetime.now(timezone.utc).timestamp() * 1000)}_{uuid.uuid4().hex[:6]}"
         meta_json = json.dumps(metadata or {})
 
         with get_db_connection(self.db_path) as conn:

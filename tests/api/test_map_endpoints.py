@@ -12,13 +12,11 @@ client = TestClient(app)
 def test_root_and_health_endpoints():
     r_root = client.get("/")
     assert r_root.status_code == 200
-    data = r_root.json()
-    assert data["phase"] == "Phase 3A: GIS Engine + Map Data Foundation"
-    assert data["status"] == "OPERATIONAL"
 
-    r_health = client.get("/health")
-    assert r_health.status_code == 200
-    assert r_health.json()["status"] == "healthy"
+    r_info = client.get("/api-info")
+    assert r_info.status_code == 200
+    data = r_info.json()
+    assert data["status"] == "OPERATIONAL"
 
 
 def test_get_cases_endpoint():

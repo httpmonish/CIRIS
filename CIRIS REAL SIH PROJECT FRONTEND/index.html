@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CIRIS | Proactive Financial Cybercrime Intelligence & ATM Cash-Out Prediction</title>
-    <meta name="description" content="CIRIS is a proactive financial-cybercrime intelligence system (SIH26184) that predicts likely cash-out locations and time windows for law enforcement and banks before fraud money disappears.">
+    <meta name="description" content="CIRIS is a proactive financial-cybercrime intelligence system that predicts likely cash-out locations and time windows for law enforcement and banks before fraud money disappears.">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -134,20 +134,6 @@
 
 <body class="bg-background text-on-surface font-sans antialiased selection:bg-primary-fixed">
 
-    <!-- Top Announcement Bar: SIH Problem Statement ID & Real Backend Status -->
-    <aside class="bg-surface-container-highest border-b border-warm-border text-on-surface-variant py-2 px-4 text-xs font-mono tracking-wider">
-        <div class="max-w-container-max mx-auto w-full flex flex-col sm:flex-row items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-                <span id="backend-pulse-dot" class="inline-block w-2 h-2 rounded-full bg-accent-mint animate-pulse"></span>
-                <span>SIH26184 &bull; Ministry of Home Affairs (MHA) &amp; I4C Aligned Intelligence Architecture</span>
-            </div>
-            <div id="backend-status-badge" class="text-[11px] flex items-center gap-1.5 px-2 py-0.5 rounded bg-surface-container border border-warm-border">
-                <span class="w-1.5 h-1.5 rounded-full bg-accent-mint"></span>
-                <span id="backend-status-text">FastAPI: Connecting to Port 8000...</span>
-            </div>
-        </div>
-    </aside>
-
     <!-- Navigation Header -->
     <header class="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-warm-border transition-all">
         <div class="max-w-container-max mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -158,32 +144,31 @@
                 <div>
                     <div class="font-serif text-2xl font-semibold tracking-tight text-on-surface flex items-center gap-1.5">
                         CIRIS
-                        <span class="text-[10px] font-mono font-normal uppercase px-1.5 py-0.5 rounded bg-primary-fixed text-primary border border-primary/20">Live System</span>
                     </div>
                     <p class="text-[10px] font-mono text-on-surface-variant uppercase tracking-widest -mt-1">Proactive Cash-Out Prediction</p>
                 </div>
             </a>
 
-            <!-- Desktop Navigation Links -->
-            <nav class="hidden md:flex items-center space-x-8 text-sm font-mono tracking-wider uppercase text-on-surface-variant">
-                <a href="#problem" class="hover:text-primary transition-colors py-1">Timing Gap</a>
-                <a href="#live-demo" class="hover:text-primary transition-colors py-1">Live Engine</a>
-                <a href="#five-part" class="hover:text-primary transition-colors py-1">5-Part Output</a>
-                <a href="#pipeline" class="hover:text-primary transition-colors py-1">Architecture</a>
-                <a href="#feasibility" class="hover:text-primary transition-colors py-1">Benchmarks</a>
-                <a href="#alerts-section" class="hover:text-primary transition-colors py-1">Alerts</a>
-            </nav>
+            <!-- Desktop Navigation Links & Action Button -->
+            <div class="flex items-center gap-8 lg:gap-10">
+                <nav class="hidden md:flex items-center space-x-8 text-sm font-mono tracking-wider uppercase text-on-surface-variant">
+                    <a href="#problem" class="hover:text-primary transition-colors py-1">Timing Gap</a>
+                    <a href="#live-demo" class="hover:text-primary transition-colors py-1">Live Engine</a>
+                    <a href="#five-part" class="hover:text-primary transition-colors py-1">5-Part Output</a>
+                    <a href="#pipeline" class="hover:text-primary transition-colors py-1">Architecture</a>
+                    <a href="#feasibility" class="hover:text-primary transition-colors py-1">Benchmarks</a>
+                    <a href="#alerts-section" class="hover:text-primary transition-colors py-1">Alerts</a>
+                </nav>
 
-            <!-- Action Button -->
-            <div class="flex items-center gap-3">
-                <a href="/docs" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 bg-surface-container border border-warm-border text-on-surface text-xs font-mono uppercase tracking-wider rounded hover:border-primary transition">
-                    <span class="material-symbols-outlined text-[15px] text-primary">api</span>
-                    API Docs
-                </a>
-                <a href="#live-demo" class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-white text-xs font-mono uppercase tracking-wider rounded font-bold hover:bg-primary-container transition shadow-sm">
-                    <span class="material-symbols-outlined text-[16px]">radar</span>
-                    Live Case Inspector
-                </a>
+                <div class="h-5 w-px bg-warm-border hidden md:block"></div>
+
+                <!-- Action Button -->
+                <div class="flex items-center">
+                    <a href="#live-demo" class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-white text-xs font-mono uppercase tracking-wider rounded font-bold hover:bg-primary-container transition shadow-sm">
+                        <span class="material-symbols-outlined text-[16px]">radar</span>
+                        Live Case Inspector
+                    </a>
+                </div>
             </div>
         </div>
     </header>
@@ -851,7 +836,6 @@
             <div class="flex items-center gap-2">
                 <div class="w-6 h-6 rounded bg-primary text-white flex items-center justify-center font-bold text-xs">C</div>
                 <span class="font-serif text-base font-semibold text-on-surface">CIRIS Intelligence Platform</span>
-                <span class="text-[11px] opacity-70">&bull; SIH26184 Architecture</span>
             </div>
             <div class="text-[11px] text-center sm:text-right text-on-surface-variant">
                 FastAPI GIS Backend Integrated &bull; Proactive Cybercrime Cash-Out Interception
@@ -1028,9 +1012,6 @@
 
         // 2. Health & Live Stats Check
         async function checkBackendHealth() {
-            const badge = document.getElementById('backend-status-badge');
-            const text = document.getElementById('backend-status-text');
-            const dot = document.getElementById('backend-pulse-dot');
             const consoleBadge = document.getElementById('console-live-badge');
 
             try {
@@ -1038,9 +1019,6 @@
                 if (res.ok) {
                     const data = await res.json();
                     isBackendConnected = true;
-                    badge.className = "text-[11px] flex items-center gap-1.5 px-2 py-0.5 rounded bg-accent-mint/10 border border-accent-mint/30 text-accent-mint font-bold";
-                    text.innerText = `FastAPI GIS Engine: CONNECTED (Port 8000)`;
-                    dot.className = "inline-block w-2 h-2 rounded-full bg-accent-mint animate-pulse";
                     if (consoleBadge) consoleBadge.innerText = "LIVE DATABASE ACTIVE";
 
                     // Fetch and update live statistics
@@ -1050,8 +1028,6 @@
                 }
             } catch (e) {
                 isBackendConnected = false;
-                badge.className = "text-[11px] flex items-center gap-1.5 px-2 py-0.5 rounded bg-primary-fixed/60 border border-primary/30 text-primary font-bold";
-                text.innerText = `Client Mode (Simulation active • Connecting...)`;
                 if (consoleBadge) consoleBadge.innerText = "SIMULATION MODE";
             }
         }
