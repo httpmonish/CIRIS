@@ -172,7 +172,7 @@
 
             <!-- Desktop Navigation Links & Action Button -->
             <div class="flex items-center gap-6 lg:gap-8">
-                <nav id="nav-links-container" class="hidden md:flex items-center space-x-6 text-sm font-mono tracking-wider uppercase text-on-surface-variant">
+                <nav id="nav-links-container" style="display: none;" class="items-center space-x-6 text-sm font-mono tracking-wider uppercase text-on-surface-variant">
                     <a href="#problem" class="hover:text-primary transition-colors py-1">Timing Gap</a>
                     <a href="#live-demo" class="hover:text-primary transition-colors py-1">Live Engine</a>
                     <a href="#five-part" class="hover:text-primary transition-colors py-1">5-Part Output</a>
@@ -181,11 +181,11 @@
                     <a href="#alerts-section" class="hover:text-primary transition-colors py-1">Alerts</a>
                 </nav>
 
-                <div class="h-5 w-px bg-warm-border hidden md:block"></div>
+                <div id="nav-divider" style="display: none;" class="h-5 w-px bg-warm-border"></div>
 
                 <!-- Session Indicator & Auth Trigger -->
                 <div id="nav-auth-section" class="flex items-center gap-3">
-                    <div id="nav-user-pill" class="hidden items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container border border-warm-border text-xs font-mono">
+                    <div id="nav-user-pill" style="display: none;" class="items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container border border-warm-border text-xs font-mono">
                         <span id="nav-user-role-badge" class="px-1.5 py-0.5 rounded bg-primary-fixed text-primary font-bold text-[10px]">CITIZEN</span>
                         <span id="nav-user-name" class="font-bold text-deep-obsidian truncate max-w-[140px]">Rajesh Kumar</span>
                         <button onclick="handleLogout()" title="Logout / Switch Role" class="ml-1 text-secondary hover:text-red-700 flex items-center">
@@ -193,10 +193,10 @@
                         </button>
                     </div>
 
-                    <button id="nav-login-btn" onclick="showAuthGateway()" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-xs font-mono uppercase tracking-wider rounded font-bold hover:bg-primary-container transition shadow-sm">
-                        <span class="material-symbols-outlined text-[16px]">lock</span>
-                        Portal Access
-                    </button>
+                    <div id="nav-unauth-badge" class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-surface-container-low border border-warm-border text-xs font-mono text-on-surface-variant">
+                        <span class="w-2 h-2 rounded-full bg-accent-mint animate-pulse"></span>
+                        <span class="font-bold uppercase tracking-wider text-[10px] text-deep-obsidian">MHA / I4C Aligned Gateway</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1316,45 +1316,52 @@
             const bankDash = document.getElementById('bank-dashboard-container');
             const govtDash = document.getElementById('govt-dashboard-container');
             const navUserPill = document.getElementById('nav-user-pill');
-            const navLoginBtn = document.getElementById('nav-login-btn');
+            const navUnauthBadge = document.getElementById('nav-unauth-badge');
             const navLinks = document.getElementById('nav-links-container');
+            const navDivider = document.getElementById('nav-divider');
 
             if (!currentUser) {
-                // Unauthenticated State: Strict Root Protection
+                // -------------------------------------------------------------
+                // Unauthenticated State: Strict Landing Page Protection
+                // -------------------------------------------------------------
                 if (authGateway) authGateway.classList.remove('hidden');
                 if (citizenDash) citizenDash.classList.add('hidden');
                 if (bankDash) bankDash.classList.add('hidden');
                 if (govtDash) govtDash.classList.add('hidden');
 
-                if (navUserPill) navUserPill.classList.add('hidden');
-                if (navLoginBtn) navLoginBtn.classList.remove('hidden');
-                if (navLinks) navLinks.classList.add('hidden');
+                if (navLinks) navLinks.style.display = 'none';
+                if (navDivider) navDivider.style.display = 'none';
+                if (navUserPill) navUserPill.style.display = 'none';
+                if (navUnauthBadge) navUnauthBadge.style.display = 'flex';
                 return;
             }
 
+            // -----------------------------------------------------------------
             // Authenticated State
+            // -----------------------------------------------------------------
             if (authGateway) authGateway.classList.add('hidden');
-            if (navLoginBtn) navLoginBtn.classList.add('hidden');
+            if (navUnauthBadge) navUnauthBadge.style.display = 'none';
             if (navUserPill) {
-                navUserPill.classList.remove('hidden');
-                navUserPill.classList.add('flex');
+                navUserPill.style.display = 'flex';
             }
 
-            // Update user badge in navbar
-            document.getElementById('nav-user-role-badge').innerText = currentUser.role;
+            // Update user session badge in navbar
+            document.getElementById('nav-user-role-badge').innerText = currentUser.role === 'BANK_OFFICIAL' ? 'BANK' : (currentUser.role === 'GOVT_OFFICIAL' ? 'GOVT' : 'CITIZEN');
             document.getElementById('nav-user-name').innerText = currentUser.full_name || currentUser.email;
 
             if (currentUser.role === 'CITIZEN') {
                 if (citizenDash) citizenDash.classList.remove('hidden');
                 if (bankDash) bankDash.classList.add('hidden');
                 if (govtDash) govtDash.classList.add('hidden');
-                if (navLinks) navLinks.classList.add('hidden');
+                if (navLinks) navLinks.style.display = 'none';
+                if (navDivider) navDivider.style.display = 'none';
                 loadCitizenComplaints();
             } else if (currentUser.role === 'BANK_OFFICIAL') {
                 if (citizenDash) citizenDash.classList.add('hidden');
                 if (bankDash) bankDash.classList.remove('hidden');
                 if (govtDash) govtDash.classList.add('hidden');
-                if (navLinks) navLinks.classList.add('hidden');
+                if (navLinks) navLinks.style.display = 'none';
+                if (navDivider) navDivider.style.display = 'none';
                 
                 const bBadge = document.getElementById('bank-dashboard-institution-badge');
                 if (bBadge) bBadge.innerText = currentUser.bank_name || currentUser.bank_id || 'Bank Nodal';
@@ -1363,9 +1370,12 @@
                 if (citizenDash) citizenDash.classList.add('hidden');
                 if (bankDash) bankDash.classList.add('hidden');
                 if (govtDash) govtDash.classList.remove('hidden');
-                if (navLinks) navLinks.classList.remove('hidden');
                 
-                // Initialize map if needed
+                // Show intelligence navigation links for Govt Super Admin
+                if (navLinks) navLinks.style.display = 'flex';
+                if (navDivider) navDivider.style.display = 'block';
+                
+                // Initialize GIS map if needed
                 if (!leafletMap) {
                     initMapAndGIS();
                 }
