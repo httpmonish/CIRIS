@@ -15,6 +15,8 @@ from fastapi.responses import FileResponse, HTMLResponse
 
 from src.db.database import get_db_path
 from src.db.seed_gis_data import seed_gis_database
+from src.db.auth_db import seed_default_auth_data
+from src.security.auth import hash_password
 from src.api.v1 import api_v1_router
 
 logging.basicConfig(
@@ -31,7 +33,7 @@ FRONTEND_DIR = BASE_DIR / "CIRIS REAL SIH PROJECT FRONTEND"
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Lifespan context manager for database initialization and warmup."""
-    logger.info("Initializing CIRIS Geospatial Platform...")
+    logger.info("Initializing CIRIS Geospatial Platform & RBAC Security Layer...")
     db_file = get_db_path()
     if not db_file.exists():
         logger.info("GIS Database not found at %s. Seeding database...", db_file)
@@ -41,6 +43,13 @@ async def lifespan(app: FastAPI):
             logger.error("Error during initial database seed: %s", e)
     else:
         logger.info("GIS Database verified at %s", db_file)
+
+    # Initialize Auth & RBAC tables and demo accounts
+    try:
+        seed_default_auth_data(hash_func=hash_password)
+        logger.info("Authentication & RBAC tables & demo accounts initialized.")
+    except Exception as e:
+        logger.error("Error initializing auth database: %s", e)
 
     yield
     logger.info("Shutting down CIRIS Geospatial Platform.")
