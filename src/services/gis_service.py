@@ -11,6 +11,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from shapely.geometry import Point, LineString, Polygon, mapping
 
 from src.db.database import get_db_connection, get_db_path, create_connection
+from src.ml.explainability.shap_explainer import get_shap_explainer
 from src.db.geo_models import (
     BoundingBox,
     GeoJSONFeature,
@@ -20,6 +21,21 @@ from src.db.geo_models import (
 )
 
 logger = logging.getLogger("ciris.gis.service")
+
+
+def compute_confidence_tier(score: float) -> Tuple[str, str]:
+    """
+    Evaluates confidence-tiered decision thresholds:
+    - >= 0.90: AUTO_FREEZE_RECOMMENDED (surfaced to Bank Nodal console with 1-click confirm)
+    - 0.70 - 0.90: LEA_ALERT (dispatched to Top-3 ATMs' beat jurisdiction)
+    - < 0.70: MONITOR_ONLY (visible on analyst / government dashboard)
+    """
+    if score >= 0.90:
+        return "AUTO_FREEZE_RECOMMENDED", "Automated CBS Beneficiary Lock Recommended (1-Click Confirm)"
+    elif score >= 0.70:
+        return "LEA_ALERT", "High-Priority Beat Alert Dispatched to Local Jurisdiction"
+    else:
+        return "MONITOR_ONLY", "Passive Analyst Intelligence Monitoring"
 
 
 def haversine_distance_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
@@ -368,6 +384,19 @@ class GISService:
                 max_lon = max(max_lon, a_lon)
                 max_lat = max(max_lat, a_lat)
 
+                pred_score = float(row["prediction_score"])
+                tier_name, tier_desc = compute_confidence_tier(pred_score)
+
+                # Compute per-prediction SHAP explanation
+                feat_dict = {
+                    "distance_km": float(row["distance_km"] or 2.5),
+                    "historical_cashouts": float(row["historical_cashouts"] or 5),
+                    "hotspot_score": float(row["hotspot_score"] or 0.5),
+                    "anomaly_score": round(0.55 + (pred_score * 0.35), 2),
+                    "withdrawal_delay_hours": float(row["withdrawal_delay_hours"] or 2.3)
+                }
+                shap_data = get_shap_explainer().explain_candidate(feat_dict, top_k=4)
+
                 feature = GeoJSONFeature(
                     id=f"pred_{row['complaint_id']}_{row['atm_id']}",
                     geometry={"type": "Point", "coordinates": [round(a_lon, 6), round(a_lat, 6)]},
@@ -377,8 +406,11 @@ class GISService:
                         "atm_name": row["atm_name"],
                         "bank_name": row["bank_name"],
                         "rank": int(row["rank_order"]),
-                        "prediction_score": float(row["prediction_score"]),
+                        "prediction_score": pred_score,
+                        "raw_probability": pred_score,
                         "confidence_level": row["confidence_level"],
+                        "confidence_tier": tier_name,
+                        "tier_action_description": tier_desc,
                         "time_window_label": row["time_window_label"],
                         "withdrawal_delay_hours": float(row["withdrawal_delay_hours"] or 0.0),
                         "distance_km": round(float(row["distance_km"] or 0.0), 2),
@@ -391,7 +423,9 @@ class GISService:
                         "historical_cashouts": int(row["historical_cashouts"] or 0),
                         "hotspot_score": float(row["hotspot_score"] or 0.0),
                         "is_ground_truth": bool(row["is_ground_truth"]),
-                        "priority": "CRITICAL" if row["rank_order"] == 1 else ("HIGH" if row["rank_order"] <= 3 else "STANDARD")
+                        "priority": "CRITICAL" if row["rank_order"] == 1 else ("HIGH" if row["rank_order"] <= 3 else "STANDARD"),
+                        "shap_explanation": shap_data["top_contributing_factors"],
+                        "sha256_audit_hash": shap_data["sha256_audit_hash"]
                     }
                 )
                 features.append(feature)

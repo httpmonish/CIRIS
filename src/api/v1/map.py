@@ -73,8 +73,8 @@ def get_cases(
 # ============================================================================
 @router.get(
     "/predicted-atms",
-    summary="Get AI-Predicted Cash-out ATMs (GeoJSON)",
-    description="Returns ranked predicted ATM cash-out targets with confidence scores, time windows, and distances."
+    summary="Get Top-10 Ranked Shortlist ATMs (GeoJSON)",
+    description="Returns ranked candidate ATMs narrowed down from 7,000 national terminals with confidence tiers, SHAP explainability, and calibrated time windows."
 )
 def get_predicted_atms(
     complaint_id: Optional[str] = Query(None, description="Filter predictions by specific Complaint ID"),

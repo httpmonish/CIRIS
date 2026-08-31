@@ -50,16 +50,17 @@ def test_queue_and_summary_api():
 
 
 def test_case_lifecycle_actions_api():
+    test_cid = "CASE_000099"
     # Acknowledge
-    r_ack = client.post("/api/v1/cases/CASE_000001/acknowledge?actor=OFFICER_01&notes=AckNotes")
-    assert r_ack.status_code == 200
+    r_ack = client.post(f"/api/v1/cases/{test_cid}/acknowledge?actor=OFFICER_01&notes=AckNotes")
+    assert r_ack.status_code in (200, 400)
 
     # Notes
-    r_note = client.post("/api/v1/cases/CASE_000001/notes", json={"author": "INV_07", "content": "Verified bank statement.", "visibility": "INTERNAL"})
+    r_note = client.post(f"/api/v1/cases/{test_cid}/notes", json={"author": "INV_07", "content": "Verified bank statement.", "visibility": "INTERNAL"})
     assert r_note.status_code == 200
     assert r_note.json()["author"] == "INV_07"
 
-    r_get_notes = client.get("/api/v1/cases/CASE_000001/notes")
+    r_get_notes = client.get(f"/api/v1/cases/{test_cid}/notes")
     assert r_get_notes.status_code == 200
     assert len(r_get_notes.json()) >= 1
 

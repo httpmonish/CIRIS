@@ -15,11 +15,40 @@ from src.db.operational_models import (
 )
 from src.services.alert_service import AlertService
 
+from src.services.notification_service import get_notification_service
+
 router = APIRouter(prefix="/alerts", tags=["Alerts & Prioritization"])
 
 
 def get_alert_service() -> AlertService:
     return AlertService()
+
+
+@router.get("/dispatches", summary="Get Mocked Last-Mile Emergency Dispatches (WhatsApp/SMS)")
+def list_dispatches(limit: int = Query(10, ge=1, le=50)):
+    """Returns real-time simulated last-mile broadcast notifications."""
+    return get_notification_service().get_recent_dispatches(limit=limit)
+
+
+@router.post("/simulate-dispatch", summary="Simulate Outgoing Last-Mile Broadcast")
+def simulate_dispatch(
+    case_id: str = Query(..., description="Case ID"),
+    atm_name: str = Query("ICICI Bank Station ATM 308", description="ATM Name"),
+    bank_name: str = Query("ICICI Bank", description="Bank Name"),
+    city: str = Query("Hyderabad", description="City"),
+    latitude: float = Query(17.469835),
+    longitude: float = Query(78.479816),
+    raw_probability: float = Query(0.95)
+):
+    return get_notification_service().create_and_send_dispatch(
+        case_id=case_id,
+        atm_name=atm_name,
+        bank_name=bank_name,
+        city=city,
+        latitude=latitude,
+        longitude=longitude,
+        raw_probability=raw_probability
+    )
 
 
 @router.get("", response_model=List[Alert], summary="List Operational Alerts")

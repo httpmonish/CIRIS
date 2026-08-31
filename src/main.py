@@ -56,9 +56,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="CIRIS - GIS Engine & Map Data Platform",
-    description="Geospatial Intelligence Backend for CIRIS SIH 2026. Provides high-performance GeoJSON map endpoints for cybercrime cases, predicted cash-out ATMs, money flow trajectories, risk hotspots, and nearby spatial search.",
-    version="1.0.0",
+    title="CIRIS - Search-Space Reduction & ATM Interception Engine",
+    description="Geospatial & Machine Learning Intelligence Backend for CIRIS (SIH 2026). Narrows 7,000 candidate ATMs to a ranked Top-10 shortlist in <50ms, capturing the true cash-out location 63.6% of the time (84.93% candidate pool recall) with Platt-calibrated confidence tiers.",
+    version="1.1.0",
     lifespan=lifespan
 )
 
