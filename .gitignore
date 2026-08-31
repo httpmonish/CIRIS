@@ -34,3 +34,6 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# PDFs and presentation artifacts
+*.pdf
