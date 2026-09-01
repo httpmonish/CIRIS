@@ -2357,14 +2357,14 @@
                 const auditHash = p.sha256_audit_hash || 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
 
                 return `
-                <div class="rounded bg-surface-container-lowest border border-warm-border overflow-hidden mb-1.5">
+                <div onclick="focusAtmOnMap(${idx})" class="cursor-pointer group rounded bg-surface-container-lowest border border-warm-border hover:border-primary transition-all duration-200 overflow-hidden mb-1.5 shadow-sm hover:shadow-md hover:bg-surface-container-low" title="Click to view ATM on map">
                     <div class="p-2.5 flex items-center justify-between ${idx === 0 ? 'bg-primary-fixed/40' : ''}">
                         <div class="flex items-center gap-2 overflow-hidden">
-                            <span class="w-4 h-4 rounded-full ${idx === 0 ? 'bg-primary text-white' : 'bg-surface-container text-on-surface-variant'} text-[10px] flex items-center justify-center font-bold">
+                            <span class="w-4 h-4 rounded-full ${idx === 0 ? 'bg-primary text-white' : 'bg-surface-container text-on-surface-variant group-hover:bg-primary/20 group-hover:text-primary'} text-[10px] flex items-center justify-center font-bold transition">
                                 ${p.rank || idx + 1}
                             </span>
                             <div>
-                                <div class="font-bold text-on-surface truncate max-w-[170px]" title="${p.atm_name}">${p.atm_name}</div>
+                                <div class="font-bold text-on-surface group-hover:text-primary transition truncate max-w-[170px]" title="${p.atm_name}">${p.atm_name}</div>
                                 <div class="text-[10px] text-on-surface-variant flex items-center gap-1.5 mt-0.5">
                                     <span>${p.distance_km ? p.distance_km.toFixed(1) + 'km' : ''}</span>
                                     <span>&bull;</span>
@@ -2377,14 +2377,14 @@
                                 <span class="font-bold text-xs ${score >= 0.8 ? 'text-accent-coral' : 'text-primary'}">${(score * 100).toFixed(1)}%</span>
                                 <div class="text-[9px] text-on-surface-variant">Calibrated</div>
                             </div>
-                            <button onclick="toggleShapPanel(${idx})" class="p-1 rounded hover:bg-surface-container text-on-surface-variant hover:text-primary transition" title="Toggle SHAP Explainability">
+                            <button onclick="event.stopPropagation(); toggleShapPanel(${idx})" class="p-1 rounded hover:bg-surface-container text-on-surface-variant hover:text-primary transition" title="Toggle SHAP Explainability">
                                 <span class="material-symbols-outlined text-[15px]">psychology</span>
                             </button>
                         </div>
                     </div>
 
                     <!-- Expandable SHAP Explainability Panel -->
-                    <div id="shap-panel-${idx}" class="hidden p-2.5 bg-surface-container-low border-t border-warm-border text-[10px] font-mono space-y-1.5">
+                    <div id="shap-panel-${idx}" onclick="event.stopPropagation()" class="hidden p-2.5 bg-surface-container-low border-t border-warm-border text-[10px] font-mono space-y-1.5">
                         <div class="flex items-center justify-between font-bold text-primary pb-1 border-b border-warm-border/60">
                             <span class="flex items-center gap-1">
                                 <span class="material-symbols-outlined text-[13px]">analytics</span>
@@ -2410,10 +2410,31 @@
         }
 
         // 6. Render Leaflet Map Markers & Money Trajectory Lines
+        let candidateMarkers = [];
+
+        function focusAtmOnMap(idx) {
+            toggleVisualizerTab('map');
+            if (!leafletMap || !currentPredictions || !currentPredictions[idx]) return;
+            const p = currentPredictions[idx];
+            if (p.lat && p.lon) {
+                leafletMap.flyTo([p.lat, p.lon], 15, {
+                    animate: true,
+                    duration: 1.0
+                });
+                if (candidateMarkers && candidateMarkers[idx]) {
+                    setTimeout(() => {
+                        candidateMarkers[idx].openPopup();
+                    }, 500);
+                }
+            }
+        }
+
         function renderMapAndMarkers(caseData, preds) {
             if (!leafletMap || !mapMarkersLayer) return;
 
             mapMarkersLayer.clearLayers();
+            candidateMarkers = [];
+            currentPredictions = preds;
 
             const victimLat = caseData.victim_lat || 19.0760;
             const victimLon = caseData.victim_lon || 72.8777;
@@ -2449,6 +2470,7 @@
                     .bindPopup(`<strong>Rank #${p.rank || idx+1}: ${p.atm_name}</strong><br>Bank: ${p.bank_name}<br>Probability: ${(p.prediction_score * 100).toFixed(1)}%<br>Time Window: ${p.time_window_label}<br>Distance: ${p.distance_km ? p.distance_km.toFixed(1) : ''} km`);
                 
                 mapMarkersLayer.addLayer(marker);
+                candidateMarkers.push(marker);
                 bounds.extend([p.lat, p.lon]);
 
                 // Draw Interception trajectory polyline to Rank #1
