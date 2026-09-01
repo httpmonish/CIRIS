@@ -114,7 +114,7 @@ def test_upgrade_7_isolation_forest_anomaly_case(client):
 
 def test_upgrade_8_compliance_in_frontend():
     """Upgrade 8: Verify DPDP 2023 and CFCFRMS statements in index.html."""
-    with open("CIRIS REAL SIH PROJECT FRONTEND/index.html", "r") as f:
+    with open("CIRIS REAL SIH PROJECT FRONTEND/index.html", "r", encoding="utf-8") as f:
         html = f.read()
     assert "DPDP Act 2023 Compliance Architecture" in html
     assert "Upstream Integration with I4C's CFCFRMS" in html

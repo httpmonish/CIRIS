@@ -32,9 +32,9 @@
                         'surface-container-highest': '#e6e2db',
                         'on-surface': '#1d1c18',
                         'on-surface-variant': '#554339',
-                        primary: '#964407',
-                        'primary-container': '#b65c21',
-                        'primary-fixed': '#ffdbca',
+                        primary: '#C84B20',
+                        'primary-container': '#A53B15',
+                        'primary-fixed': '#FFDCCE',
                         'on-primary': '#ffffff',
                         secondary: '#974544',
                         'secondary-container': '#ffdad8',
@@ -52,13 +52,21 @@
                         mono: ['"Space Mono"', 'monospace']
                     },
                     maxWidth: {
-                        'container-max': '1240px'
+                        'container-max': '1520px'
                     }
                 }
             }
         };
     </script>
     <style>
+        html {
+            font-size: 16px;
+        }
+        body {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
         /* macOS App Launch Spring Physics & Glassmorphic Hover Effects */
         .mac-hover-card {
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
@@ -68,7 +76,7 @@
 
         .mac-hover-card:hover {
             transform: translateY(-8px) scale(1.025) !important;
-            box-shadow: 0 20px 35px -10px rgba(150, 68, 7, 0.18), 0 0 0 1px rgba(150, 68, 7, 0.3) !important;
+            box-shadow: 0 20px 35px -10px rgba(200, 75, 32, 0.22), 0 0 0 1px rgba(200, 75, 32, 0.35) !important;
             background-color: #ffffff !important;
             backdrop-filter: blur(12px) !important;
         }
@@ -84,7 +92,7 @@
             background: linear-gradient(
                 90deg,
                 transparent 0%,
-                rgba(255, 219, 202, 0.45) 50%,
+                rgba(255, 220, 206, 0.5) 50%,
                 transparent 100%
             );
             transform: rotate(25deg);
@@ -114,13 +122,14 @@
     
     <style>
         ::selection {
-            background-color: #ffdbca;
-            color: #964407;
+            background-color: #ffdcce;
+            color: #C84B20;
         }
         
         .tag-pill {
             font-family: 'Space Mono', monospace;
-            font-size: 11px;
+            font-size: 12px;
+            font-weight: 700;
             letter-spacing: 0.08em;
             text-transform: uppercase;
         }
@@ -144,24 +153,24 @@
 
         /* Subtle grid background pattern */
         .grid-linen-pattern {
-            background-image: radial-gradient(rgba(150, 68, 7, 0.08) 1px, transparent 1px);
+            background-image: radial-gradient(rgba(200, 75, 32, 0.08) 1px, transparent 1px);
             background-size: 24px 24px;
         }
 
         #map-container {
-            height: 380px;
+            height: 400px;
             width: 100%;
-            border-radius: 8px;
+            border-radius: 10px;
             z-index: 10;
         }
 
         .leaflet-popup-content-wrapper {
             background: #ffffff;
             border: 1px solid #d8d0c8;
-            border-radius: 6px;
+            border-radius: 8px;
             font-family: 'Space Mono', monospace;
-            font-size: 11px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            font-size: 12px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
         }
         .leaflet-popup-tip {
             background: #ffffff;
@@ -169,18 +178,18 @@
 
         /* Custom scrollbar */
         ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 7px;
+            height: 7px;
         }
         ::-webkit-scrollbar-track {
             background: #f2ede6;
         }
         ::-webkit-scrollbar-thumb {
             background: #d8d0c8;
-            border-radius: 3px;
+            border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #b65c21;
+            background: #C84B20;
         }
 
         /* High-tech Dispatch Animation Styles */
@@ -206,49 +215,43 @@
     </style>
 </head>
 
-<body class="bg-background text-on-surface font-sans antialiased selection:bg-primary-fixed">
+<body class="bg-background text-on-surface font-sans antialiased selection:bg-primary-fixed text-base">
 
     <!-- Navigation Header -->
-    <header class="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-warm-border transition-all">
+    <header class="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-warm-border transition-all shadow-xs">
         <div class="max-w-container-max mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="#hero" class="flex items-center gap-3 group">
-                <div class="w-9 h-9 rounded bg-primary text-white flex items-center justify-center font-mono font-bold text-base shadow-sm group-hover:bg-primary-container transition-colors">
-                    C
-                </div>
-                <div>
-                    <div class="font-serif text-2xl font-semibold tracking-tight text-on-surface flex items-center gap-1.5">
-                        CIRIS
-                    </div>
-                    <p class="text-[10px] font-mono text-on-surface-variant uppercase tracking-widest -mt-1">Proactive Cash-Out Prediction</p>
+                <img src="/static/ciris-logo.svg" alt="CIRIS Logo" class="h-11 w-auto" />
+                <div class="hidden sm:block border-l border-warm-border pl-3 ml-1">
+                    <p class="text-xs font-mono font-bold text-on-surface-variant uppercase tracking-wider">Cybercrime Interception Platform</p>
+                    <p class="text-[11px] font-mono text-primary font-bold">Proactive Cash-Out Prediction</p>
                 </div>
             </a>
 
             <!-- Desktop Navigation Links & Action Button -->
             <div class="flex items-center gap-6 lg:gap-8">
-                <nav id="nav-links-container" style="display: none;" class="items-center space-x-6 text-sm font-mono tracking-wider uppercase text-on-surface-variant">
+                <nav id="nav-links-container" style="display: none;" class="items-center space-x-6 text-sm font-mono tracking-wider uppercase text-on-surface-variant font-semibold">
                     <a href="#problem" class="hover:text-primary transition-colors py-1">Timing Gap</a>
                     <a href="#live-demo" class="hover:text-primary transition-colors py-1">Live Engine</a>
                     <a href="#five-part" class="hover:text-primary transition-colors py-1">5-Part Output</a>
                     <a href="#pipeline" class="hover:text-primary transition-colors py-1">Architecture</a>
-                    <a href="#feasibility" class="hover:text-primary transition-colors py-1">Benchmarks</a>
-                    <a href="#alerts-section" class="hover:text-primary transition-colors py-1">Alerts</a>
                 </nav>
 
                 <div id="nav-divider" style="display: none;" class="h-5 w-px bg-warm-border"></div>
 
                 <!-- Session Indicator & Auth Trigger -->
                 <div id="nav-auth-section" class="flex items-center gap-3">
-                    <div id="nav-user-pill" style="display: none;" class="items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container border border-warm-border text-xs font-mono">
-                        <span id="nav-user-role-badge" class="px-1.5 py-0.5 rounded bg-primary-fixed text-primary font-bold text-[10px]">CITIZEN</span>
-                        <span id="nav-user-name" class="font-bold text-deep-obsidian truncate max-w-[140px]">Rajesh Kumar</span>
+                    <div id="nav-user-pill" style="display: none;" class="items-center gap-2 px-3.5 py-1.5 rounded-lg bg-surface-container border border-warm-border text-xs font-mono font-bold">
+                        <span id="nav-user-role-badge" class="px-2 py-0.5 rounded bg-primary-fixed text-primary font-bold text-[11px]">CITIZEN</span>
+                        <span id="nav-user-name" class="font-bold text-deep-obsidian truncate max-w-[150px]">Rajesh Kumar</span>
                         <button onclick="handleLogout()" title="Logout / Switch Role" class="ml-1 text-secondary hover:text-red-700 flex items-center">
-                            <span class="material-symbols-outlined text-[16px]">logout</span>
+                            <span class="material-symbols-outlined text-[18px]">logout</span>
                         </button>
                     </div>
 
                     <div id="nav-unauth-badge" class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-surface-container-low border border-warm-border text-xs font-mono text-on-surface-variant">
                         <span class="w-2 h-2 rounded-full bg-accent-mint animate-pulse"></span>
-                        <span class="font-bold uppercase tracking-wider text-[10px] text-deep-obsidian">MHA / I4C Aligned Gateway</span>
+                        <span class="font-bold uppercase tracking-wider text-[11px] text-deep-obsidian">MHA / I4C Aligned Gateway</span>
                     </div>
                 </div>
             </div>
@@ -262,57 +265,55 @@
     <!-- 1. UNAUTHENTICATED LANDING & TRIPLE-ROLE AUTHENTICATION GATEWAY -->
     <!-- ========================================================================= -->
     <div id="auth-gateway-container" class="py-12 md:py-16 px-6 lg:px-8 max-w-container-max mx-auto">
-        <div class="max-w-xl mx-auto bg-surface-container-lowest border border-warm-border rounded-2xl shadow-xl p-8 text-on-surface">
+        <div class="max-w-2xl mx-auto bg-surface-container-lowest border border-warm-border rounded-2xl shadow-xl p-8 sm:p-10 text-on-surface">
             
-            <div class="text-center mb-6">
-                <div class="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center mx-auto mb-3">
-                    <span class="material-symbols-outlined text-[24px]">verified_user</span>
-                </div>
-                <h2 class="font-serif text-2xl font-semibold text-deep-obsidian">CIRIS Security Gateway</h2>
-                <p class="text-xs font-mono text-on-surface-variant mt-1">Select your access role to authenticate into the platform</p>
+            <div class="text-center mb-8">
+                <img src="/static/ciris-logo.svg" alt="CIRIS Logo" class="h-16 w-auto mx-auto mb-4" />
+                <h2 class="font-serif text-3xl font-semibold text-deep-obsidian">Security &amp; RBAC Gateway</h2>
+                <p class="text-sm font-mono text-on-surface-variant mt-1.5">Select your designated access role to authenticate into the platform</p>
             </div>
 
             <!-- Role Selector Tabs -->
-            <div class="grid grid-cols-3 gap-1 bg-surface-container p-1 rounded-xl mb-6 font-mono text-xs">
-                <button id="auth-tab-citizen" onclick="switchPortalAuthRole('CITIZEN')" class="py-2 rounded-lg font-bold bg-primary text-white shadow-sm transition">
+            <div class="grid grid-cols-3 gap-2 bg-surface-container p-1.5 rounded-xl mb-6 font-mono text-sm">
+                <button id="auth-tab-citizen" onclick="switchPortalAuthRole('CITIZEN')" class="py-2.5 rounded-lg font-bold bg-primary text-white shadow-sm transition">
                     Citizen
                 </button>
-                <button id="auth-tab-bank" onclick="switchPortalAuthRole('BANK_OFFICIAL')" class="py-2 rounded-lg font-medium text-on-surface-variant hover:text-on-surface transition">
+                <button id="auth-tab-bank" onclick="switchPortalAuthRole('BANK_OFFICIAL')" class="py-2.5 rounded-lg font-bold text-on-surface-variant hover:text-on-surface transition">
                     Bank Officer
                 </button>
-                <button id="auth-tab-govt" onclick="switchPortalAuthRole('GOVT_OFFICIAL')" class="py-2 rounded-lg font-medium text-on-surface-variant hover:text-on-surface transition">
+                <button id="auth-tab-govt" onclick="switchPortalAuthRole('GOVT_OFFICIAL')" class="py-2.5 rounded-lg font-bold text-on-surface-variant hover:text-on-surface transition">
                     Govt Admin
                 </button>
             </div>
 
             <!-- Role Description Box -->
-            <div id="auth-role-desc-box" class="p-3.5 rounded-lg bg-surface-container-low border border-warm-border text-xs font-mono mb-6 text-on-surface-variant leading-relaxed">
-                <span class="font-bold text-primary block mb-0.5">&bull; Citizen Incident Role:</span>
+            <div id="auth-role-desc-box" class="p-4 rounded-xl bg-surface-container-low border border-warm-border text-xs sm:text-sm font-mono mb-6 text-on-surface-variant leading-relaxed">
+                <span class="font-bold text-primary block mb-1 text-sm">&bull; Citizen Incident Role:</span>
                 Submit personal cyber financial complaints, track recovery status, and view dispute timelines.
             </div>
 
             <!-- Auth Form (Login / Register) -->
-            <form id="auth-login-form" onsubmit="handleAuthSubmit(event)" class="space-y-4 text-xs font-mono">
+            <form id="auth-login-form" onsubmit="handleAuthSubmit(event)" class="space-y-4 text-sm font-mono">
                 
                 <div id="auth-fullname-container" class="hidden">
-                    <label class="block text-on-surface-variant font-bold mb-1">Full Name</label>
-                    <input type="text" id="auth-fullname" placeholder="Rajesh Kumar" class="w-full px-3.5 py-2.5 rounded-lg border border-warm-border bg-surface focus:border-primary outline-none">
+                    <label class="block text-on-surface-variant font-bold mb-1.5 text-xs uppercase tracking-wider">Full Name</label>
+                    <input type="text" id="auth-fullname" placeholder="Rajesh Kumar" class="w-full px-4 py-3 rounded-lg border border-warm-border bg-surface text-sm focus:border-primary outline-none">
                 </div>
 
                 <div>
-                    <label class="block text-on-surface-variant font-bold mb-1">Official / Registered Email</label>
-                    <input type="email" id="auth-email-input" required placeholder="name@domain.gov.in" class="w-full px-3.5 py-2.5 rounded-lg border border-warm-border bg-surface focus:border-primary outline-none">
+                    <label class="block text-on-surface-variant font-bold mb-1.5 text-xs uppercase tracking-wider">Official / Registered Email</label>
+                    <input type="email" id="auth-email-input" required placeholder="name@domain.gov.in" class="w-full px-4 py-3 rounded-lg border border-warm-border bg-surface text-sm focus:border-primary outline-none">
                 </div>
 
                 <div id="auth-phone-container" class="hidden">
-                    <label class="block text-on-surface-variant font-bold mb-1">Mobile Phone Number</label>
-                    <input type="text" id="auth-phone" placeholder="+91 9876543210" class="w-full px-3.5 py-2.5 rounded-lg border border-warm-border bg-surface focus:border-primary outline-none">
+                    <label class="block text-on-surface-variant font-bold mb-1.5 text-xs uppercase tracking-wider">Mobile Phone Number</label>
+                    <input type="text" id="auth-phone" placeholder="+91 9876543210" class="w-full px-4 py-3 rounded-lg border border-warm-border bg-surface text-sm focus:border-primary outline-none">
                 </div>
 
                 <!-- Bank Selection Dropdown (Only for Bank Officials) -->
                 <div id="auth-bank-selector-container" class="hidden">
-                    <label class="block text-on-surface-variant font-bold mb-1">Assigned Banking Institution</label>
-                    <select id="auth-bank-select" class="w-full px-3.5 py-2.5 rounded-lg border border-warm-border bg-surface text-on-surface outline-none">
+                    <label class="block text-on-surface-variant font-bold mb-1.5 text-xs uppercase tracking-wider">Assigned Banking Institution</label>
+                    <select id="auth-bank-select" class="w-full px-4 py-3 rounded-lg border border-warm-border bg-surface text-sm text-on-surface outline-none">
                         <option value="BANK_ICICI">ICICI Bank</option>
                         <option value="BANK_SBI">State Bank of India (SBI)</option>
                         <option value="BANK_HDFC">HDFC Bank</option>
@@ -323,60 +324,60 @@
 
                 <!-- Badge ID (Only for Govt Officials) -->
                 <div id="auth-badge-container" class="hidden">
-                    <label class="block text-on-surface-variant font-bold mb-1">MHA / I4C Officer Badge ID</label>
-                    <input type="text" id="auth-badge-input" placeholder="I4C-DIRECTOR-0891" class="w-full px-3.5 py-2.5 rounded-lg border border-warm-border bg-surface focus:border-primary outline-none">
+                    <label class="block text-on-surface-variant font-bold mb-1.5 text-xs uppercase tracking-wider">MHA / I4C Officer Badge ID</label>
+                    <input type="text" id="auth-badge-input" placeholder="I4C-DIRECTOR-0891" class="w-full px-4 py-3 rounded-lg border border-warm-border bg-surface text-sm focus:border-primary outline-none">
                 </div>
 
                 <div>
-                    <label class="block text-on-surface-variant font-bold mb-1">Password</label>
-                    <input type="password" id="auth-password-input" required placeholder="••••••••••••" class="w-full px-3.5 py-2.5 rounded-lg border border-warm-border bg-surface focus:border-primary outline-none">
+                    <label class="block text-on-surface-variant font-bold mb-1.5 text-xs uppercase tracking-wider">Password</label>
+                    <input type="password" id="auth-password-input" required placeholder="••••••••••••" class="w-full px-4 py-3 rounded-lg border border-warm-border bg-surface text-sm focus:border-primary outline-none">
                 </div>
 
-                <button type="submit" id="auth-submit-btn" class="w-full py-3 bg-primary hover:bg-primary-container text-white font-bold rounded-lg transition shadow uppercase tracking-wider text-xs font-mono flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined text-[16px]">login</span>
+                <button type="submit" id="auth-submit-btn" class="w-full py-3.5 bg-primary hover:bg-primary-container text-white font-bold rounded-lg transition shadow uppercase tracking-wider text-sm font-mono flex items-center justify-center gap-2 mt-2">
+                    <span class="material-symbols-outlined text-[18px]">login</span>
                     <span>Sign In to Portal</span>
                 </button>
             </form>
 
             <!-- Toggle Login / Register -->
-            <div class="mt-4 text-center">
-                <button type="button" onclick="toggleAuthMode()" id="auth-toggle-mode-btn" class="text-xs font-mono text-primary hover:underline font-bold">
+            <div class="mt-5 text-center">
+                <button type="button" onclick="toggleAuthMode()" id="auth-toggle-mode-btn" class="text-sm font-mono text-primary hover:underline font-bold">
                     Need an account? Register as Citizen
                 </button>
             </div>
 
             <!-- 1-Click Quick Demo Login Bar -->
             <div class="mt-8 pt-6 border-t border-warm-border/80">
-                <span class="text-[10px] font-mono uppercase tracking-widest text-on-surface-variant block text-center mb-3">
+                <span class="text-xs font-mono uppercase tracking-widest text-on-surface-variant font-bold block text-center mb-3.5">
                     ⚡ Quick Demo Access (1-Click Evaluation)
                 </span>
-                <div class="grid grid-cols-2 gap-2 text-[11px] font-mono">
-                    <button onclick="quickDemoLogin('citizen')" class="p-2.5 rounded bg-surface-container hover:bg-surface-container-high border border-warm-border flex items-center gap-2 transition text-left">
-                        <span class="material-symbols-outlined text-primary text-[16px]">person</span>
+                <div class="grid grid-cols-2 gap-3 text-xs font-mono">
+                    <button onclick="quickDemoLogin('citizen')" class="p-3 rounded-xl bg-surface-container hover:bg-surface-container-high border border-warm-border flex items-center gap-2.5 transition text-left">
+                        <span class="material-symbols-outlined text-primary text-[20px]">person</span>
                         <div>
-                            <span class="font-bold block text-deep-obsidian">Citizen User</span>
-                            <span class="text-[9px] text-on-surface-variant">Rajesh Kumar</span>
+                            <span class="font-bold block text-deep-obsidian text-sm">Citizen User</span>
+                            <span class="text-xs text-on-surface-variant">Rajesh Kumar</span>
                         </div>
                     </button>
-                    <button onclick="quickDemoLogin('bank_icici')" class="p-2.5 rounded bg-surface-container hover:bg-surface-container-high border border-warm-border flex items-center gap-2 transition text-left">
-                        <span class="material-symbols-outlined text-tertiary text-[16px]">account_balance</span>
+                    <button onclick="quickDemoLogin('bank_icici')" class="p-3 rounded-xl bg-surface-container hover:bg-surface-container-high border border-warm-border flex items-center gap-2.5 transition text-left">
+                        <span class="material-symbols-outlined text-tertiary text-[20px]">account_balance</span>
                         <div>
-                            <span class="font-bold block text-deep-obsidian">ICICI Nodal</span>
-                            <span class="text-[9px] text-on-surface-variant">Priya Sharma</span>
+                            <span class="font-bold block text-deep-obsidian text-sm">ICICI Nodal</span>
+                            <span class="text-xs text-on-surface-variant">Priya Sharma</span>
                         </div>
                     </button>
-                    <button onclick="quickDemoLogin('bank_sbi')" class="p-2.5 rounded bg-surface-container hover:bg-surface-container-high border border-warm-border flex items-center gap-2 transition text-left">
-                        <span class="material-symbols-outlined text-tertiary text-[16px]">account_balance</span>
+                    <button onclick="quickDemoLogin('bank_sbi')" class="p-3 rounded-xl bg-surface-container hover:bg-surface-container-high border border-warm-border flex items-center gap-2.5 transition text-left">
+                        <span class="material-symbols-outlined text-tertiary text-[20px]">account_balance</span>
                         <div>
-                            <span class="font-bold block text-deep-obsidian">SBI Nodal</span>
-                            <span class="text-[9px] text-on-surface-variant">Amitabh Roy</span>
+                            <span class="font-bold block text-deep-obsidian text-sm">SBI Nodal</span>
+                            <span class="text-xs text-on-surface-variant">Amitabh Roy</span>
                         </div>
                     </button>
-                    <button onclick="quickDemoLogin('govt')" class="p-2.5 rounded bg-surface-container hover:bg-surface-container-high border border-warm-border flex items-center gap-2 transition text-left">
-                        <span class="material-symbols-outlined text-accent-mint text-[16px]">shield_person</span>
+                    <button onclick="quickDemoLogin('govt')" class="p-3 rounded-xl bg-surface-container hover:bg-surface-container-high border border-warm-border flex items-center gap-2.5 transition text-left">
+                        <span class="material-symbols-outlined text-accent-mint text-[20px]">shield_person</span>
                         <div>
-                            <span class="font-bold block text-deep-obsidian">I4C Director</span>
-                            <span class="text-[9px] text-on-surface-variant">Super Admin</span>
+                            <span class="font-bold block text-deep-obsidian text-sm">I4C Director</span>
+                            <span class="text-xs text-on-surface-variant">Super Admin</span>
                         </div>
                     </button>
                 </div>
@@ -1052,39 +1053,45 @@
     <!-- The Five-Part Output (Architecture Showcase) -->
     <section id="five-part" class="py-20 md:py-24 border-b border-warm-border bg-surface-container-low">
         <div class="max-w-container-max mx-auto px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto mb-14">
+            <div class="text-center max-w-3xl mx-auto mb-16">
                 <span class="tag-pill text-primary">Core Intelligence Deliverable</span>
-                <h2 class="font-serif text-3xl sm:text-4xl text-deep-obsidian mt-2 mb-3">
+                <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-deep-obsidian mt-2 mb-4">
                     The 5-Part Actionable Output
                 </h2>
-                <p class="text-on-surface-variant text-base">
-                    Investigative teams cannot act on ambiguous risk scores. Every CIRIS case yields five structured, explainable d            <!-- Five Dimension Cards Grid with Interactive macOS Spring Hover Details -->
-            <div class="grid md:grid-cols-5 gap-4">
+                <p class="text-on-surface-variant text-base sm:text-lg leading-relaxed">
+                    Investigative teams cannot act on ambiguous risk scores. Every CIRIS case yields five structured, explainable dimensions for immediate operational deployment.
+                </p>
+            </div>
+
+            <!-- Five Dimension Cards Grid with Interactive macOS Spring Hover Details -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
                 <!-- 1. WHERE -->
-                <div class="bg-surface-container-lowest p-5 rounded-lg border border-warm-border group cursor-pointer mac-hover-card">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-8 h-8 rounded bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-xs group-hover:bg-primary group-hover:text-white transition-colors">
-                            01
+                <div class="bg-surface-container-lowest p-6 rounded-2xl border border-warm-border group cursor-pointer mac-hover-card flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-sm group-hover:bg-primary group-hover:text-white transition-colors">
+                                01
+                            </div>
+                            <span class="text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity font-bold">Details ↓</span>
                         </div>
-                        <span class="text-[10px] font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity font-semibold">Details ↓</span>
+                        <h3 class="font-serif text-2xl font-semibold text-deep-obsidian mb-1">WHERE</h3>
+                        <p class="font-mono text-xs text-primary mb-3 font-bold uppercase tracking-wider">ATM Target Cluster</p>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">
+                            Pinpoints likely withdrawal terminal zones ranked by LambdaRank scoring.
+                        </p>
                     </div>
-                    <h3 class="font-serif text-xl font-medium text-deep-obsidian mb-1">WHERE</h3>
-                    <p class="font-mono text-xs text-primary mb-2 uppercase tracking-wide">ATM Target Cluster</p>
-                    <p class="text-xs text-on-surface-variant leading-relaxed">
-                        Pinpoints likely withdrawal terminal zones ranked by LambdaRank scoring.
-                    </p>
                     <!-- Expanded Details on Hover -->
-                    <div class="max-h-0 opacity-0 group-hover:max-h-96 group-hover:opacity-100 overflow-hidden mt-0 group-hover:mt-3 pt-0 group-hover:pt-3 border-t border-transparent group-hover:border-warm-border mac-expand-panel">
-                        <div class="space-y-2 text-[11px] text-on-surface-variant">
-                            <div class="bg-surface-container-low p-2 rounded border border-warm-border/60">
-                                <span class="font-mono font-bold text-primary block text-[10px] uppercase">Candidate Retrieval</span>
+                    <div class="max-h-0 opacity-0 group-hover:max-h-96 group-hover:opacity-100 overflow-hidden mt-0 group-hover:mt-4 pt-0 group-hover:pt-3 border-t border-transparent group-hover:border-warm-border mac-expand-panel">
+                        <div class="space-y-2 text-xs text-on-surface-variant">
+                            <div class="bg-surface-container-low p-2.5 rounded-lg border border-warm-border/60">
+                                <span class="font-mono font-bold text-primary block text-xs uppercase mb-0.5">Candidate Retrieval</span>
                                 BallTree spatial indexing narrows 7,000 national ATMs to ~200 candidate terminals within 250km in sub-3ms.
                             </div>
-                            <div class="bg-surface-container-low p-2 rounded border border-warm-border/60">
-                                <span class="font-mono font-bold text-primary block text-[10px] uppercase">LambdaMART Ranker</span>
+                            <div class="bg-surface-container-low p-2.5 rounded-lg border border-warm-border/60">
+                                <span class="font-mono font-bold text-primary block text-xs uppercase mb-0.5">LambdaMART Ranker</span>
                                 Evaluates 36 Point-in-Time features (corridor velocity, cluster frequency, transit hub distance).
                             </div>
-                            <div class="flex items-center justify-between font-mono text-[10px] text-primary pt-1 font-semibold">
+                            <div class="flex items-center justify-between font-mono text-xs text-primary pt-1 font-bold">
                                 <span>🎯 Lat/Lon + Terminal ID</span>
                                 <span>⚡ Sub-50ms</span>
                             </div>
@@ -1093,30 +1100,32 @@
                 </div>
 
                 <!-- 2. WHEN -->
-                <div class="bg-surface-container-lowest p-5 rounded-lg border border-warm-border group cursor-pointer mac-hover-card">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-8 h-8 rounded bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-xs group-hover:bg-primary group-hover:text-white transition-colors">
-                            02
+                <div class="bg-surface-container-lowest p-6 rounded-2xl border border-warm-border group cursor-pointer mac-hover-card flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-sm group-hover:bg-primary group-hover:text-white transition-colors">
+                                02
+                            </div>
+                            <span class="text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity font-bold">Details ↓</span>
                         </div>
-                        <span class="text-[10px] font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity font-semibold">Details ↓</span>
+                        <h3 class="font-serif text-2xl font-semibold text-deep-obsidian mb-1">WHEN</h3>
+                        <p class="font-mono text-xs text-primary mb-3 font-bold uppercase tracking-wider">Withdrawal Window</p>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">
+                            Calibrated time windows (0–1h, 1–3h, 3–6h, 6–12h) to deploy actionable resources.
+                        </p>
                     </div>
-                    <h3 class="font-serif text-xl font-medium text-deep-obsidian mb-1">WHEN</h3>
-                    <p class="font-mono text-xs text-primary mb-2 uppercase tracking-wide">Withdrawal Window</p>
-                    <p class="text-xs text-on-surface-variant leading-relaxed">
-                        Calibrated time windows (0–1h, 1–3h, 3–6h, 6–12h) to deploy actionable resources.
-                    </p>
                     <!-- Expanded Details on Hover -->
-                    <div class="max-h-0 opacity-0 group-hover:max-h-96 group-hover:opacity-100 overflow-hidden mt-0 group-hover:mt-3 pt-0 group-hover:pt-3 border-t border-transparent group-hover:border-warm-border mac-expand-panel">
-                        <div class="space-y-2 text-[11px] text-on-surface-variant">
-                            <div class="bg-surface-container-low p-2 rounded border border-warm-border/60">
-                                <span class="font-mono font-bold text-primary block text-[10px] uppercase">Dual-Head Regressor</span>
+                    <div class="max-h-0 opacity-0 group-hover:max-h-96 group-hover:opacity-100 overflow-hidden mt-0 group-hover:mt-4 pt-0 group-hover:pt-3 border-t border-transparent group-hover:border-warm-border mac-expand-panel">
+                        <div class="space-y-2 text-xs text-on-surface-variant">
+                            <div class="bg-surface-container-low p-2.5 rounded-lg border border-warm-border/60">
+                                <span class="font-mono font-bold text-primary block text-xs uppercase mb-0.5">Dual-Head Regressor</span>
                                 Estimates cash-out delay (MAE 4.95h) to pinpoint exact operational interception window.
                             </div>
-                            <div class="bg-surface-container-low p-2 rounded border border-warm-border/60">
-                                <span class="font-mono font-bold text-primary block text-[10px] uppercase">Triage Intervals</span>
+                            <div class="bg-surface-container-low p-2.5 rounded-lg border border-warm-border/60">
+                                <span class="font-mono font-bold text-primary block text-xs uppercase mb-0.5">Triage Intervals</span>
                                 <span class="text-primary font-semibold">0–1h</span> (Emergency Patrol), <span class="text-primary font-semibold">1–3h</span> (Bank CBS Hold), <span class="text-primary font-semibold">3–6h</span> (Monitoring).
                             </div>
-                            <div class="flex items-center justify-between font-mono text-[10px] text-primary pt-1 font-semibold">
+                            <div class="flex items-center justify-between font-mono text-xs text-primary pt-1 font-bold">
                                 <span>⏱️ Delay MAE</span>
                                 <span>4.95 Hours</span>
                             </div>
@@ -1125,30 +1134,32 @@
                 </div>
 
                 <!-- 3. WHY -->
-                <div class="bg-surface-container-lowest p-5 rounded-lg border border-warm-border group cursor-pointer mac-hover-card">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-8 h-8 rounded bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-xs group-hover:bg-primary group-hover:text-white transition-colors">
-                            03
+                <div class="bg-surface-container-lowest p-6 rounded-2xl border border-warm-border group cursor-pointer mac-hover-card flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-sm group-hover:bg-primary group-hover:text-white transition-colors">
+                                03
+                            </div>
+                            <span class="text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity font-bold">Details ↓</span>
                         </div>
-                        <span class="text-[10px] font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity font-semibold">Details ↓</span>
+                        <h3 class="font-serif text-2xl font-semibold text-deep-obsidian mb-1">WHY</h3>
+                        <p class="font-mono text-xs text-primary mb-3 font-bold uppercase tracking-wider">SHAP &amp; Graph Proof</p>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">
+                            Feature contribution + multi-hop transaction fragmentation evidence.
+                        </p>
                     </div>
-                    <h3 class="font-serif text-xl font-medium text-deep-obsidian mb-1">WHY</h3>
-                    <p class="font-mono text-xs text-primary mb-2 uppercase tracking-wide">SHAP &amp; Graph Proof</p>
-                    <p class="text-xs text-on-surface-variant leading-relaxed">
-                        Feature contribution + multi-hop transaction fragmentation evidence.
-                    </p>
                     <!-- Expanded Details on Hover -->
-                    <div class="max-h-0 opacity-0 group-hover:max-h-96 group-hover:opacity-100 overflow-hidden mt-0 group-hover:mt-3 pt-0 group-hover:pt-3 border-t border-transparent group-hover:border-warm-border mac-expand-panel">
-                        <div class="space-y-2 text-[11px] text-on-surface-variant">
-                            <div class="bg-surface-container-low p-2 rounded border border-warm-border/60">
-                                <span class="font-mono font-bold text-primary block text-[10px] uppercase">TreeExplainer SHAP</span>
+                    <div class="max-h-0 opacity-0 group-hover:max-h-96 group-hover:opacity-100 overflow-hidden mt-0 group-hover:mt-4 pt-0 group-hover:pt-3 border-t border-transparent group-hover:border-warm-border mac-expand-panel">
+                        <div class="space-y-2 text-xs text-on-surface-variant">
+                            <div class="bg-surface-container-low p-2.5 rounded-lg border border-warm-border/60">
+                                <span class="font-mono font-bold text-primary block text-xs uppercase mb-0.5">TreeExplainer SHAP</span>
                                 Quantifies top feature impacts (e.g. +0.44 Anomaly Score, +0.31 Proximity) for judicial review.
                             </div>
-                            <div class="bg-surface-container-low p-2 rounded border border-warm-border/60">
-                                <span class="font-mono font-bold text-primary block text-[10px] uppercase">Section 65B Hash</span>
+                            <div class="bg-surface-container-low p-2.5 rounded-lg border border-warm-border/60">
+                                <span class="font-mono font-bold text-primary block text-xs uppercase mb-0.5">Section 65B Hash</span>
                                 Generates tamper-proof SHA-256 cryptographic audit logs for court admissibility.
                             </div>
-                            <div class="flex items-center justify-between font-mono text-[10px] text-primary pt-1 font-semibold">
+                            <div class="flex items-center justify-between font-mono text-xs text-primary pt-1 font-bold">
                                 <span>📜 Legal Evidence</span>
                                 <span>Sec. 65B Hash</span>
                             </div>
@@ -1157,30 +1168,32 @@
                 </div>
 
                 <!-- 4. CONFIDENCE -->
-                <div class="bg-surface-container-lowest p-5 rounded-lg border border-warm-border group cursor-pointer mac-hover-card">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-8 h-8 rounded bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-xs group-hover:bg-primary group-hover:text-white transition-colors">
-                            04
+                <div class="bg-surface-container-lowest p-6 rounded-2xl border border-warm-border group cursor-pointer mac-hover-card flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-sm group-hover:bg-primary group-hover:text-white transition-colors">
+                                04
+                            </div>
+                            <span class="text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity font-bold">Details ↓</span>
                         </div>
-                        <span class="text-[10px] font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity font-semibold">Details ↓</span>
+                        <h3 class="font-serif text-2xl font-semibold text-deep-obsidian mb-1">CONFIDENCE</h3>
+                        <p class="font-mono text-xs text-primary mb-3 font-bold uppercase tracking-wider">Calibrated Risk</p>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">
+                            Isotonic calibrated probability (e.g. 84.9%)—not raw, uncalibrated scores.
+                        </p>
                     </div>
-                    <h3 class="font-serif text-xl font-medium text-deep-obsidian mb-1">CONFIDENCE</h3>
-                    <p class="font-mono text-xs text-primary mb-2 uppercase tracking-wide">Calibrated Risk</p>
-                    <p class="text-xs text-on-surface-variant leading-relaxed">
-                        Isotonic calibrated probability (e.g. 84.9%)—not raw, uncalibrated scores.
-                    </p>
                     <!-- Expanded Details on Hover -->
-                    <div class="max-h-0 opacity-0 group-hover:max-h-96 group-hover:opacity-100 overflow-hidden mt-0 group-hover:mt-3 pt-0 group-hover:pt-3 border-t border-transparent group-hover:border-warm-border mac-expand-panel">
-                        <div class="space-y-2 text-[11px] text-on-surface-variant">
-                            <div class="bg-surface-container-low p-2 rounded border border-warm-border/60">
-                                <span class="font-mono font-bold text-primary block text-[10px] uppercase">Isotonic Calibration</span>
+                    <div class="max-h-0 opacity-0 group-hover:max-h-96 group-hover:opacity-100 overflow-hidden mt-0 group-hover:mt-4 pt-0 group-hover:pt-3 border-t border-transparent group-hover:border-warm-border mac-expand-panel">
+                        <div class="space-y-2 text-xs text-on-surface-variant">
+                            <div class="bg-surface-container-low p-2.5 rounded-lg border border-warm-border/60">
+                                <span class="font-mono font-bold text-primary block text-xs uppercase mb-0.5">Isotonic Calibration</span>
                                 Transforms raw GBDT margins into true mathematical probabilities, eliminating false locks.
                             </div>
-                            <div class="bg-surface-container-low p-2 rounded border border-warm-border/60">
-                                <span class="font-mono font-bold text-primary block text-[10px] uppercase">Confidence Tiers</span>
+                            <div class="bg-surface-container-low p-2.5 rounded-lg border border-warm-border/60">
+                                <span class="font-mono font-bold text-primary block text-xs uppercase mb-0.5">Confidence Tiers</span>
                                 <span class="font-semibold text-red-700">AUTO-FREEZE</span> (≥90%), <span class="font-semibold text-amber-700">LEA ALERT</span> (70–89%), <span class="font-semibold text-slate-600">MONITOR</span> (&lt;70%).
                             </div>
-                            <div class="flex items-center justify-between font-mono text-[10px] text-primary pt-1 font-semibold">
+                            <div class="flex items-center justify-between font-mono text-xs text-primary pt-1 font-bold">
                                 <span>📊 Hit@10 Accuracy</span>
                                 <span>63.61%</span>
                             </div>
@@ -1189,37 +1202,36 @@
                 </div>
 
                 <!-- 5. ACTION -->
-                <div class="bg-surface-container-lowest p-5 rounded-lg border border-warm-border group cursor-pointer mac-hover-card">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-8 h-8 rounded bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-xs group-hover:bg-primary group-hover:text-white transition-colors">
-                            05
+                <div class="bg-surface-container-lowest p-6 rounded-2xl border border-warm-border group cursor-pointer mac-hover-card flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-primary-fixed text-primary flex items-center justify-center font-mono font-bold text-sm group-hover:bg-primary group-hover:text-white transition-colors">
+                                05
+                            </div>
+                            <span class="text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity font-bold">Details ↓</span>
                         </div>
-                        <span class="text-[10px] font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity font-semibold">Details ↓</span>
+                        <h3 class="font-serif text-2xl font-semibold text-deep-obsidian mb-1">ACTION</h3>
+                        <p class="font-mono text-xs text-primary mb-3 font-bold uppercase tracking-wider">Operational Priority</p>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">
+                            Automated triage (P1 Active Cash-Out, P2 Network, P3 Monitor) with dispatch notes.
+                        </p>
                     </div>
-                    <h3 class="font-serif text-xl font-medium text-deep-obsidian mb-1">ACTION</h3>
-                    <p class="font-mono text-xs text-primary mb-2 uppercase tracking-wide">Operational Priority</p>
-                    <p class="text-xs text-on-surface-variant leading-relaxed">
-                        Automated triage (P1 Active Cash-Out, P2 Network, P3 Monitor) with dispatch notes.
-                    </p>
                     <!-- Expanded Details on Hover -->
-                    <div class="max-h-0 opacity-0 group-hover:max-h-96 group-hover:opacity-100 overflow-hidden mt-0 group-hover:mt-3 pt-0 group-hover:pt-3 border-t border-transparent group-hover:border-warm-border mac-expand-panel">
-                        <div class="space-y-2 text-[11px] text-on-surface-variant">
-                            <div class="bg-surface-container-low p-2 rounded border border-warm-border/60">
-                                <span class="font-mono font-bold text-primary block text-[10px] uppercase">Last-Mile Dispatch</span>
+                    <div class="max-h-0 opacity-0 group-hover:max-h-96 group-hover:opacity-100 overflow-hidden mt-0 group-hover:mt-4 pt-0 group-hover:pt-3 border-t border-transparent group-hover:border-warm-border mac-expand-panel">
+                        <div class="space-y-2 text-xs text-on-surface-variant">
+                            <div class="bg-surface-container-low p-2.5 rounded-lg border border-warm-border/60">
+                                <span class="font-mono font-bold text-primary block text-xs uppercase mb-0.5">Last-Mile Dispatch</span>
                                 Triggers instant SMS/NOC alerts to beat constables &amp; patrol units with navigation links.
                             </div>
-                            <div class="bg-surface-container-low p-2 rounded border border-warm-border/60">
-                                <span class="font-mono font-bold text-primary block text-[10px] uppercase">Bank CBS Integration</span>
+                            <div class="bg-surface-container-low p-2.5 rounded-lg border border-warm-border/60">
+                                <span class="font-mono font-bold text-primary block text-xs uppercase mb-0.5">Bank CBS Integration</span>
                                 Feeds directly into I4C CFCFRMS banking freeze workflows for mule account hold.
                             </div>
-                            <div class="flex items-center justify-between font-mono text-[10px] text-primary pt-1 font-semibold">
+                            <div class="flex items-center justify-between font-mono text-xs text-primary pt-1 font-bold">
                                 <span>⚡ Automated Triage</span>
                                 <span>P1 / P2 / P3</span>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>                        </div>
                     </div>
                 </div>
             </div>
@@ -1372,199 +1384,7 @@
         </div>
     </section>
 
-    <!-- LIVE OPERATIONAL ALERTS & LAST-MILE BROADCAST FEED -->
-    <section id="alerts-section" class="py-20 md:py-24 border-b border-warm-border bg-surface-container-low">
-        <div class="max-w-container-max mx-auto px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
-                <div>
-                    <span class="tag-pill text-secondary font-bold">Operational Triage &amp; Broadcast</span>
-                    <h2 class="font-serif text-3xl text-deep-obsidian mt-1">Live Interception &amp; Last-Mile Alert Feeds</h2>
-                    <p class="text-xs text-on-surface-variant mt-1">Direct from FastAPI Queue (/api/v1/alerts) &amp; Mocked WhatsApp/SMS Dispatcher</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="loadLiveAlerts(); loadMockDispatches();" class="px-3 py-1.5 bg-surface-container-lowest border border-warm-border text-xs font-mono rounded hover:border-primary transition flex items-center gap-1.5">
-                        <span class="material-symbols-outlined text-[15px] text-primary">refresh</span>
-                        Refresh All Feeds
-                    </button>
-                </div>
-            </div>
-
-            <div class="grid lg:grid-cols-2 gap-6">
-                <!-- Column 1: Operational Alert Feed -->
-                <div>
-                    <div class="font-mono text-xs font-bold uppercase tracking-wider text-on-surface mb-3 flex items-center justify-between">
-                        <span>Incident Priority Queue</span>
-                        <span class="text-[10px] text-primary">NCRP / 1930 Stream</span>
-                    </div>
-                    <div id="alerts-feed-container" class="space-y-3">
-                        <div class="p-6 rounded-lg bg-surface-container-lowest border border-warm-border text-center text-xs font-mono text-on-surface-variant">
-                            Loading live operational alerts from backend...
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Column 2: Mocked Last-Mile WhatsApp & SMS Dispatch Log -->
-                <div>
-                    <div class="font-mono text-xs font-bold uppercase tracking-wider text-on-surface mb-3 flex items-center justify-between">
-                        <span>Simulated Last-Mile Broadcasts</span>
-                        <span class="text-[10px] text-accent-mint flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-accent-mint animate-pulse"></span>
-                            WHATSAPP / SMS STUB
-                        </span>
-                    </div>
-                    <div id="dispatches-feed-container" class="space-y-3">
-                        <!-- Dynamically loaded from /api/v1/alerts/dispatches -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Feasibility, Evaluation & Integrity -->
-    <section id="feasibility" class="py-20 md:py-24 border-b border-warm-border">
-        <div class="max-w-container-max mx-auto px-6 lg:px-8">
-            <div class="grid lg:grid-cols-12 gap-12 items-center">
-                
-                <!-- Left: Evaluation Nuance & Governance -->
-                <div class="lg:col-span-6 space-y-6">
-                    <span class="tag-pill text-primary">Empirical Validation</span>
-                    <h2 class="font-serif text-3xl sm:text-4xl text-deep-obsidian leading-tight">
-                        Search-Space Reduction vs. Baseline Random Police Patrols.
-                    </h2>
-                    <p class="text-on-surface-variant text-base leading-relaxed">
-                        Rather than guessing across 7,000 national ATMs, CIRIS narrows the target perimeter to a ranked Top-10 shortlist with <strong class="text-on-surface">63.61% Hit@10 accuracy</strong> and an empirical candidate recall of <strong class="text-on-surface">84.93%</strong>.
-                    </p>
-
-                    <!-- Validation Checkmarks -->
-                    <div class="space-y-3 pt-2">
-                        <div class="flex items-center gap-3 p-3 rounded bg-surface-container-low border border-warm-border text-xs font-mono text-on-surface">
-                            <span class="material-symbols-outlined text-accent-mint text-[18px]">verified</span>
-                            <span><strong>31/31 Automated Feature Tests Passed</strong> with zero temporal leakage</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-3 rounded bg-surface-container-low border border-warm-border text-xs font-mono text-on-surface">
-                            <span class="material-symbols-outlined text-accent-mint text-[18px]">verified</span>
-                            <span><strong>99.85% Search-Space Reduction</strong> (Shrunk from 7,000 candidate terminals to Top-10)</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-3 rounded bg-surface-container-low border border-warm-border text-xs font-mono text-on-surface">
-                            <span class="material-symbols-outlined text-accent-mint text-[18px]">verified</span>
-                            <span><strong>Sub-50ms CPU Execution</strong> across LightGBM LambdaMART &amp; BallTree engines</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right: Performance Comparison Table -->
-                <div class="lg:col-span-6">
-                    <div class="bg-surface-container-lowest rounded-xl border border-warm-border shadow-sm overflow-hidden">
-                        <div class="p-4 bg-surface-container-low border-b border-warm-border font-mono text-xs font-bold uppercase tracking-wider text-on-surface flex justify-between items-center">
-                            <span>Benchmark Governance Metrics</span>
-                            <span class="text-[10px] text-primary">Rigorous Separation</span>
-                        </div>
-                        <table class="w-full text-left text-xs font-mono">
-                            <thead class="bg-surface-container-high/40 text-on-surface-variant border-b border-warm-border">
-                                <tr>
-                                    <th class="p-3.5">Metric Dimension</th>
-                                    <th class="p-3.5">Controlled Ranking</th>
-                                    <th class="p-3.5">Dynamic E2E Evaluation</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-warm-border/60 text-on-surface">
-                                <tr>
-                                    <td class="p-3.5 font-bold">Candidate Pool Recall</td>
-                                    <td class="p-3.5 text-on-surface-variant">&mdash;</td>
-                                    <td class="p-3.5 text-accent-mint font-bold">84.93%</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-3.5 font-bold">Hit@10 Shortlist Accuracy</td>
-                                    <td class="p-3.5 text-primary font-bold">63.61%</td>
-                                    <td class="p-3.5 text-on-surface">28.77%</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-3.5 font-bold">Hit@5 Shortlist Accuracy</td>
-                                    <td class="p-3.5 text-primary font-bold">50.27%</td>
-                                    <td class="p-3.5 text-on-surface">19.18%</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-3.5 font-bold">Hit@1 Exact Target</td>
-                                    <td class="p-3.5 text-primary font-bold">33.05%</td>
-                                    <td class="p-3.5 text-on-surface">1.37%</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-3.5 font-bold">NDCG@10 Ranking Quality</td>
-                                    <td class="p-3.5 font-bold text-tertiary">0.4584</td>
-                                    <td class="p-3.5 text-on-surface">0.1260</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-3.5 font-bold">Time Window MAE</td>
-                                    <td class="p-3.5 text-on-surface">&sim;4.95 Hours</td>
-                                    <td class="p-3.5 text-on-surface-variant">&mdash;</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- DPDP ACT 2023 & CFCFRMS UPSTREAM POSITIONING SECTION -->
-    <section id="compliance-section" class="py-16 border-b border-warm-border bg-surface-container-low">
-        <div class="max-w-container-max mx-auto px-6 lg:px-8">
-            <div class="grid md:grid-cols-2 gap-8">
-                
-                <!-- DPDP Compliance Card with Hover Details -->
-                <div class="p-6 rounded-xl bg-surface-container-lowest border border-warm-border hover:border-primary hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 group cursor-pointer relative overflow-hidden space-y-3 font-mono text-xs">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2 text-primary font-bold">
-                            <span class="material-symbols-outlined text-[20px]">policy</span>
-                            <span class="font-serif text-base text-deep-obsidian">DPDP Act 2023 Compliance Architecture</span>
-                        </div>
-                        <span class="text-[10px] font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity font-semibold">Details ↓</span>
-                    </div>
-                    <p class="text-on-surface-variant leading-relaxed">
-                        CIRIS enforces strict data minimization principles under the <strong>Digital Personal Data Protection Act 2023</strong>:
-                    </p>
-                    <ul class="space-y-1.5 text-on-surface-variant">
-                        <li>&bull; <strong>Data Minimization:</strong> Analyzes transaction metadata (RRN, timestamps, amounts, anonymized terminal IDs) without storing raw biometrics or credentials.</li>
-                        <li>&bull; <strong>Purpose Limitation:</strong> Telemetry is restricted strictly to active cyber fraud interception and Section 65B court evidence.</li>
-                        <li>&bull; <strong>Multi-Tenant Isolation:</strong> Bank Nodal officers access only their respective institution's accounts with JWT token isolation.</li>
-                    </ul>
-
-                    <div class="max-h-0 opacity-0 group-hover:max-h-36 group-hover:opacity-100 transition-all duration-300 ease-in-out overflow-hidden mt-0 group-hover:mt-3 pt-0 group-hover:pt-2 border-t border-transparent group-hover:border-warm-border text-[11px] text-on-surface-variant space-y-1 bg-surface-container-low p-2 rounded">
-                        <div class="font-mono font-bold text-primary text-[10px] uppercase">Legal &amp; Privacy Safeguards</div>
-                        <div>Zero persistent PII storage, automated cryptographic hash generation for audit trails, and strict RBAC isolation between law enforcement and bank officials.</div>
-                    </div>
-                </div>
-
-                <!-- CFCFRMS Upstream Co-existence Card with Hover Details -->
-                <div class="p-6 rounded-xl bg-surface-container-lowest border border-warm-border hover:border-primary hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 group cursor-pointer relative overflow-hidden space-y-3 font-mono text-xs">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2 text-tertiary font-bold">
-                            <span class="material-symbols-outlined text-[20px]">account_tree</span>
-                            <span class="font-serif text-base text-deep-obsidian">Upstream Integration with I4C's CFCFRMS</span>
-                        </div>
-                        <span class="text-[10px] font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity font-semibold">Details ↓</span>
-                    </div>
-                    <p class="text-on-surface-variant leading-relaxed">
-                        <strong>CIRIS does not replace CFCFRMS; it operates as an upstream proactive intelligence layer:</strong>
-                    </p>
-                    <ul class="space-y-1.5 text-on-surface-variant">
-                        <li>&bull; <strong>Current CFCFRMS:</strong> Reactive inter-bank freeze ticketing taking hours to days.</li>
-                        <li>&bull; <strong>CIRIS Upstream Role:</strong> Executes within 15 minutes of 1930 ingestion to identify ATM egress bottlenecks and recommend automated CBS account holds before funds leave banking rails.</li>
-                        <li>&bull; <strong>Direct API Feed:</strong> Dispatches pre-computed intercept shortlists directly into police beat handhelds and bank NOCs.</li>
-                    </ul>
-
-                    <div class="max-h-0 opacity-0 group-hover:max-h-36 group-hover:opacity-100 transition-all duration-300 ease-in-out overflow-hidden mt-0 group-hover:mt-3 pt-0 group-hover:pt-2 border-t border-transparent group-hover:border-warm-border text-[11px] text-on-surface-variant space-y-1 bg-surface-container-low p-2 rounded">
-                        <div class="font-mono font-bold text-primary text-[10px] uppercase">System Synergy</div>
-                        <div>Complements NCRP 1930 &amp; CFCFRMS by closing the critical 2-4 hour cash-out window before physical withdrawal takes place.</div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- DATA PROVENANCE MODAL -->
+    <!-- DATA PROVENANCE & COMPLIANCE MODAL -->
     <div id="provenance-modal" class="fixed inset-0 z-[110] hidden items-center justify-center p-4 bg-deep-obsidian/50 backdrop-blur-sm">
         <div class="relative w-full max-w-2xl bg-surface border border-warm-border rounded-2xl shadow-2xl p-6 text-on-surface font-mono text-xs max-h-[85vh] overflow-y-auto">
             <div class="flex items-center justify-between pb-3 border-b border-warm-border mb-4">
@@ -1594,6 +1414,16 @@
                     </div>
                 </div>
 
+                <h4 class="font-bold text-deep-obsidian uppercase tracking-wider text-[11px]">DPDP Act 2023 Compliance Architecture:</h4>
+                <p>
+                    CIRIS enforces strict data minimization principles under the <strong>Digital Personal Data Protection Act 2023</strong>: Analyzes transaction metadata (RRN, timestamps, amounts, anonymized terminal IDs) without storing raw biometrics or credentials. Zero persistent PII storage, automated cryptographic hash generation for audit trails, and strict RBAC isolation between law enforcement and bank officials.
+                </p>
+
+                <h4 class="font-bold text-deep-obsidian uppercase tracking-wider text-[11px]">Upstream Integration with I4C's CFCFRMS:</h4>
+                <p>
+                    <strong>CIRIS does not replace CFCFRMS; it operates as an upstream proactive intelligence layer:</strong> Executes within 15 minutes of 1930 ingestion to identify ATM egress bottlenecks and recommend automated CBS account holds before funds leave banking rails.
+                </p>
+
                 <h4 class="font-bold text-deep-obsidian uppercase tracking-wider text-[11px]">Production Deployment &amp; Retraining Path:</h4>
                 <p>
                     CIRIS LightGBM rankers are designed for zero-GPU CPU execution. When connected to live NCRP / CFCFRMS feeds under a formal data-sharing agreement, models can be fully retrained on 100,000 historical FIR records in under 12 minutes.
@@ -1609,13 +1439,13 @@
     </div>
 
     <!-- Footer -->
-    <footer class="py-12 bg-background border-t border-warm-border text-on-surface-variant text-xs font-mono">
+    <footer class="py-12 bg-background border-t border-warm-border text-on-surface-variant text-sm font-mono">
         <div class="max-w-container-max mx-auto px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded bg-primary text-white flex items-center justify-center font-bold text-xs">C</div>
-                <span class="font-serif text-base font-semibold text-on-surface">CIRIS Intelligence Platform</span>
+            <div class="flex items-center gap-3">
+                <img src="/static/ciris-logo.svg" alt="CIRIS Logo" class="h-10 w-auto" />
+                <span class="font-serif text-lg font-semibold text-on-surface">Intelligence &amp; Interception Engine</span>
             </div>
-            <div class="text-[11px] text-center sm:text-right text-on-surface-variant">
+            <div class="text-xs text-center sm:text-right text-on-surface-variant">
                 FastAPI GIS Backend Integrated &bull; Proactive Cybercrime Cash-Out Interception
             </div>
         </div>

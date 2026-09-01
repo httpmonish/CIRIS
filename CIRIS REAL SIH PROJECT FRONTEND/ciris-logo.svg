@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 120" width="100%" height="100%" fill="none">
+  <!-- SQUIRCLE ICON -->
+  <rect x="10" y="10" width="100" height="100" rx="30" fill="#C84B20"/>
+  <!-- WHITE BOLD C -->
+  <path d="M 78 40 C 73 31 64 27 53 27 C 36 27 24 39.5 24 60 C 24 80.5 36 93 53 93 C 64 93 73 89 78 80" 
+        stroke="#FFFFFF" 
+        stroke-width="14" 
+        stroke-linecap="round" 
+        fill="none"/>
+  <!-- CIRIS TEXT -->
+  <text x="135" y="80" 
+        fill="#182338" 
+        font-family="'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+        font-size="76" 
+        font-weight="900" 
+        letter-spacing="-2">CIRIS</text>
+</svg>
